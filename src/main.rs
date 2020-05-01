@@ -17,7 +17,8 @@ use libp2p::{
     mdns::{Mdns, MdnsEvent}, // initial peer discovery = only in LAN or VPN
     swarm::NetworkBehaviourEventProcess, // ?
 };
-use std::{error::Error, task::{Context, Poll}};
+use std::{error::Error, task::{Context, Poll}, fs};
+use std::path::Path;
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -47,11 +48,11 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
             KademliaEvent::GetRecordResult(Ok(result)) => {
                 for Record { key, value, publisher, .. } in result.records {
                     println!(
-                    "Got record {:?} {:?} from Publisher {:?}",
-                    std::str::from_utf8(key.as_ref()),
-                    std::str::from_utf8(&value),
-                    publisher  //PRINT THE Publisher PEER
-                );
+                        "Got record {:?} {:?} from Publisher {:?}",
+                        std::str::from_utf8(key.as_ref()),
+                        std::str::from_utf8(&value),
+                        publisher  //PRINT THE Publisher PEER
+                    );
                 }
             }
             KademliaEvent::GetRecordResult(Err(err)) => {
@@ -94,14 +95,10 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
     // Listen on all interfaces and whatever port the OS assigns.
     Swarm::listen_on(&mut swarm, "/ip4/0.0.0.0/tcp/0".parse()?)?; //listening for mdns results on addr
 
-
-    //TODO: Dialog for Batch selection
-
-
     //TODO: Auto Upload hashes with own
 
     // Save cli input - blocking when busy
-    helper_safe_cli(&mut swarm,  local_peer_id)
+    helper_safe_cli(&mut swarm, local_peer_id)
 }
 
 fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId) -> Result<(), Box<dyn Error>> {
@@ -141,48 +138,95 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
 fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_peer_id: PeerId) {
     let mut args = line.split(" ");
 
+    //TODO: Dialog for Batch selection
+    // BATCH: Type `BATCH my-features-file`
+    // BATCH-QUERY: TYPE `QUERY my-features-file`
     match args.next() {
-        Some("GET") => {
-            let key = {
+        Some("BATCH") => {
+
+            let feature_file_path = {
                 match args.next() {
-                    Some(key) => Key::new(&key),
+                    Some(feature_file_path) => Path::new(feature_file_path),
                     None => {
-                        eprintln!("Expected key");
+                        println!("No PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/k1.csv");
                         return;
                     }
                 }
             };
-            kademlia.get_record(&key, Quorum::One);
-        }
-        Some("PUT") => {
-            let key = {
-                match args.next() {
-                    Some(key) => Key::new(&key),
-                    None => {
-                        eprintln!("Expected key");
-                        return;
-                    }
+            println!("Got path: {}", &feature_file_path.display());
+
+            // Read CSV + handle invalid path
+            let features = fs::read_to_string(&feature_file_path);
+            let features = match features {
+                Ok(f) => f,
+                Err(_) => {
+                    // /Users/corihle/GIT/SwarmBC/49222.csv
+                    println!("No valid PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/k1.csv");
+                    return;
                 }
             };
-            let value = {
-                match args.next() {
-                    Some(value) => value.as_bytes().to_vec(),
-                    None => {
-                        eprintln!("Expected value");
-                        return;
-                    }
+
+            // Handle the 2 column CSV input
+            let v: Vec<&str> = features.split(',').collect();
+            for s in v.to_owned() {
+                if s != v.first().unwrap().to_owned(){ //filter first
+                    let key = Key::new(&s.lines().next().unwrap()
+                        .chars().filter(|c| !c.is_whitespace())
+                        .collect::<String>()
+                    );
+                    let value = local_peer_id.as_bytes().to_vec();
+                    let record = Record {
+                        key,
+                        value,
+                        publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
+                        expires: None, //stays in memory for ever + periodic replication and republication
+                    };
+                    kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
+
                 }
-            };
-            let record = Record {
-                key,
-                value,
-                publisher: Some(local_peer_id), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION TODO: issue - WHY doesn't it require a moveable type
-                expires: None, //stays in memory for ever + periodic replication and republication
-            };
-            kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
-        }
-        _ => {
-            eprintln!("expected GET or PUT");
-        }
+            }
     }
+    Some("GET") => {
+        let key = {
+            match args.next() {
+                Some(key) => Key::new(&key),
+                None => {
+                    eprintln!("Expected key");
+                    return;
+                }
+            }
+        };
+        kademlia.get_record(&key, Quorum::One);
+    }
+    Some("PUT") => {
+        let key = {
+            match args.next() {
+                Some(key) => Key::new(&key),
+                None => {
+                    eprintln!("Expected key");
+                    return;
+                }
+            }
+        };
+        let value = {
+            match args.next() {
+                Some(value) => value.as_bytes().to_vec(),
+                None => {
+                    eprintln!("Expected value");
+                    return;
+                }
+            }
+        };
+        let record = Record {
+            key,
+            value,
+            publisher: Some(local_peer_id), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
+            expires: None, //stays in memory for ever + periodic replication and republication
+        };
+        kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
+    }
+    _ => {
+    eprintln ! ("expected GET or PUT");
+    }
+}
 }
