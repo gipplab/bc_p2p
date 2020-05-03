@@ -19,6 +19,7 @@ use libp2p::{
 };
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
+use chrono::Local;
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -50,7 +51,7 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
                     println!(
                         "Got record {:?} {:?} from Publisher {:?}",
                         std::str::from_utf8(key.as_ref()),
-                        std::str::from_utf8(&value),
+                        std::str::from_utf8(value.as_ref()),
                         publisher  //PRINT THE Publisher PEER
                     );
                 }
@@ -60,8 +61,9 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
             }
             KademliaEvent::PutRecordResult(Ok(PutRecordOk { key })) => {
                 println!(
-                    "Successfully put record {:?}",
-                    std::str::from_utf8(key.as_ref())
+                    "Successfully put record {:?} at {:?}",
+                    std::str::from_utf8(key.as_ref()),
+                    Local::now()
                 );
             }
             KademliaEvent::PutRecordResult(Err(err)) => {
@@ -80,7 +82,7 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
     let local_peer_id = PeerId::from(local_key.public());
 
     // Set up a an encrypted DNS-enabled TCP Transport over the Mplex protocol.
-    let transport = build_development_transport(local_key)?; // Transport layer ist variable, for our use case of small keys TCP is not ideal
+    let transport = build_development_transport(local_key.clone())?; // Transport layer ist variable, for our use case of small keys TCP is not ideal
 
     // Create a swarm to manage peers and events.
     let mut swarm = {  // swarm is like a channel - channel initialized with own peer_id
@@ -104,13 +106,14 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
 fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId) -> Result<(), Box<dyn Error>> {
     // Read full lines from stdin
     let mut stdin = io::BufReader::new(io::stdin()).lines(); //cli input + buffer for increased performance
+    let mut upload_buffer: Vec<Key> = Vec::new();
 
     let mut listening = false;
     task::block_on(future::poll_fn(move |cx: &mut Context| { //handle input as async task + context for timeout handling
         // blocking all new inputs until task is complete - poll fn checks for task completion
         loop {
             match stdin.try_poll_next_unpin(cx)? { //handle input, empty input, and pending input
-                Poll::Ready(Some(line)) => handle_input_line(&mut swarm.kademlia, line, local_peer_id.clone()), //execute input command
+                Poll::Ready(Some(line)) => handle_input_line(&mut swarm.kademlia, line, local_peer_id.clone(),  &mut upload_buffer), //execute input command
                 Poll::Ready(None) => panic!("Stdin closed"),
                 Poll::Pending => break
             }
@@ -130,12 +133,25 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
                 }
             }
         }
+
+        if upload_buffer.len() > 0 {
+            println!("Upload Buffer: {}", upload_buffer.len());
+            let value = Vec::from(local_peer_id.to_base58());
+            let key = upload_buffer.pop().unwrap().to_owned();
+            let record = Record {
+                key,
+                value,
+                publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
+                expires: None, //stays in memory for ever + periodic replication and republication
+            };
+            swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
+        }
         Poll::Pending
     }))
 }
 
 // Handle commands
-fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_peer_id: PeerId) {
+fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_peer_id: PeerId, upload_buffer: &mut Vec<Key>) {
     let mut args = line.split(" ");
 
     //TODO: Dialog for Batch selection
@@ -143,12 +159,12 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
     // BATCH-QUERY: TYPE `QUERY my-features-file`
     match args.next() {
         Some("BATCH") => {
-
+            println!("Started BATCH upload at: {}",Local::now());
             let feature_file_path = {
                 match args.next() {
                     Some(feature_file_path) => Path::new(feature_file_path),
                     None => {
-                        println!("No PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/k1.csv");
+                        println!("No PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/1000_k1.csv");
                         return;
                     }
                 }
@@ -161,7 +177,7 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
                 Ok(f) => f,
                 Err(_) => {
                     // /Users/corihle/GIT/SwarmBC/49222.csv
-                    println!("No valid PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/k1.csv");
+                    println!("No valid PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/1000_k1.csv");
                     return;
                 }
             };
@@ -174,18 +190,10 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
                         .chars().filter(|c| !c.is_whitespace())
                         .collect::<String>()
                     );
-                    let value = local_peer_id.as_bytes().to_vec();
-                    let record = Record {
-                        key,
-                        value,
-                        publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
-                        expires: None, //stays in memory for ever + periodic replication and republication
-                    };
-                    kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
-
+                    upload_buffer.push(key);
                 }
             }
-    }
+        }
     Some("GET") => {
         let key = {
             match args.next() {
