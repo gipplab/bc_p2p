@@ -1,5 +1,7 @@
 //! Type `PUT my-key my-value`
 //! Type `GET my-key`
+//! Type `BATCH my-path-to-csv`
+//! Type `CHECK my-path-to-csv`
 //! Close with Ctrl-c.
 
 use async_std::{io, task};
@@ -11,7 +13,7 @@ use libp2p::kad::{record::Key, Kademlia, KademliaEvent, PutRecordOk, Quorum, Rec
 use libp2p::{
     NetworkBehaviour,
     PeerId, //hash
-    Swarm, //?
+    Swarm, //Channel for our cluster
     build_development_transport, //?
     identity, //PubKey
     mdns::{Mdns, MdnsEvent}, // initial peer discovery = only in LAN or VPN
@@ -49,10 +51,11 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
             KademliaEvent::GetRecordResult(Ok(result)) => {
                 for Record { key, value, publisher, .. } in result.records {
                     println!(
-                        "Got record {:?} {:?} from Publisher {:?}",
+                        "Got record {:?} {:?} from Publisher {:?} at {:?}",
                         std::str::from_utf8(key.as_ref()),
                         std::str::from_utf8(value.as_ref()),
-                        publisher  //PRINT THE Publisher PEER
+                        publisher,  //PRINT THE Publisher PEER
+                        Local::now()
                     );
                 }
             }
@@ -142,7 +145,7 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
                 key,
                 value,
                 publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
-                expires: None, //stays in memory for ever + periodic replication and republication
+                expires: None, //stays in memory for ever + periodic replication and republication - Date as std::time::Instant
             };
             swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
@@ -158,6 +161,42 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
     // BATCH: Type `BATCH my-features-file`
     // BATCH-QUERY: TYPE `QUERY my-features-file`
     match args.next() {
+        Some("CHECK") => { //TODO: Refactor duplicated iterator
+            println!("Started batch CHECK at: {}",Local::now());
+            let feature_file_path = {
+                match args.next() {
+                    Some(feature_file_path) => Path::new(feature_file_path),
+                    None => {
+                        println!("No PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/1000_k1.csv");
+                        return;
+                    }
+                }
+            };
+            println!("Got path: {}", &feature_file_path.display());
+
+            // Read CSV + handle invalid path
+            let features = fs::read_to_string(&feature_file_path);
+            let features = match features {
+                Ok(f) => f,
+                Err(_) => {
+                    // /Users/corihle/GIT/SwarmBC/49222.csv
+                    println!("No valid PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/1000_k1.csv");
+                    return;
+                }
+            };
+
+            // Handle the 2 column CSV input
+            let v: Vec<&str> = features.split(',').collect();
+            for s in v.to_owned() {
+                if s != v.first().unwrap().to_owned(){ //filter first
+                    let key = Key::new(&s.lines().next().unwrap()
+                        .chars().filter(|c| !c.is_whitespace())
+                        .collect::<String>()
+                    );
+                    kademlia.get_record(&key, Quorum::One);
+                }
+            }
+        }
         Some("BATCH") => {
             println!("Started BATCH upload at: {}",Local::now());
             let feature_file_path = {
