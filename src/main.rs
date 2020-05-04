@@ -157,9 +157,6 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
 fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_peer_id: PeerId, upload_buffer: &mut Vec<Key>) {
     let mut args = line.split(" ");
 
-    //TODO: Dialog for Batch selection
-    // BATCH: Type `BATCH my-features-file`
-    // BATCH-QUERY: TYPE `QUERY my-features-file`
     match args.next() {
         Some("CHECK") => { //TODO: Refactor duplicated iterator
             println!("Started batch CHECK at: {}",Local::now());
