@@ -204,3 +204,102 @@ Start:  2020-05-17 21:05:10.811768 +02:00
 Finish: 2020-05-17 21:05:11.620212 +02:00
 
 ## 2. 3 Hosts Test (17.05.2020)
+We use a simple shell script to create and kill peers using tmux (terminal multiplexer). 
+
+The interacting peer is run manually and logged using 
+`$ script test_n.log`
+to store the output logs.
+
+Starting additional peers on each host:
+`$ sh xstarttmux.sh n`
+
+Killing peers:
+`$ tmux kill-server`
+or 
+`$ tmux kill-session -t n`
+
+List peers:
+`$ tmux list-sessions`
+
+### 3 Hosts 3 Peers
+`$ script test_3h_3p.log`
+`$ ./bc_p2p`
+`$ BATCH ../../data/1000_k1.csv`
+Restart to clear cache (kill and re-run)
+`$ ./bc_p2p`
+`$ CHECK ../../data/1000_k1.csv`
+`$ exit `
+
+PUT
+Start:  2020-05-24 17:30:40.566820 +02:00
+Finish: 2020-05-24 17:30:44.504157 +02:00
+
+GET form restarted peer: 
+Start:  2020-05-24 17:31:51.856411 +02:00
+Finish: 2020-05-24 17:31:53.373731 +02:00
+
+### 3 Hosts 6 Peers
+Host setup:
+`$ sh xstarttmux.sh 1` (start two instances with id 0 and id 1)
+
+Interacting Peer:
+`$ sh xstarttmux.sh 0` (start one instance with id 0)
+`$ script test_3h_6p.log`
+`$ ./bc_p2p`
+`$ BATCH ../../data/1000_k1.csv`
+Restart to clear cache (kill and re-run)
+`$ ./bc_p2p`
+`$ CHECK ../../data/1000_k1.csv`
+`$ exit `
+
+PUT
+Start:  2020-05-24 17:38:27.866857 +02:00
+Finish: 2020-05-24 17:38:45.609589 +02:00
+
+GET form restarted peer: 
+Start:  2020-05-24 17:39:32.014167 +02:00
+Finish: 2020-05-24 17:39:33.419060 +02:00
+
+### 3 Hosts 9 Peers
+Host setup:
+`$ sh xstarttmux.sh 2` (start three instances with id 0 to 2)
+
+Interacting Peer:
+`$ sh xstarttmux.sh 1` 
+`$ script test_3h_9p.log`
+`$ ./bc_p2p`
+`$ BATCH ../../data/1000_k1.csv`
+Restart to clear cache (kill and re-run)
+`$ ./bc_p2p`
+`$ CHECK ../../data/1000_k1.csv`
+`$ exit `
+
+PUT
+Start:  2020-05-24 17:46:49.301692 +02:00
+Finish: 2020-05-24 17:46:59.787804 +02:00
+
+GET form restarted peer: 
+Start:  2020-05-24 17:47:14.865066 +02:00
+Finish: 2020-05-24 17:47:16.917338 +02:00
+
+### 3 Hosts 12 Peers
+Host setup:
+`$ sh xstarttmux.sh 3` (start three instances with id 0 to 3)
+
+Interacting Peer:
+`$ sh xstarttmux.sh 2` 
+`$ script test_3h_12p.log`
+`$ ./bc_p2p`
+`$ BATCH ../../data/1000_k1.csv`
+Restart to clear cache (kill and re-run)
+`$ ./bc_p2p`
+`$ CHECK ../../data/1000_k1.csv`
+`$ exit `
+
+PUT
+Start:  2020-05-24 17:49:40.018581 +02:00
+Finish: 2020-05-24 17:49:57.195546 +02:00
+
+GET form restarted peer: 
+Start:  2020-05-24 17:50:12.559621 +02:00
+Finish: 2020-05-24 17:50:14.921254 +02:00
