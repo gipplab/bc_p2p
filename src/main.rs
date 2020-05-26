@@ -7,6 +7,7 @@
 use async_std::{io, task};
 use futures::prelude::*;
 use libp2p::kad::record::store::MemoryStore;
+use libp2p::kad::record::store::MemoryStoreConfig;
 //no persistent DB
 use libp2p::kad::{record::Key, Kademlia, KademliaEvent, PutRecordOk, Quorum, Record};
 // flex DTH algo, record = key != hash, callback event, ...
@@ -22,6 +23,8 @@ use libp2p::{
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
+//use std::borrow::Borrow;
+//use std::sync::mpsc::Receiver;
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -87,10 +90,25 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
     // Set up a an encrypted DNS-enabled TCP Transport over the Mplex protocol.
     let transport = build_development_transport(local_key.clone())?; // Transport layer ist variable, for our use case of small keys TCP is not ideal
 
+
+
+
     // Create a swarm to manage peers and events.
     let mut swarm = {  // swarm is like a channel - channel initialized with own peer_id
         // Create a Kademlia behaviour.
-        let store = MemoryStore::new(local_peer_id.clone());
+
+        //libp2p_kad::record::store
+        let mem_config = MemoryStoreConfig {
+            max_records: 250000, // default is 1024 - with 250000 we can support 500 features on k2
+            max_value_bytes: 65 * 1024,
+            max_provided_keys: 1024,
+            max_providers_per_key: 20, //Kademilia standard, could be smaller then 20 for the low peer count in the pilot phase
+        };
+
+        let store = MemoryStore::with_config(local_peer_id.clone(), mem_config );
+        //let store = MemoryStore::new(local_peer_id.clone());
+
+
         let kademlia = Kademlia::new(local_peer_id.clone(), store); //keys and routing table
         let mdns = Mdns::new()?;
         let behaviour = MyBehaviour { kademlia, mdns };
@@ -98,9 +116,9 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
     };
 
     // Listen on all interfaces and whatever port the OS assigns.
-    Swarm::listen_on(&mut swarm, "/ip4/0.0.0.0/tcp/0".parse()?)?; //listening for mdns results on addr
 
-    //TODO: Auto Upload hashes with own
+    //TCP
+    Swarm::listen_on(&mut swarm, "/ip4/0.0.0.0/tcp/0".parse()?)?; //listening for mdns results on addr
 
     // Save cli input - blocking when busy
     helper_safe_cli(&mut swarm, local_peer_id)
