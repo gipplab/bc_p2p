@@ -303,3 +303,28 @@ Finish: 2020-05-24 17:49:57.195546 +02:00
 GET form restarted peer: 
 Start:  2020-05-24 17:50:12.559621 +02:00
 Finish: 2020-05-24 17:50:14.921254 +02:00
+
+#### 250000 Hashes
+Host setup:
+`$ sh xstarttmux.sh 3` (start three instances with id 0 to 3)
+
+Interacting Peer:
+`$ sh xstarttmux.sh 2` 
+`$ script test_3h_12p_250k.log`
+`$ ./bc_p2p`
+`$ BATCH ../../data/250000_k2.csv`
+Restart to clear cache (kill and re-run)
+`$ ./bc_p2p`
+`$ CHECK ../../data/250000_k2.csv`
+`$ exit `
+
+PUT
+Start:  2020-05-26 16:22:33.918308 +02:00
+Finish: 2020-05-26 17:11:35.760697 +02:00
+
+220MB/peer (Empty peer = 11MB)
+880MB/host
+
+GET form restarted peer: 
+Start:  2020-05-26 18:16:34.861029 +02:00
+Finish: 2020-05-26 18:16:56.893808 +02:00
