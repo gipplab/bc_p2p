@@ -1,6 +1,7 @@
 # bc_p2p
 A peer to peer implementation of confidential bibliographic coupling detection.
 
+---
 #### Run multiple instances from your terminal, then:
 PUT: Type `PUT my-key my-value`
 
@@ -14,3 +15,6 @@ Close: Type `Ctrl-c`
 
 
 
+---
+
+*if you use Intellij - a library requires the following setting (https://github.com/intellij-rust/intellij-rust/issues/3628)

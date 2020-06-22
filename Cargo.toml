@@ -12,3 +12,8 @@ libp2p = "0.18.1"
 async-std = "1.5.0"
 env_logger = "0.7.1"
 chrono = "0.4.11"
+
+# cit_manager
+reqwest = { version = "0.10", features = ["json"] }
+serde = { version = "1.0.112", features = ["derive"] }
+tokio = { version = "0.2", features = ["full"] }

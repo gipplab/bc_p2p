@@ -4,6 +4,8 @@
 //! Type `CHECK my-path-to-csv`
 //! Close with Ctrl-c.
 
+mod semscholar;
+
 use async_std::{io, task};
 use futures::prelude::*;
 use libp2p::kad::record::store::MemoryStore;
@@ -80,7 +82,11 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
     }
 }
 
-fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug error handling
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug error handling
+    let citations_result = semscholar::get_citations_of().await;
+    println!("Lookup = {:?}", citations_result);
+
     env_logger::init(); //console logs
 
     // Create a random key for ourselves.
@@ -89,8 +95,6 @@ fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug erro
 
     // Set up a an encrypted DNS-enabled TCP Transport over the Mplex protocol.
     let transport = build_development_transport(local_key.clone())?; // Transport layer ist variable, for our use case of small keys TCP is not ideal
-
-
 
 
     // Create a swarm to manage peers and events.
@@ -182,7 +186,7 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
                 match args.next() {
                     Some(feature_file_path) => Path::new(feature_file_path),
                     None => {
-                        println!("No PATH provided, please set a PATH e.g.: /Users/corihle/GIT/bc_p2p/data/1000_k1.csv");
+                        println!("No PATH provided, please set a PATH e.g.: ../../data/1000_k1.csv");
                         return;
                     }
                 }
