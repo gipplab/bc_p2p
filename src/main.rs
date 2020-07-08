@@ -86,10 +86,13 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug error handling
 
-    loop {
-        get_id_from_doi().await;
-    }
+    // Test API reachability by getting a paper id
+    let id = get_id_from_doi("10.1016/j.jnca.2020.102630").await.unwrap();
+    println!("Got Paper ID: {}", id);
 
+    // Get all references of a doc
+
+    // Get all docs which cite a reference
     let citations_result = semscholar::get_citations_of().await;
     println!("Lookup = {:?}", citations_result);
 

@@ -119,9 +119,7 @@ pub async fn get_citations_of() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-pub async fn get_id_from_doi() -> Result<(), anyhow::Error> {
-    let doi = "10.1016/j.jnca.2020.102630";
-
+pub async fn get_id_from_doi(doi: &str) -> Result<String, anyhow::Error> {
     let doc_url = format!("https://api.semanticscholar.org/v1/paper/{}", doi);
     let body = reqwest::get(&doc_url)
         .await?
@@ -131,9 +129,7 @@ pub async fn get_id_from_doi() -> Result<(), anyhow::Error> {
     let doc: Root = serde_json::from_str(body.as_ref())?;
     let id: String = doc.paper_id;
 
-    println!("Got Paper ID: {} from DOI: {}", id, doi);
-
-    Ok(())
+    Ok(id)
 }
 
 pub async fn get_all_references_by_id() -> Result<(), anyhow::Error> {
