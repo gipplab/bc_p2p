@@ -25,7 +25,7 @@ use libp2p::{
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
-use crate::semscholar::get_id_from_doi;
+use crate::semscholar::{get_id_from_doi, get_all_references_by_id};
 //use std::borrow::Borrow;
 //use std::sync::mpsc::Receiver;
 
@@ -86,17 +86,28 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug error handling
 
+    // ---------------------------------------
+    // PUBLIC CENTRALIZED - REFERENCE - STORE
+    // ---------------------------------------
+
     // Test API reachability by getting a paper id
     let id = get_id_from_doi("10.1016/j.jnca.2020.102630").await.unwrap();
     println!("Got Paper ID: {}", id);
 
     // Get all references of a doc
+    let doc_refs: Vec<semscholar::Reference> = get_all_references_by_id(&*id).await.unwrap();
 
     // Get all docs which cite a reference
+
     let citations_result = semscholar::get_citations_of().await;
     println!("Lookup = {:?}", citations_result);
 
     env_logger::init(); //console logs
+
+
+    // ---------------------------------------
+    // PEER TO PEER - REFERENCE_ID - STORE
+    // ---------------------------------------
 
     // Create a random key for ourselves.
     let local_key = identity::Keypair::generate_ed25519();

@@ -88,6 +88,8 @@ pub struct Topic {
     pub url: String,
 }
 
+const API_URL: &'static str = "https://api.semanticscholar.org/v1/paper/";
+
 pub async fn get_citations_of() -> Result<(), anyhow::Error> {
     let test_id: String = "fdd81cddbb086f377d3640581bcec58ec8f22c61".parse()?;
 
@@ -96,7 +98,7 @@ pub async fn get_citations_of() -> Result<(), anyhow::Error> {
     let mut next_id: String = test_id.to_owned();
     println!("Start time {}", Local::now());
     for n in 0..100 {
-        let doc_url = format!("https://api.semanticscholar.org/v1/paper/{}", next_id);
+        let doc_url = format!("{}{}", API_URL, next_id);
 
         let body = reqwest::get(&doc_url)
             .await?
@@ -120,7 +122,7 @@ pub async fn get_citations_of() -> Result<(), anyhow::Error> {
 }
 
 pub async fn get_id_from_doi(doi: &str) -> Result<String, anyhow::Error> {
-    let doc_url = format!("https://api.semanticscholar.org/v1/paper/{}", doi);
+    let doc_url = format!("{}{}", API_URL, doi);
     let body = reqwest::get(&doc_url)
         .await?
         .text()
@@ -132,8 +134,14 @@ pub async fn get_id_from_doi(doi: &str) -> Result<String, anyhow::Error> {
     Ok(id)
 }
 
-pub async fn get_all_references_by_id() -> Result<(), anyhow::Error> {
-    Ok(())
+pub async fn get_all_references_by_id(id: &str) -> Result<Vec<Reference>, anyhow::Error> {
+    let doc_url = format!("{}{}", API_URL, id);
+    let body = reqwest::get(&doc_url)
+        .await?
+        .text()
+        .await?;
+    let doc: Root = serde_json::from_str(body.as_ref())?;
+    Ok(doc.references)
 }
 
 
