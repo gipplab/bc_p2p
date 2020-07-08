@@ -1,4 +1,4 @@
-
+use chrono::Local;
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -37,7 +37,7 @@ pub struct Author {
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Citation {
-    pub arxiv_id: Option<String>,
+    pub arxiv_id: ::serde_json::Value,
     pub authors: Vec<Author2>,
     pub doi: Option<String>,
     pub intent: Vec<String>,
@@ -46,7 +46,7 @@ pub struct Citation {
     pub title: String,
     pub url: String,
     pub venue: String,
-    pub year: Option<i64>,
+    pub year: i64,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
@@ -63,7 +63,7 @@ pub struct Reference {
     pub arxiv_id: Option<String>,
     pub authors: Vec<Author3>,
     pub doi: Option<String>,
-    pub intent: Vec<::serde_json::Value>,
+    pub intent: Vec<String>,
     pub is_influential: bool,
     pub paper_id: String,
     pub title: String,
@@ -75,9 +75,9 @@ pub struct Reference {
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Author3 {
-    pub author_id: String,
+    pub author_id: Option<String>,
     pub name: String,
-    pub url: String,
+    pub url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
@@ -88,9 +88,40 @@ pub struct Topic {
     pub url: String,
 }
 
-pub async fn get_citations_of() -> Result<(), anyhow::Error>{
+pub async fn get_citations_of() -> Result<(), anyhow::Error> {
+    let test_id: String = "fdd81cddbb086f377d3640581bcec58ec8f22c61".parse()?;
 
-    let doi = "10.1038/nrn3241";
+
+    // test for 100 queries
+    let mut next_id: String = test_id.to_owned();
+    println!("Start time {}", Local::now());
+    for n in 0..100 {
+        let doc_url = format!("https://api.semanticscholar.org/v1/paper/{}", next_id);
+
+        let body = reqwest::get(&doc_url)
+            .await?
+            .text()
+            .await?;
+
+        let curr_id: String = String::from(next_id.clone());
+        let doc: Root = serde_json::from_str(body.as_ref())?;
+        let citations = doc.citations;
+        next_id = citations[0].paper_id.to_owned();
+        //let current_id = next_id.clone();
+
+        let citations_count = citations.len();
+
+        // Access parts of the data by indexing with square brackets.
+        println!("{} papers cited the document {}. Query number {}", citations_count, curr_id, n);
+    }
+    println!("End time {}", Local::now());
+
+    Ok(())
+}
+
+pub async fn get_id_from_doi() -> Result<(), anyhow::Error> {
+    let doi = "10.1016/j.jnca.2020.102630";
+
     let doc_url = format!("https://api.semanticscholar.org/v1/paper/{}", doi);
     let body = reqwest::get(&doc_url)
         .await?
@@ -98,14 +129,15 @@ pub async fn get_citations_of() -> Result<(), anyhow::Error>{
         .await?;
 
     let doc: Root = serde_json::from_str(body.as_ref())?;
-    let citations = doc.citations;
-    let cit_0 = citations[0].to_owned();
-    let paper_id = cit_0.paper_id; //some might not have a DOI - CATCH!!
-    let citations_count = citations.len();
+    let id: String = doc.paper_id;
 
-    // Access parts of the data by indexing with square brackets.
-    println!("{} papers cited the document {}", citations_count, paper_id);
+    println!("Got Paper ID: {} from DOI: {}", id, doi);
 
     Ok(())
 }
+
+pub async fn get_all_references_by_id() -> Result<(), anyhow::Error> {
+    Ok(())
+}
+
 
