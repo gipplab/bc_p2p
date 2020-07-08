@@ -144,4 +144,14 @@ pub async fn get_all_references_by_id(id: &str) -> Result<Vec<Reference>, anyhow
     Ok(doc.references)
 }
 
+pub async fn get_all_citations_by_reference_id(id: &str) -> Result<Vec<Citation>, anyhow::Error> {
+    let doc_url = format!("{}{}", API_URL, id);
+    let body = reqwest::get(&doc_url)
+        .await?
+        .text()
+        .await?;
+    let doc: Root = serde_json::from_str(body.as_ref())?;
+    Ok(doc.citations)
+}
+
 

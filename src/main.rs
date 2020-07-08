@@ -25,7 +25,7 @@ use libp2p::{
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
-use crate::semscholar::{get_id_from_doi, get_all_references_by_id};
+use crate::semscholar::{get_id_from_doi, get_all_references_by_id, get_all_citations_by_reference_id};
 //use std::borrow::Borrow;
 //use std::sync::mpsc::Receiver;
 
@@ -96,8 +96,11 @@ async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debu
 
     // Get all references of a doc
     let doc_refs: Vec<semscholar::Reference> = get_all_references_by_id(&*id).await.unwrap();
+    println!("Paper has {} references", doc_refs.len());
 
     // Get all docs which cite a reference
+    let citations_ref_0 = get_all_citations_by_reference_id(&*doc_refs[0].paper_id).await.unwrap();
+    println!("Reference has {} citations", citations_ref_0.len());
 
     let citations_result = semscholar::get_citations_of().await;
     println!("Lookup = {:?}", citations_result);
