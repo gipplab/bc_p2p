@@ -26,8 +26,7 @@ use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
 use crate::semscholar::{get_id_from_doi, get_all_references_by_id, get_all_citations_by_reference_id};
-//use std::borrow::Borrow;
-//use std::sync::mpsc::Receiver;
+use std::collections::HashSet;
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -91,26 +90,65 @@ async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debu
     // ---------------------------------------
 
     // Test API reachability by getting a paper id
-    let id = get_id_from_doi("10.1016/j.jnca.2020.102630").await.unwrap();
+    let id = get_id_from_doi("10.1016/j.jnca.2020.102630").await?;
     println!("Got Paper ID: {}", id);
 
     // Get all references of a doc
-    let doc_refs: Vec<semscholar::Reference> = get_all_references_by_id(&*id).await.unwrap();
+    let doc_refs: Vec<semscholar::Reference> = get_all_references_by_id(&*id).await?;
+
+    // Extract Paper_IDs
+    let mut doc_ref_ids: HashSet<String> = HashSet::new();
+    for r in &doc_refs {
+        doc_ref_ids.insert(r.paper_id.clone());
+    }
+
     println!("Paper has {} references", doc_refs.len());
 
-    // Get all docs which cite a reference
-    let citations_ref_0 = get_all_citations_by_reference_id(&*doc_refs[0].paper_id).await.unwrap();
-    println!("Reference has {} citations", citations_ref_0.len());
+    // Iterate through all references
+    for r in &doc_refs {
+        // Get all docs which cite a reference
+        let citations_ref = get_all_citations_by_reference_id(&*r.paper_id).await?;
+        println!("Reference {} has {} citations", r.paper_id , citations_ref.len());
 
-    let citations_result = semscholar::get_citations_of().await;
-    println!("Lookup = {:?}", citations_result);
+        // Get all references of the co-citing docs
+        for co_r in &doc_refs {
+            println!("Checking {}...", co_r.paper_id);
 
-    env_logger::init(); //console logs
+            // Check if the paper_id is still accessible
+            let co_cite_refs = get_all_references_by_id(&*co_r.paper_id).await;
+            match &co_cite_refs {
+                Ok(refs)=> {
+                    ();
+                },
+                Err(e)=> {
+                    println!("Citation not found");
+                    continue;
+                }
+                _ => {}
+            }
+
+            // Extract Paper_IDs
+            let mut co_doc_ref_ids = HashSet::new();
+            for r in co_cite_refs? {
+                co_doc_ref_ids.insert(r.paper_id);
+            }
+
+            // Find intersection between co-citing paper and source paper
+            let intersection_set: HashSet<_> = doc_ref_ids.intersection(&co_doc_ref_ids).collect();
+
+            println!("{} intersecting elements with {}", intersection_set.len(), co_r.paper_id)
+        }
+    }
+
+    // let citations_result = semscholar::get_citations_of().await;
+    //println!("Lookup = {:?}", citations_result);
 
 
     // ---------------------------------------
     // PEER TO PEER - REFERENCE_ID - STORE
     // ---------------------------------------
+
+    env_logger::init(); //console logs
 
     // Create a random key for ourselves.
     let local_key = identity::Keypair::generate_ed25519();

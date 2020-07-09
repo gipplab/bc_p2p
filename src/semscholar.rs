@@ -1,4 +1,3 @@
-use chrono::Local;
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -7,12 +6,12 @@ pub struct Root {
     pub abstract_field: String,
     pub arxiv_id: ::serde_json::Value,
     pub authors: Vec<Author>,
-    pub citation_velocity: i64,
+    pub citation_velocity: Option<i64>,
     pub citations: Vec<Citation>,
-    pub corpus_id: i64,
-    pub doi: String,
+    pub corpus_id: Option<i64>,
+    pub doi: Option<String>,
     pub fields_of_study: Vec<String>,
-    pub influential_citation_count: i64,
+    pub influential_citation_count: Option<i64>,
     #[serde(rename = "is_open_access")]
     pub is_open_access: bool,
     #[serde(rename = "is_publisher_licensed")]
@@ -23,7 +22,7 @@ pub struct Root {
     pub topics: Vec<Topic>,
     pub url: String,
     pub venue: String,
-    pub year: i64,
+    pub year: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
@@ -41,19 +40,19 @@ pub struct Citation {
     pub authors: Vec<Author2>,
     pub doi: Option<String>,
     pub intent: Vec<String>,
-    pub is_influential: bool,
+    pub is_influential: Option<bool>,
     pub paper_id: String,
-    pub title: String,
-    pub url: String,
-    pub venue: String,
-    pub year: i64,
+    pub title: Option<String>,
+    pub url: Option<String>,
+    pub venue: Option<String>,
+    pub year: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Author2 {
     pub author_id: Option<String>,
-    pub name: String,
+    pub name: Option<String>,
     pub url: Option<String>,
 }
 
@@ -64,62 +63,31 @@ pub struct Reference {
     pub authors: Vec<Author3>,
     pub doi: Option<String>,
     pub intent: Vec<String>,
-    pub is_influential: bool,
+    pub is_influential: Option<bool>,
     pub paper_id: String,
-    pub title: String,
-    pub url: String,
-    pub venue: String,
-    pub year: i64,
+    pub title: Option<String>,
+    pub url: Option<String>,
+    pub venue: Option<String>,
+    pub year: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Author3 {
     pub author_id: Option<String>,
-    pub name: String,
+    pub name: Option<String>,
     pub url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Topic {
-    pub topic: String,
-    pub topic_id: String,
-    pub url: String,
+    pub topic: Option<String>,
+    pub topic_id: Option<String>,
+    pub url: Option<String>,
 }
 
 const API_URL: &'static str = "https://api.semanticscholar.org/v1/paper/";
-
-pub async fn get_citations_of() -> Result<(), anyhow::Error> {
-    let test_id: String = "fdd81cddbb086f377d3640581bcec58ec8f22c61".parse()?;
-
-
-    // test for 100 queries
-    let mut next_id: String = test_id.to_owned();
-    println!("Start time {}", Local::now());
-    for n in 0..100 {
-        let doc_url = format!("{}{}", API_URL, next_id);
-
-        let body = reqwest::get(&doc_url)
-            .await?
-            .text()
-            .await?;
-
-        let curr_id: String = String::from(next_id.clone());
-        let doc: Root = serde_json::from_str(body.as_ref())?;
-        let citations = doc.citations;
-        next_id = citations[0].paper_id.to_owned();
-        //let current_id = next_id.clone();
-
-        let citations_count = citations.len();
-
-        // Access parts of the data by indexing with square brackets.
-        println!("{} papers cited the document {}. Query number {}", citations_count, curr_id, n);
-    }
-    println!("End time {}", Local::now());
-
-    Ok(())
-}
 
 pub async fn get_id_from_doi(doi: &str) -> Result<String, anyhow::Error> {
     let doc_url = format!("{}{}", API_URL, doi);
