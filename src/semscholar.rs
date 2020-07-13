@@ -4,8 +4,8 @@
 pub struct Root {
     #[serde(rename = "abstract")]
     pub abstract_field: Option<String>,
-    pub arxiv_id: ::serde_json::Value,
-    pub authors: Vec<Author>,
+    pub arxiv_id: Option<::serde_json::Value>,
+    pub authors: Option<Vec<Author>>,
     pub citation_velocity: Option<i64>,
     pub citations: Vec<Citation>,
     pub corpus_id: Option<i64>,
