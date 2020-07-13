@@ -106,13 +106,15 @@ async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debu
 
     // Iterate through all references
     for r in &doc_refs {
-        // Get all docs which cite a reference
+        // Get all docs which cite a reference (BC > 0)
         let citations_ref = get_all_citations_by_reference_id(&*r.paper_id).await?;
         println!("Reference {} has {} citations", r.paper_id , citations_ref.len());
 
-        // Get all references of the co-citing docs
+        // Get all references of the co-citing docs (Check BC)
         for co_r in &doc_refs {
             println!("Checking {}...", co_r.paper_id);
+
+            // Todo: retry
 
             // Check if the paper_id is still accessible
             let co_cite_refs = get_all_references_by_id(&*co_r.paper_id).await;

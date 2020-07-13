@@ -3,7 +3,7 @@
 #[serde(rename_all = "camelCase")]
 pub struct Root {
     #[serde(rename = "abstract")]
-    pub abstract_field: String,
+    pub abstract_field: Option<String>,
     pub arxiv_id: ::serde_json::Value,
     pub authors: Vec<Author>,
     pub citation_velocity: Option<i64>,
@@ -113,6 +113,7 @@ pub async fn get_all_references_by_id(id: &str) -> Result<Vec<Reference>, anyhow
 }
 
 pub async fn get_all_citations_by_reference_id(id: &str) -> Result<Vec<Citation>, anyhow::Error> {
+    //TODO: handle connections over a reqwest::Client for single handshake
     let doc_url = format!("{}{}", API_URL, id);
     let body = reqwest::get(&doc_url)
         .await?
