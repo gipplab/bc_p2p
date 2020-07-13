@@ -7,37 +7,37 @@ pub struct Root {
     pub arxiv_id: Option<::serde_json::Value>,
     pub authors: Option<Vec<Author>>,
     pub citation_velocity: Option<i64>,
-    pub citations: Vec<Citation>,
+    pub citations: Option<Vec<Citation>>,
     pub corpus_id: Option<i64>,
     pub doi: Option<String>,
-    pub fields_of_study: Vec<String>,
+    pub fields_of_study: Option<Vec<String>>,
     pub influential_citation_count: Option<i64>,
     #[serde(rename = "is_open_access")]
-    pub is_open_access: bool,
+    pub is_open_access: Option<bool>,
     #[serde(rename = "is_publisher_licensed")]
-    pub is_publisher_licensed: bool,
+    pub is_publisher_licensed: Option<bool>,
     pub paper_id: String,
-    pub references: Vec<Reference>,
-    pub title: String,
-    pub topics: Vec<Topic>,
-    pub url: String,
-    pub venue: String,
+    pub references: Option<Vec<Reference>>,
+    pub title: Option<String>,
+    pub topics: Option<Vec<Topic>>,
+    pub url: Option<String>,
+    pub venue: Option<String>,
     pub year: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Author {
-    pub author_id: String,
-    pub name: String,
-    pub url: String,
+    pub author_id: Option<String>,
+    pub name: Option<String>,
+    pub url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Citation {
-    pub arxiv_id: ::serde_json::Value,
-    pub authors: Vec<Author2>,
+    pub arxiv_id: Option<::serde_json::Value>,
+    pub authors: Option<Vec<Author2>>,
     pub doi: Option<String>,
     pub intent: Vec<String>,
     pub is_influential: Option<bool>,
@@ -60,9 +60,9 @@ pub struct Author2 {
 #[serde(rename_all = "camelCase")]
 pub struct Reference {
     pub arxiv_id: Option<String>,
-    pub authors: Vec<Author3>,
+    pub authors: Option<Vec<Author3>>,
     pub doi: Option<String>,
-    pub intent: Vec<String>,
+    pub intent: Option<Vec<String>>,
     pub is_influential: Option<bool>,
     pub paper_id: String,
     pub title: Option<String>,
@@ -109,7 +109,7 @@ pub async fn get_all_references_by_id(id: &str) -> Result<Vec<Reference>, anyhow
         .text()
         .await?;
     let doc: Root = serde_json::from_str(body.as_ref())?;
-    Ok(doc.references)
+    Ok(doc.references.unwrap())
 }
 
 pub async fn get_all_citations_by_reference_id(id: &str) -> Result<Vec<Citation>, anyhow::Error> {
@@ -120,7 +120,7 @@ pub async fn get_all_citations_by_reference_id(id: &str) -> Result<Vec<Citation>
         .text()
         .await?;
     let doc: Root = serde_json::from_str(body.as_ref())?;
-    Ok(doc.citations)
+    Ok(doc.citations.unwrap())
 }
 
 
