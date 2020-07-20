@@ -25,8 +25,9 @@ use libp2p::{
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
-use crate::semscholar::{get_id_from_doi, get_all_references_by_id, get_all_citations_by_reference_id};
-use std::collections::HashSet;
+use crate::semscholar::{get_id_from_doi, get_all_references_by_id, get_all_citations_by_reference_id, create_k2_sets, Reference};
+use std::collections::{HashSet, HashMap};
+use std::borrow::BorrowMut;
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -84,74 +85,49 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debug error handling
-
-    // ---------------------------------------
-    // PUBLIC CENTRALIZED - REFERENCE - STORE
-    // ---------------------------------------
-
-    // Test API reachability by getting a paper id
-    let id = get_id_from_doi("10.1016/j.jnca.2020.102630").await?;
-    println!("Got Paper ID: {}", id);
-
-    // Get all references of a doc
-    let doc_refs: Vec<semscholar::Reference> = get_all_references_by_id(&*id).await?;
-
-    // Extract Paper_IDs
-    let mut doc_ref_ids: HashSet<String> = HashSet::new();
-    for r in &doc_refs {
-        doc_ref_ids.insert(r.paper_id.clone());
-    }
-
-    println!("Paper has {} references", doc_refs.len());
-
-    // Iterate through all references
-    for r in &doc_refs {
-        // Get all docs which cite a reference (BC > 0)
-        let citations_ref = get_all_citations_by_reference_id(&*r.paper_id).await?;
-        //TODO: error handling
-        println!("Reference {} has {} citations", r.paper_id , citations_ref.len());
-
-        // Get all references of the co-citing docs (Check BC)
-        for co_r in &citations_ref {
-            println!("Checking {}...", co_r.paper_id);
-
-            // Todo: retry
-
-            // Check if the paper_id is still accessible
-            let co_cite_refs = get_all_references_by_id(&*co_r.paper_id).await;
-            match &co_cite_refs {
-                Ok(refs)=> {
-                    ();
-                },
-                Err(e)=> {
-                    println!("Citation not found");
-                    continue;
-                }
-                _ => {}
-            }
-
-            // Extract Paper_IDs
-            let mut co_doc_ref_ids = HashSet::new();
-            for r in co_cite_refs? {
-                co_doc_ref_ids.insert(r.paper_id);
-            }
-
-            // Find intersection between co-citing paper and source paper
-            let intersection_set: HashSet<_> = doc_ref_ids.intersection(&co_doc_ref_ids).collect();
-
-            println!("{} intersecting elements with {}", intersection_set.len(), co_r.paper_id)
-        }
-    }
-
-    // let citations_result = semscholar::get_citations_of().await;
-    //println!("Lookup = {:?}", citations_result);
-
-
-    // ---------------------------------------
-    // PEER TO PEER - REFERENCE_ID - STORE
-    // ---------------------------------------
-
     env_logger::init(); //console logs
+
+    // ---------------------------------------
+    // REFERENCE FILTERING
+    // ---------------------------------------
+
+    // Get and print combinations from non-unique document
+    let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await?.clone();
+    let k2_sets = create_k2_sets(my_refs.clone());
+    for r in k2_sets {
+        println!("{} + {}", r[0], r[1]);
+    }
+
+    let mut co_cite_refs_map: HashMap<String, Vec<String>> = HashMap::new(); //reference; vector<paper_id>
+
+    // Get all citations from own references
+    for my_ref in my_refs{
+        let cits = get_all_citations_by_reference_id(&*my_ref.paper_id).await?;
+        let mut current_cits;
+        match co_cite_refs_map.get(&*my_ref.paper_id) {
+            Some(c_vec) => current_cits = c_vec.clone(),
+            _ => current_cits = vec![],
+        }
+
+        // fill co-cite map
+        for c in cits {
+            current_cits.push(c.paper_id);
+        };
+        co_cite_refs_map.insert(my_ref.paper_id, current_cits.clone());
+
+        // create k2 set
+
+        // check entries for each k2 pair -> is it cited by the same doc_id
+
+        // if not -> push to p2p hash table
+    }
+
+
+    // Filter ID Pairs when found in citations
+
+    // ---------------------------------------
+    // PUBLIC De-CENTRALIZED - REFERENCE - STORE
+    // ---------------------------------------
 
     // Create a random key for ourselves.
     let local_key = identity::Keypair::generate_ed25519();
