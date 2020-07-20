@@ -1,10 +1,3 @@
-use std::collections::HashSet;
-use crate::semscholar;
-use futures::future::ok;
-use combinations::Combinations;
-use std::cmp::Ordering;
-use std::iter::FromIterator;
-use futures::SinkExt;
 use itertools::Itertools;
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]

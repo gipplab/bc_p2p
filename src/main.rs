@@ -25,9 +25,10 @@ use libp2p::{
 use std::{error::Error, task::{Context, Poll}, fs};
 use std::path::Path;
 use chrono::Local;
-use crate::semscholar::{get_id_from_doi, get_all_references_by_id, get_all_citations_by_reference_id, create_k2_sets, Reference};
+use crate::semscholar::{get_all_references_by_id, get_all_citations_by_reference_id, create_k2_sets};
 use std::collections::{HashSet, HashMap};
-use std::borrow::BorrowMut;
+
+
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)] // behaviour = interface
@@ -92,35 +93,61 @@ async fn main() -> Result<(), Box<dyn Error>> { // return type "Result" for debu
     // ---------------------------------------
 
     // Get and print combinations from non-unique document
-    let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await?.clone();
-    let k2_sets = create_k2_sets(my_refs.clone());
-    for r in k2_sets {
-        println!("{} + {}", r[0], r[1]);
-    }
+    //let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await?.clone();
+    //println!("Test document: {}", "97efafdb4a3942ab3efba53ded7413199f79c054");
 
-    let mut co_cite_refs_map: HashMap<String, Vec<String>> = HashMap::new(); //reference; vector<paper_id>
+    // No new tuples in "Mathematical Formulae in Wikimedia Projects"
+    let my_refs = get_all_references_by_id("10.1145/3383583.3398557").await?.clone();
+    println!("Test document: {}", "10.1145/3383583.3398557");
+
+    // No new tuples in "A First Step Towards Content Protecting Plagiarism Detection"
+    // let my_refs = get_all_references_by_id("10.1145/3383583.3398620").await?.clone();
+    // println!("Test document: {}", "10.1145/3383583.3398620");
+
+    let mut co_cite_refs_map: HashMap<String, HashSet<String>> = HashMap::new(); //reference; vector<paper_id>
 
     // Get all citations from own references
-    for my_ref in my_refs{
-        let cits = get_all_citations_by_reference_id(&*my_ref.paper_id).await?;
-        let mut current_cits;
+    for my_ref in my_refs.clone(){
+        println!("Checking Reference: {}", my_ref.paper_id);
+        let mut cits;
+        match get_all_citations_by_reference_id(&*my_ref.paper_id).await {
+            Ok(c_new) => cits = c_new,
+            _ => cits = vec![],
+        }
+
+        let mut current_cits:HashSet<String>;
         match co_cite_refs_map.get(&*my_ref.paper_id) {
             Some(c_vec) => current_cits = c_vec.clone(),
-            _ => current_cits = vec![],
+            _ => current_cits = HashSet::new(),
         }
 
         // fill co-cite map
         for c in cits {
-            current_cits.push(c.paper_id);
+            current_cits.insert(c.paper_id);
         };
         co_cite_refs_map.insert(my_ref.paper_id, current_cits.clone());
+    }
+    // create k2 set
+    // TODO: pre-filter set for
+    let k2_sets = create_k2_sets(my_refs.clone());
 
-        // create k2 set
+    // check entries for each k2 pair -> is it cited by the same doc_id
+    for r in k2_sets {
+        //println!("{} + {}", r[0], r[1]);
 
-        // check entries for each k2 pair -> is it cited by the same doc_id
+        let a:HashSet<String> = co_cite_refs_map.get(&*r[0]).unwrap().clone();
+        let b:HashSet<String> = co_cite_refs_map.get(&*r[1]).unwrap().clone();
+
+        let matching: HashSet<_> = a.intersection(&b).into_iter().clone().collect();
 
         // if not -> push to p2p hash table
+        if matching.len() == 0 {
+            println!("Publish private k2 set {} + {}", r[0], r[1])
+        }
+
     }
+
+
 
 
     // Filter ID Pairs when found in citations
