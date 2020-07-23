@@ -258,6 +258,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
+ "sha-1 0.9.1",
  "tokio",
 ]
 
@@ -1802,7 +1803,7 @@ dependencies = [
  "blake2b_simd",
  "blake2s_simd",
  "digest 0.8.1",
- "sha-1",
+ "sha-1 0.8.2",
  "sha2 0.8.1",
  "sha3",
  "unsigned-varint 0.3.3",
@@ -2568,6 +2569,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha-1"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "170a36ea86c864a3f16dd2687712dd6646f7019f301e57537c7f4dc9f5916770"
+dependencies = [
+ "block-buffer 0.9.0",
+ "cfg-if",
+ "cpuid-bool",
+ "digest 0.9.0",
+ "opaque-debug 0.3.0",
+]
+
+[[package]]
 name = "sha2"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2706,7 +2720,7 @@ dependencies = [
  "httparse",
  "log",
  "rand 0.7.3",
- "sha-1",
+ "sha-1 0.8.2",
 ]
 
 [[package]]
