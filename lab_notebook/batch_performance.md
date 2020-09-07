@@ -284,7 +284,7 @@ Finish: 2020-05-24 17:47:16.917338 +02:00
 
 ### 3 Hosts 12 Peers
 Host setup:
-`$ sh xstarttmux.sh 3` (start three instances with id 0 to 3)
+`$ sh xstarttmux.sh 3` (start three instances with id 0 to 2)
 
 Interacting Peer:
 `$ sh xstarttmux.sh 2` 
@@ -306,7 +306,7 @@ Finish: 2020-05-24 17:50:14.921254 +02:00
 
 #### 250000 Hashes
 Host setup:
-`$ sh xstarttmux.sh 3` (start three instances with id 0 to 3)
+`$ sh xstarttmux.sh 3` (start three instances with id 0 to 2)
 
 Interacting Peer:
 `$ sh xstarttmux.sh 2` 
