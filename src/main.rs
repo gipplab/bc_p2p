@@ -105,23 +105,34 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 async fn main() -> Result<(), Box<dyn Error>> {
     env_logger::init();
 
+
     // --------------------
-    // REFERENCE FILTERING
+    // FILTERING
     // --------------------
 
-    // Get and print combinations from non-unique document
-    let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await?.clone();
-    println!("Test document: {}", "97efafdb4a3942ab3efba53ded7413199f79c054");
+    // Filter-Dialog
+    let mut line = String::new();
+    let h = "h";
+    println!("Enter 'h' for 'hash' upload");
+    println!("Enter 'd' to submit a 'document' by DOI");
+    std::io::stdin().read_line(&mut line).unwrap();
 
-    // No new tuples in "Mathematical Formulae in Wikimedia Projects"
-    //let my_refs = get_all_references_by_id("10.1145/3383583.3398557").await?.clone();
-    //println!("Test document: {}", "10.1145/3383583.3398557");
+    let k2_hashes;
+    match line.as_str(){
+        "h\n" => {
+            println!("hash mode");
+        },
+        "d\n" => {
+            println!("document mode");
+            k2_hashes = referenceFiltering().await;
+        },
+        _ => println!("invalid input - default to 'hash upload'"),
+    }
+    println!("Mode: , {}", line);
 
-    // No new tuples in "A First Step Towards Content Protecting Plagiarism Detection"
-    // let my_refs = get_all_references_by_id("10.1145/3383583.3398620").await?.clone();
-    // println!("Test document: {}", "10.1145/3383583.3398620");
 
-    let k2_hashes = filter_pub_refs(my_refs).await;
+    // TODO: Check and upload k2_hashes to DHT
+    // TODO:  originality ratio can be calculated as a numeric value
 
     // --------------------
     // P2P Upload
@@ -141,7 +152,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             max_records: 250000, // default is 1024 - with 250000 we can support 500 features on k2
             max_value_bytes: 65 * 1024,
             max_provided_keys: 1024, // why not 20k?
-            max_providers_per_key: 20, //Kademlia standard, could be smaller then 20 for the low peer count in the pilot phase
+            max_providers_per_key: 2, //Kademlia standard, could be smaller then 20 for the low peer count in the pilot phase
         };
 
         // Create a Kademlia behaviour.
@@ -159,6 +170,27 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     // SAVE CLI INPUT
     helper_safe_cli(&mut swarm, local_peer_id)
+}
+
+async fn referenceFiltering() -> Vec<String> {
+// --------------------
+    // REFERENCE FILTERING
+    // --------------------
+
+    // Get and print combinations from non-unique document
+    let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await.unwrap();
+
+
+    // No new tuples in "Mathematical Formulae in Wikimedia Projects"
+    //let my_refs = get_all_references_by_id("10.1145/3383583.3398557").await?.clone();
+    //println!("Test document: {}", "10.1145/3383583.3398557");
+
+    // No new tuples in "A First Step Towards Content Protecting Plagiarism Detection"
+    // let my_refs = get_all_references_by_id("10.1145/3383583.3398620").await?.clone();
+    // println!("Test document: {}", "10.1145/3383583.3398620");
+
+
+    return filter_pub_refs(my_refs).await;
 }
 
 fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId) -> Result<(), Box<dyn Error>> {
