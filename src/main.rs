@@ -132,7 +132,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 
     // TODO: Check and upload k2_hashes to DHT
-    // TODO:  originality ratio can be calculated as a numeric value
+    // TODO:  originality ratio can be calculatedh as a numeric value
 
     // --------------------
     // P2P Upload
@@ -222,6 +222,18 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
                     break
                 }
             }
+        }
+        if upload_buffer.len() > 0 {
+            println!("Upload Buffer: {}", upload_buffer.len());
+            let value = Vec::from(local_peer_id.to_base58());
+            let key = upload_buffer.pop().unwrap().to_owned();
+            let record = Record {
+                key,
+                value,
+                publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
+                expires: None, //stays in memory for ever + periodic replication and republication - Date as std::time::Instant
+            };
+            swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
         Poll::Pending
     }))
@@ -400,7 +412,7 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
             kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
         _ => {
-            eprintln ! ("expected GET or PUT");
+            eprintln ! ("expected GET, PUT, BATCH, or CHECK");
         }
     }
 }
