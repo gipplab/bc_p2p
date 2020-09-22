@@ -38,7 +38,7 @@ use libp2p::{
     mdns::{Mdns, MdnsEvent},
     swarm::NetworkBehaviourEventProcess
 };
-use std::{error::Error, task::{Context, Poll}, fs};
+use std::{error::Error, task::{Context, Poll}, fs, env};
 use std::collections::{HashMap, HashSet};
 use sha1::Sha1;
 use sha1::Digest;
@@ -103,33 +103,24 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let args: Vec<String> = env::args().collect();
     env_logger::init();
 
 
     // --------------------
     // FILTERING
     // --------------------
-
-    // Filter-Dialog
-    let mut line = String::new();
-    let h = "h";
-    println!("Enter 'h' for 'hash' upload");
-    println!("Enter 'd' to submit a 'document' by DOI");
-    std::io::stdin().read_line(&mut line).unwrap();
-
     let k2_hashes;
-    match line.as_str(){
-        "h\n" => {
-            println!("hash mode");
-        },
-        "d\n" => {
-            println!("document mode");
-            k2_hashes = referenceFiltering().await;
-        },
-        _ => println!("invalid input - default to 'hash upload'"),
+    if args.len() > 1 {
+        match args[1].as_str() {
+            "filter" => {
+                println!("filtering by document");
+                k2_hashes = referenceFiltering().await;
+                // TODO: add document ID input dialog
+            },
+            _ => println!("Standard Mode"),
+        }
     }
-    println!("Mode: , {}", line);
-
 
     // TODO: Check and upload k2_hashes to DHT
     // TODO:  originality ratio can be calculatedh as a numeric value
