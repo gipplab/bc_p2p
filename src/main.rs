@@ -214,6 +214,7 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
                 }
             }
         }
+
         if upload_buffer.len() > 0 {
             println!("Upload Buffer: {}", upload_buffer.len());
             let value = Vec::from(local_peer_id.to_base58());
@@ -226,6 +227,7 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
             };
             swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
+
         Poll::Pending
     }))
 }
