@@ -44,14 +44,33 @@ use sha1::Sha1;
 use sha1::Digest;
 use std::io::Read;
 use std::iter::FromIterator;
-use chrono::Local;
+use chrono::{Local};
+use chrono::DateTime;
 use std::path::Path;
+use lazy_static::lazy_static;
+use mut_static::MutStatic;
+
+pub struct Timer {
+    startTime : DateTime<Local>
+}
+
+impl Timer {
+    pub fn new(t: DateTime<Local>) -> Self{
+        Timer { startTime: t }
+    }
+    pub fn getvalue(&self) -> DateTime<Local> { self.startTime }
+    pub fn setvalue(&mut self, t: DateTime<Local>) { self.startTime = t }
+}
+
+lazy_static! {
+    static ref MY_TIMER: MutStatic<Timer> = MutStatic::new();
+}
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)]
 struct MyBehaviour {
     kademlia: Kademlia<MemoryStore>,
-    mdns: Mdns
+    mdns: Mdns,
 }
 
 impl NetworkBehaviourEventProcess<MdnsEvent> for MyBehaviour {
@@ -88,7 +107,7 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
                     println!(
                         "Successfully put record {:?} at {:?}",
                         std::str::from_utf8(key.as_ref()),
-                        Local::now()
+                        Local::now() - MY_TIMER.read().unwrap().getvalue()
                     );
                 }
                 QueryResult::PutRecord(Err(err)) => {
@@ -106,6 +125,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
     env_logger::init();
 
+    // Shared timer init
+    MY_TIMER.set(Timer::new(Local::now())).unwrap();
 
     // --------------------
     // FILTERING
@@ -227,7 +248,6 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
             };
             swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
-
         Poll::Pending
     }))
 }
@@ -330,7 +350,12 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
             }
         }
         Some("BATCH") => {
-            println!("Started BATCH upload at: {}",Local::now());
+            {
+            let mut mut_timer = MY_TIMER.write().unwrap();
+            mut_timer.setvalue(Local::now());
+            }
+            println!("Started BATCH upload at: {}",MY_TIMER.read().unwrap().getvalue());
+
             let feature_file_path = {
                 match args.next() {
                     Some(feature_file_path) => Path::new(feature_file_path),

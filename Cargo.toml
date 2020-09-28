@@ -13,6 +13,8 @@ async-std = "1.6.2"
 env_logger = "0.7.1"
 chrono = "0.4.13"
 sha-1 = "0.9.1"
+lazy_static = "1.4.0"
+mut_static = "5.0.0"
 
 # cit_manager
 reqwest = { version = "0.10.6", features = ["json"] }
