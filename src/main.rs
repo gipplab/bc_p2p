@@ -96,7 +96,7 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
                             std::str::from_utf8(key.as_ref()),
                             std::str::from_utf8(value.as_ref()),
                             publisher,  //PRINT THE Publisher PEER
-                            Local::now()
+                            Local::now() - MY_TIMER.read().unwrap().getvalue()
                         );
                     }
                 }
@@ -314,6 +314,10 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
 
     match args.next() {
         Some("CHECK") => { //TODO: Refactor duplicated iterator
+            {
+                let mut mut_timer = MY_TIMER.write().unwrap();
+                mut_timer.setvalue(Local::now());
+            }
             println!("Started batch CHECK at: {}",Local::now());
             let feature_file_path = {
                 match args.next() {
@@ -391,6 +395,10 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
             }
         }
         Some("GET") => {
+            {
+                let mut mut_timer = MY_TIMER.write().unwrap();
+                mut_timer.setvalue(Local::now());
+            }
             let key = {
                 match args.next() {
                     Some(key) => Key::new(&key),
@@ -403,6 +411,10 @@ fn handle_input_line(kademlia: &mut Kademlia<MemoryStore>, line: String, local_p
             kademlia.get_record(&key, Quorum::One);
         }
         Some("PUT") => {
+            {
+                let mut mut_timer = MY_TIMER.write().unwrap();
+                mut_timer.setvalue(Local::now());
+            }
             let key = {
                 match args.next() {
                     Some(key) => Key::new(&key),
