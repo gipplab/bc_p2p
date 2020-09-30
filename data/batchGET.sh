@@ -4,25 +4,30 @@
 # $1 as number of hosts
 # $2 as number of peers
 # $3 as number of runs 
-tmux new-session -s query10 -d
+# $4 as name of configuration (e.g. wifi)
+tmux new-session -s putget -d
 sleep 1s
-# initial BATCH upload
+
+# PUT
 tmux send-keys -t 0 "./bc_p2p" ENTER
 sleep 3s
 tmux send-keys -t 0 "BATCH /home/workbook/GIT/bc_p2p/data/1000_k1.csv" ENTER
-sleep 60s
+sleep 40s
 tmux send-keys -t 0 C-c
 
-# scan runs
+# Runs
 for (( i = 1; i <= $3; i++)) do
-tmux send-keys -t 0 "script $1host$2peers_scan_run$i.txt" ENTER
-sleep 1s
+
+# Log
+tmux send-keys -t 0 "script $1host$2peers_batch_get_$4_run_$i.txt" ENTER
+
+# GET
 tmux send-keys -t 0 "./bc_p2p" ENTER
 sleep 3s
 tmux send-keys -t 0 "CHECK /home/workbook/GIT/bc_p2p/data/1000_k1.csv" ENTER
-sleep 10s
+sleep 15s
 tmux send-keys -t 0 C-c
-sleep 1s
+
 tmux send-keys -t 0 "exit" ENTER
 sleep 1s;
 done

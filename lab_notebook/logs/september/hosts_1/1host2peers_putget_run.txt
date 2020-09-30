@@ -1,0 +1,106 @@
+Script started on 2020-09-30 01:41:39+01:00 [TERM="screen" TTY="/dev/pts/13" COLUMNS="80" LINES="24"]
+./bc_p2p
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/44167"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 11315453 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/37067"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWMyqYFHJPNFaeatwAPSM1Ug2eSzLkWskQz5CAvC44FRGn")) at Duration { secs: 0, nanos: 8573390 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/46163"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 14526258 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/34821"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWAvrPqhoWZwhBmt15sbh8jedVETeXBgPfZtbGGNVgUyAX")) at Duration { secs: 0, nanos: 8676287 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/39523"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 18271234 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/41021"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWGy6EJ5i9Hb7YmKdi9KvuXa5kB6jEe25Q8TUUkkUtdEBy")) at Duration { secs: 0, nanos: 8187218 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/42473"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 15298255 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/38131"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWJumcz54uo81w4Ns1ppGocWDLhXkBziagCQ5abqU1MMcs")) at Duration { secs: 0, nanos: 8985198 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/35495"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 18540225 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/32853"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWAagR7ENdQQUxTPF9bvq7aS3cn7qpxmqg1pwgt1W5SDkd")) at Duration { secs: 0, nanos: 8954902 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/45451"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 20411842 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/33407"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWNjAJqKjZJdkuDDnkVmgvuEy6PQY6PrNgyxDvyzWa8vJv")) at Duration { secs: 0, nanos: 7195813 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/42761"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 20667755 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/35211"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWGYtQvW9VCVCiBHVq5QsBLoTPbrHL5hdVnx9oHHUTMyUj")) at Duration { secs: 0, nanos: 9438938 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/40789"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 23766663 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/43085"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWQBfwv7b1Dcdb14VWVbqQD4ezgUqzXChFahjpGwXX3fRs")) at Duration { secs: 0, nanos: 8992555 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/37825"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 26213024 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/41921"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWKx8YUSJfNszmB4o2DBa6dMKEHvVUNaTtPcHjVpdRvURy")) at Duration { secs: 0, nanos: 9805790 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/44919"
+PUT test value
+Successfully put record Ok("test") at Duration { secs: 0, nanos: 25869088 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/43203"
+GET test
+Got record Ok("test") Ok("value") from Publisher Some(PeerId("12D3KooWLggct6UoRiKb7bqueMFEx3wjgbXAqo7EJDXgYtwsS2FL")) at Duration { secs: 0, nanos: 8563835 }
+^C
+_workbook@x230-c:~/GIT/bc_p2p/target/release\[01;32m[workbook@x230-c[01;37m release[01;32m]$[00m exit
+exit
+
+Script done on 2020-09-30 01:44:00+01:00 [COMMAND_EXIT_CODE="130"]
