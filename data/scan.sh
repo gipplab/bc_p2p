@@ -26,4 +26,9 @@ sleep 1s
 tmux send-keys -t 0 "exit" ENTER
 sleep 1s;
 done
+
+# Search for last duration in .txt
+grep 'Duration' $1host$2peers_scan_run$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' | sed -r '/^\s*$/d' >> seconds_nanos.csv
+echo '' >> seconds_nanos.csv
+
 tmux kill-server
