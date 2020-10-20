@@ -31,7 +31,7 @@ sleep 1s;
 
 # Search for last duration an save to .csv
 grep 'Duration' $1host$2peers_batch_put_$4_run_$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' | sed -r '/^\s*$/d' >> seconds_nanos.csv
-echo '' >> seconds_nanos.csv
+echo '' >> timings$1host$2peers_batch_put_$4seconds_nanos.csv
 done
 
 tmux kill-server
