@@ -8,7 +8,9 @@
 
 # Expects binary in same folder or in bin path
 
-for (( i = 0; i <= $1; i++)) do tmux new-session -d -s $i && tmux send ./bc_p2p Enter && echo "$i Started"; done
+for (( i = 1; i <= $1; i++)) do 
+    tmux new-session -d -s $i && tmux send ./bc_p2p Enter && echo "$i Started"; 
+done
 
 
 

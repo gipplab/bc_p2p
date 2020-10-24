@@ -8,13 +8,15 @@
 
 # Monitoring
 # tmux attach -t putget
-
+tmux kill-server
+sh xstarttmux.sh $2
 tmux new-session -s batchPUT -d
 sleep 1s
 
-# Runsfor (( i = 1; i <= $3; i++)) do
+# Runs
+for (( i = 1; i <= $3; i++)) do
     # Log start
-    tmux send-keys -t 0 "script $1host$2peers_batch_put_$4_run_$i.txt" ENTER
+    tmux send-keys -t 0 "script ./results/$1host$2peers_batch_put_$4_run_$i.txt" ENTER
 
     # PUT
     tmux send-keys -t 0 "./bc_p2p" ENTER
@@ -28,10 +30,9 @@ sleep 1s
     sleep 1s;
 
     # Search for last duration an save to .csv
-    grep 'Duration' $1host$2peers_batch_put_$4_run_$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' > temp.csv
-    sed temp.csv -r '/^\s*$/d' > timings$1host$2peers_batch_put_$4seconds_nanos.csv
+    grep 'Duration' ./results/$1host$2peers_batch_put_$4_run_$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' > temp.csv >> ./results/timings$1host$2peers_batch_put_$4.csv
 
-    echo '' >> timings$1host$2peers_batch_put_$4seconds_nanos.csv
+    echo '' >> ./results/timings$1host$2peers_batch_put_$4.csv;
 done
 
 tmux kill-server
