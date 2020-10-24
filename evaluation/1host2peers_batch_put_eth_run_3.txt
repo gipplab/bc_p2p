@@ -1,8 +1,0 @@
-Script started on Sat Oct 24 14:12:55 2020
-[1m[3m%[23m[1m[0m                                                                                k..2p/evaluation\[0m[23m[24m[J[01;32m➜  [36mevaluation[00m [01;34mgit:([31mmaster[34m) [33m✗[00m [K[?1h=[?2004hBBATCH /home/workbook/GIT/bc_p2p/data/1000_k1.csv[?1l>[?2004l
-kBATCH\BATCH: garbled time
-[1m[3m%[23m[1m[0m                                                                                k..2p/evaluation\[0m[23m[24m[J[01;31m➜  [36mevaluation[00m [01;34mgit:([31mmaster[34m) [33m✗[00m [K[?1h=[?2004h[?2004l
-[1m[3m%[23m[1m[0m                                                                                k..2p/evaluation\exit
-[0m[23m[24m[J[01;31m➜  [36mevaluation[00m [01;34mgit:([31mmaster[34m) [33m✗[00m [K[?1h=[?2004heexit[?1l>[?2004l
-kexit\
-Script done on Sat Oct 24 14:13:38 2020
