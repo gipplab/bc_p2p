@@ -8,37 +8,36 @@
 
 # Monitoring
 # tmux attach -t putget
-
 tmux new-session -s batchGET -d
 sleep 1s
 
 # PUT
 tmux send-keys -t 0 "./bc_p2p" ENTER
 sleep 3s
-tmux send-keys -t 0 "BATCH /home/workbook/GIT/bc_p2p/data/1000_k1.csv" ENTER
+tmux send-keys -t 0 "BATCH 1000_k1.csv" ENTER
 sleep 60s
-tmux send-keys -t 0 C-cc
+tmux send-keys -t 0 C-c
 
 # Runs
 for (( i = 1; i <= $3; i++)) do
+    # Log start
+    tmux send-keys -t 0 "script ./results/$1host$2peers_batch_get_$4_run_$i.txt" ENTER
 
-# Log start
-tmux send-keys -t 0 "script $1host$2peers_batch_get_$4_run_$i.txt" ENTER
+    # GET
+    tmux send-keys -t 0 "./bc_p2p" ENTER
+    sleep 3s
+    tmux send-keys -t 0 "CHECK 1000_k1.csv" ENTER
+    sleep 15s
+    tmux send-keys -t 0 C-c
 
-# GET
-tmux send-keys -t 0 "./bc_p2p" ENTER
-sleep 3s
-tmux send-keys -t 0 "CHECK /home/workbook/GIT/bc_p2p/data/1000_k1.csv" ENTER
-sleep 15s
-tmux send-keys -t 0 C-c
+    # Log end
+    tmux send-keys -t 0 "exit" ENTER
+    sleep 1s;
 
-# Log end
-tmux send-keys -t 0 "exit" ENTER
-sleep 1s
+    # Search for last duration an save to .csv
+    grep 'Duration' ./results/$1host$2peers_batch_get_$4_run_$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' >> ./results/timings$1host$2peers_batch_get_$4.csv
 
-# Search for last duration an save to .csv
-grep 'Duration' $1host$2peers_batch_get_$4_run_$i.txt | tail -n 1 | tr [:space:] '\n' | grep -v [a-z] | tr -d '{}\n' | sed -r '/^\s*$/d' >> seconds_nanos.csv
-echo '' >> timings$1host$2peers_batch_get_$4seconds_nanos.csv
+    echo '' >> ./results/timings$1host$2peers_batch_get_$4.csv;
 done
 
 tmux kill-server

@@ -1,0 +1,1248 @@
+Script started on 2020-10-26 19:35:19+01:00 [TERM="screen" TTY="/dev/pts/26" COLUMNS="80" LINES="24"]
+./bc_p2p
+_manjaro@manjaro-pc:~/GIT/bc_p2p/evaluation\[01;32m[manjaro@manjaro-pc[01;37m evaluation[01;32m]$[00m ./bc_p2p
+Listening on "/ip4/127.0.0.1/tcp/42367"
+BATCH 1000_k1.csv
+Started BATCH upload at: 2020-10-26 19:35:24.704706084 +01:00
+Got path: 1000_k1.csv
+Upload Buffer: 1000
+Failed to put record: QuorumFailed { key: Key(b"9ab90b2ab21910e97da45f1615461abf016db3ae"), success: [], quorum: 1 }
+Upload Buffer: 999
+Failed to put record: QuorumFailed { key: Key(b"717bfdc6862a7cf80bc370404dd649ed8449dd66"), success: [], quorum: 1 }
+Upload Buffer: 998
+Failed to put record: QuorumFailed { key: Key(b"b9f5636ba3dbfc6f175ea3bbab32839c0a625a58"), success: [], quorum: 1 }
+Upload Buffer: 997
+Failed to put record: QuorumFailed { key: Key(b"9b2a0f15377f53b15c80031f1acec9e2ed5d6668"), success: [], quorum: 1 }
+Upload Buffer: 996
+Failed to put record: QuorumFailed { key: Key(b"448e25d42fe797d08de334abd27d037dcd057603"), success: [], quorum: 1 }
+Upload Buffer: 995
+Failed to put record: QuorumFailed { key: Key(b"d4aaf4340c6b23cfd78c9aa48520eea34831caf0"), success: [], quorum: 1 }
+Upload Buffer: 994
+Failed to put record: QuorumFailed { key: Key(b"8eac722752b2dca962305ba06132c703a0b830e3"), success: [], quorum: 1 }
+Upload Buffer: 993
+Failed to put record: QuorumFailed { key: Key(b"8c42707f0bc0772b7ada2ea74890c88dd6aabc84"), success: [], quorum: 1 }
+Upload Buffer: 992
+Failed to put record: QuorumFailed { key: Key(b"c0ea39048612cb3d71c69abce86d294140425420"), success: [], quorum: 1 }
+Upload Buffer: 991
+Failed to put record: QuorumFailed { key: Key(b"54371fd5f1b22b2d31cfbe7dcf313f55d37c5248"), success: [], quorum: 1 }
+Upload Buffer: 990
+Failed to put record: QuorumFailed { key: Key(b"15b85f4ab2a02cf3ce996f06b40e072ec5dc4153"), success: [], quorum: 1 }
+Upload Buffer: 989
+Failed to put record: QuorumFailed { key: Key(b"065acc6e533e5a855e0f1f289d5bed99cdb59253"), success: [], quorum: 1 }
+Upload Buffer: 988
+Failed to put record: QuorumFailed { key: Key(b"64c6cafd4c33ba433c48fd9f14f8d2d3931e9b7d"), success: [], quorum: 1 }
+Upload Buffer: 987
+Failed to put record: QuorumFailed { key: Key(b"520cf399a139684757cb1ce43173ddc39ef59b44"), success: [], quorum: 1 }
+Upload Buffer: 986
+Failed to put record: QuorumFailed { key: Key(b"6c49bc039267e4bb461b740bd5f581f93e6da26b"), success: [], quorum: 1 }
+Upload Buffer: 985
+Failed to put record: QuorumFailed { key: Key(b"e33ec18865d87e7c802f58049f185c524caa6c1b"), success: [], quorum: 1 }
+Upload Buffer: 984
+Failed to put record: QuorumFailed { key: Key(b"dfe2231695b972c701ce25ec48b89f91608955d2"), success: [], quorum: 1 }
+Upload Buffer: 983
+Failed to put record: QuorumFailed { key: Key(b"5d5c49887f46992aa63b4c21381c171aa3585d44"), success: [], quorum: 1 }
+Upload Buffer: 982
+Failed to put record: QuorumFailed { key: Key(b"773d4e1f7ee43ba2b1c46726a39bad08a729b80b"), success: [], quorum: 1 }
+Upload Buffer: 981
+Failed to put record: QuorumFailed { key: Key(b"5bf18251adb99caa7eaf5b052fc1c0bab1e08914"), success: [], quorum: 1 }
+Upload Buffer: 980
+Failed to put record: QuorumFailed { key: Key(b"09f4455d4a64b72d0a29a3ffdc1d7c4087dd21f1"), success: [], quorum: 1 }
+Upload Buffer: 979
+Failed to put record: QuorumFailed { key: Key(b"3c8844c7d5bb1edc88faaabaf14db5b353faf531"), success: [], quorum: 1 }
+Upload Buffer: 978
+Failed to put record: QuorumFailed { key: Key(b"baf02623e56bf05b55f9ea3dc4ace5a0a7647b4d"), success: [], quorum: 1 }
+Upload Buffer: 977
+Failed to put record: QuorumFailed { key: Key(b"3bcd61ddd6b45ca4f1007dcde0bd9cee6a491645"), success: [], quorum: 1 }
+Upload Buffer: 976
+Failed to put record: QuorumFailed { key: Key(b"c2f93e37f5ca9152880ee18660fb468e5bb8eb4a"), success: [], quorum: 1 }
+Upload Buffer: 975
+Failed to put record: QuorumFailed { key: Key(b"b858b2d567e3b057eb54976c0d71ab17c7c48420"), success: [], quorum: 1 }
+Upload Buffer: 974
+Failed to put record: QuorumFailed { key: Key(b"c953f3704c7d088d033e714c09556f339cd7d7fc"), success: [], quorum: 1 }
+Upload Buffer: 973
+Failed to put record: QuorumFailed { key: Key(b"2414ce721b01386f77a7512bf037dc55069146ab"), success: [], quorum: 1 }
+Upload Buffer: 972
+Failed to put record: QuorumFailed { key: Key(b"565916164c6e09d2c09f513515f04ba88ed1100d"), success: [], quorum: 1 }
+Upload Buffer: 971
+Failed to put record: QuorumFailed { key: Key(b"74ad22ecd30347cd65ce5b4672f2b5ad6c291e13"), success: [], quorum: 1 }
+Upload Buffer: 970
+Failed to put record: QuorumFailed { key: Key(b"b2561eddd24ffd361df787547ae6589861e6c0d7"), success: [], quorum: 1 }
+Upload Buffer: 969
+Failed to put record: QuorumFailed { key: Key(b"136d5cabf28788798e3220c72e3a72a6bb35e29c"), success: [], quorum: 1 }
+Upload Buffer: 968
+Failed to put record: QuorumFailed { key: Key(b"270298fc63049d2f7eaa448659735efba7735f7d"), success: [], quorum: 1 }
+Upload Buffer: 967
+Failed to put record: QuorumFailed { key: Key(b"cb6d6a142f5e92d31a9803b50c37c5717a1cca5b"), success: [], quorum: 1 }
+Upload Buffer: 966
+Failed to put record: QuorumFailed { key: Key(b"74d8432f89aac6ee769a7b9c6bb1fef662193996"), success: [], quorum: 1 }
+Upload Buffer: 965
+Failed to put record: QuorumFailed { key: Key(b"58ba8ca51261c918635971efc72cd68e1788a182"), success: [], quorum: 1 }
+Upload Buffer: 964
+Failed to put record: QuorumFailed { key: Key(b"34858fc04b55fe4a757642623d49a965266c1cf7"), success: [], quorum: 1 }
+Upload Buffer: 963
+Failed to put record: QuorumFailed { key: Key(b"cafceb074e3f95da2122f4b29921e0ca2dcab003"), success: [], quorum: 1 }
+Upload Buffer: 962
+Failed to put record: QuorumFailed { key: Key(b"fb2a1c2789211f1207bb9c74313e6bb4b0afefe4"), success: [], quorum: 1 }
+Upload Buffer: 961
+Failed to put record: QuorumFailed { key: Key(b"40209092c5923c1a7ffbc5fa35e4a823dbb597f8"), success: [], quorum: 1 }
+Upload Buffer: 960
+Failed to put record: QuorumFailed { key: Key(b"943d8e5499a10fc9fb423eca78573e77e7e1c6c6"), success: [], quorum: 1 }
+Upload Buffer: 959
+Failed to put record: QuorumFailed { key: Key(b"ff20e8b541ce9a35dc06648aeeee1f444e51cde0"), success: [], quorum: 1 }
+Upload Buffer: 958
+Failed to put record: QuorumFailed { key: Key(b"a09f57cd23d3f8ebffd163064113939ce95b09dd"), success: [], quorum: 1 }
+Upload Buffer: 957
+Failed to put record: QuorumFailed { key: Key(b"243a5a793045d00938ffa58022d185d290cd200b"), success: [], quorum: 1 }
+Upload Buffer: 956
+Failed to put record: QuorumFailed { key: Key(b"a8382ec8ac29ad720a4a89a1fe8a8e5ac582828e"), success: [], quorum: 1 }
+Upload Buffer: 955
+Failed to put record: QuorumFailed { key: Key(b"127e4bde1732908438950ef0cbc5486f6ecb867c"), success: [], quorum: 1 }
+Upload Buffer: 954
+Failed to put record: QuorumFailed { key: Key(b"c02a6b28195ce6eb5d5873a711923ce66090bd6e"), success: [], quorum: 1 }
+Upload Buffer: 953
+Failed to put record: QuorumFailed { key: Key(b"d4723211f0f2ff01cc90b652df6eb83da5420809"), success: [], quorum: 1 }
+Upload Buffer: 952
+Failed to put record: QuorumFailed { key: Key(b"1053badd5f54fa933ad4221d85341b36b0c48c52"), success: [], quorum: 1 }
+Upload Buffer: 951
+Upload Buffer: 950
+Upload Buffer: 949
+Upload Buffer: 948
+Upload Buffer: 947
+Upload Buffer: 946
+Upload Buffer: 945
+Upload Buffer: 944
+Upload Buffer: 943
+Upload Buffer: 942
+Upload Buffer: 941
+Upload Buffer: 940
+Upload Buffer: 939
+Upload Buffer: 938
+Upload Buffer: 937
+Upload Buffer: 936
+Upload Buffer: 935
+Upload Buffer: 934
+Upload Buffer: 933
+Upload Buffer: 932
+Upload Buffer: 931
+Upload Buffer: 930
+Upload Buffer: 929
+Upload Buffer: 928
+Upload Buffer: 927
+Upload Buffer: 926
+Upload Buffer: 925
+Upload Buffer: 924
+Upload Buffer: 923
+Upload Buffer: 922
+Upload Buffer: 921
+Upload Buffer: 920
+Upload Buffer: 919
+Upload Buffer: 918
+Upload Buffer: 917
+Upload Buffer: 916
+Upload Buffer: 915
+Upload Buffer: 914
+Upload Buffer: 913
+Upload Buffer: 912
+Upload Buffer: 911
+Upload Buffer: 910
+Upload Buffer: 909
+Upload Buffer: 908
+Upload Buffer: 907
+Upload Buffer: 906
+Upload Buffer: 905
+Upload Buffer: 904
+Upload Buffer: 903
+Upload Buffer: 902
+Upload Buffer: 901
+Upload Buffer: 900
+Upload Buffer: 899
+Upload Buffer: 898
+Upload Buffer: 897
+Upload Buffer: 896
+Upload Buffer: 895
+Upload Buffer: 894
+Upload Buffer: 893
+Upload Buffer: 892
+Upload Buffer: 891
+Upload Buffer: 890
+Upload Buffer: 889
+Upload Buffer: 888
+Upload Buffer: 887
+Upload Buffer: 886
+Upload Buffer: 885
+Upload Buffer: 884
+Upload Buffer: 883
+Upload Buffer: 882
+Upload Buffer: 881
+Upload Buffer: 880
+Upload Buffer: 879
+Upload Buffer: 878
+Upload Buffer: 877
+Upload Buffer: 876
+Upload Buffer: 875
+Upload Buffer: 874
+Upload Buffer: 873
+Upload Buffer: 872
+Upload Buffer: 871
+Upload Buffer: 870
+Upload Buffer: 869
+Upload Buffer: 868
+Upload Buffer: 867
+Upload Buffer: 866
+Upload Buffer: 865
+Upload Buffer: 864
+Upload Buffer: 863
+Upload Buffer: 862
+Upload Buffer: 861
+Upload Buffer: 860
+Upload Buffer: 859
+Upload Buffer: 858
+Upload Buffer: 857
+Upload Buffer: 856
+Upload Buffer: 855
+Upload Buffer: 854
+Upload Buffer: 853
+Upload Buffer: 852
+Upload Buffer: 851
+Upload Buffer: 850
+Upload Buffer: 849
+Upload Buffer: 848
+Upload Buffer: 847
+Upload Buffer: 846
+Upload Buffer: 845
+Upload Buffer: 844
+Upload Buffer: 843
+Upload Buffer: 842
+Upload Buffer: 841
+Upload Buffer: 840
+Upload Buffer: 839
+Upload Buffer: 838
+Upload Buffer: 837
+Upload Buffer: 836
+Upload Buffer: 835
+Upload Buffer: 834
+Upload Buffer: 833
+Upload Buffer: 832
+Upload Buffer: 831
+Upload Buffer: 830
+Upload Buffer: 829
+Upload Buffer: 828
+Upload Buffer: 827
+Upload Buffer: 826
+Upload Buffer: 825
+Upload Buffer: 824
+Upload Buffer: 823
+Upload Buffer: 822
+Upload Buffer: 821
+Upload Buffer: 820
+Upload Buffer: 819
+Upload Buffer: 818
+Upload Buffer: 817
+Upload Buffer: 816
+Upload Buffer: 815
+Upload Buffer: 814
+Upload Buffer: 813
+Upload Buffer: 812
+Upload Buffer: 811
+Upload Buffer: 810
+Upload Buffer: 809
+Upload Buffer: 808
+Upload Buffer: 807
+Upload Buffer: 806
+Upload Buffer: 805
+Upload Buffer: 804
+Upload Buffer: 803
+Upload Buffer: 802
+Upload Buffer: 801
+Upload Buffer: 800
+Upload Buffer: 799
+Upload Buffer: 798
+Upload Buffer: 797
+Upload Buffer: 796
+Upload Buffer: 795
+Upload Buffer: 794
+Upload Buffer: 793
+Upload Buffer: 792
+Upload Buffer: 791
+Upload Buffer: 790
+Upload Buffer: 789
+Upload Buffer: 788
+Upload Buffer: 787
+Upload Buffer: 786
+Upload Buffer: 785
+Upload Buffer: 784
+Upload Buffer: 783
+Upload Buffer: 782
+Upload Buffer: 781
+Upload Buffer: 780
+Upload Buffer: 779
+Upload Buffer: 778
+Upload Buffer: 777
+Upload Buffer: 776
+Upload Buffer: 775
+Upload Buffer: 774
+Upload Buffer: 773
+Upload Buffer: 772
+Upload Buffer: 771
+Upload Buffer: 770
+Upload Buffer: 769
+Upload Buffer: 768
+Upload Buffer: 767
+Upload Buffer: 766
+Upload Buffer: 765
+Upload Buffer: 764
+Upload Buffer: 763
+Upload Buffer: 762
+Upload Buffer: 761
+Upload Buffer: 760
+Upload Buffer: 759
+Upload Buffer: 758
+Upload Buffer: 757
+Upload Buffer: 756
+Upload Buffer: 755
+Upload Buffer: 754
+Upload Buffer: 753
+Upload Buffer: 752
+Upload Buffer: 751
+Upload Buffer: 750
+Upload Buffer: 749
+Upload Buffer: 748
+Upload Buffer: 747
+Upload Buffer: 746
+Upload Buffer: 745
+Upload Buffer: 744
+Upload Buffer: 743
+Upload Buffer: 742
+Upload Buffer: 741
+Upload Buffer: 740
+Upload Buffer: 739
+Upload Buffer: 738
+Upload Buffer: 737
+Upload Buffer: 736
+Upload Buffer: 735
+Upload Buffer: 734
+Upload Buffer: 733
+Upload Buffer: 732
+Upload Buffer: 731
+Upload Buffer: 730
+Upload Buffer: 729
+Upload Buffer: 728
+Upload Buffer: 727
+Upload Buffer: 726
+Upload Buffer: 725
+Upload Buffer: 724
+Upload Buffer: 723
+Upload Buffer: 722
+Upload Buffer: 721
+Upload Buffer: 720
+Upload Buffer: 719
+Upload Buffer: 718
+Upload Buffer: 717
+Upload Buffer: 716
+Upload Buffer: 715
+Upload Buffer: 714
+Upload Buffer: 713
+Upload Buffer: 712
+Upload Buffer: 711
+Upload Buffer: 710
+Upload Buffer: 709
+Upload Buffer: 708
+Upload Buffer: 707
+Upload Buffer: 706
+Upload Buffer: 705
+Upload Buffer: 704
+Upload Buffer: 703
+Upload Buffer: 702
+Upload Buffer: 701
+Upload Buffer: 700
+Upload Buffer: 699
+Upload Buffer: 698
+Upload Buffer: 697
+Upload Buffer: 696
+Upload Buffer: 695
+Upload Buffer: 694
+Upload Buffer: 693
+Upload Buffer: 692
+Upload Buffer: 691
+Upload Buffer: 690
+Upload Buffer: 689
+Upload Buffer: 688
+Upload Buffer: 687
+Upload Buffer: 686
+Upload Buffer: 685
+Upload Buffer: 684
+Upload Buffer: 683
+Upload Buffer: 682
+Upload Buffer: 681
+Upload Buffer: 680
+Upload Buffer: 679
+Upload Buffer: 678
+Upload Buffer: 677
+Upload Buffer: 676
+Upload Buffer: 675
+Upload Buffer: 674
+Upload Buffer: 673
+Upload Buffer: 672
+Upload Buffer: 671
+Upload Buffer: 670
+Upload Buffer: 669
+Upload Buffer: 668
+Upload Buffer: 667
+Upload Buffer: 666
+Upload Buffer: 665
+Upload Buffer: 664
+Upload Buffer: 663
+Upload Buffer: 662
+Upload Buffer: 661
+Upload Buffer: 660
+Upload Buffer: 659
+Upload Buffer: 658
+Upload Buffer: 657
+Upload Buffer: 656
+Upload Buffer: 655
+Upload Buffer: 654
+Upload Buffer: 653
+Upload Buffer: 652
+Upload Buffer: 651
+Upload Buffer: 650
+Upload Buffer: 649
+Upload Buffer: 648
+Upload Buffer: 647
+Upload Buffer: 646
+Upload Buffer: 645
+Upload Buffer: 644
+Upload Buffer: 643
+Upload Buffer: 642
+Upload Buffer: 641
+Upload Buffer: 640
+Upload Buffer: 639
+Upload Buffer: 638
+Upload Buffer: 637
+Upload Buffer: 636
+Upload Buffer: 635
+Upload Buffer: 634
+Upload Buffer: 633
+Upload Buffer: 632
+Upload Buffer: 631
+Upload Buffer: 630
+Upload Buffer: 629
+Upload Buffer: 628
+Upload Buffer: 627
+Upload Buffer: 626
+Upload Buffer: 625
+Upload Buffer: 624
+Upload Buffer: 623
+Upload Buffer: 622
+Upload Buffer: 621
+Upload Buffer: 620
+Upload Buffer: 619
+Upload Buffer: 618
+Upload Buffer: 617
+Upload Buffer: 616
+Upload Buffer: 615
+Upload Buffer: 614
+Upload Buffer: 613
+Upload Buffer: 612
+Upload Buffer: 611
+Upload Buffer: 610
+Upload Buffer: 609
+Upload Buffer: 608
+Upload Buffer: 607
+Upload Buffer: 606
+Upload Buffer: 605
+Upload Buffer: 604
+Upload Buffer: 603
+Upload Buffer: 602
+Upload Buffer: 601
+Upload Buffer: 600
+Upload Buffer: 599
+Upload Buffer: 598
+Upload Buffer: 597
+Upload Buffer: 596
+Upload Buffer: 595
+Upload Buffer: 594
+Upload Buffer: 593
+Upload Buffer: 592
+Upload Buffer: 591
+Upload Buffer: 590
+Upload Buffer: 589
+Upload Buffer: 588
+Upload Buffer: 587
+Upload Buffer: 586
+Upload Buffer: 585
+Upload Buffer: 584
+Upload Buffer: 583
+Upload Buffer: 582
+Upload Buffer: 581
+Upload Buffer: 580
+Upload Buffer: 579
+Upload Buffer: 578
+Upload Buffer: 577
+Upload Buffer: 576
+Upload Buffer: 575
+Upload Buffer: 574
+Upload Buffer: 573
+Upload Buffer: 572
+Upload Buffer: 571
+Upload Buffer: 570
+Upload Buffer: 569
+Upload Buffer: 568
+Upload Buffer: 567
+Upload Buffer: 566
+Upload Buffer: 565
+Upload Buffer: 564
+Upload Buffer: 563
+Upload Buffer: 562
+Upload Buffer: 561
+Upload Buffer: 560
+Upload Buffer: 559
+Upload Buffer: 558
+Upload Buffer: 557
+Upload Buffer: 556
+Upload Buffer: 555
+Upload Buffer: 554
+Upload Buffer: 553
+Upload Buffer: 552
+Upload Buffer: 551
+Upload Buffer: 550
+Upload Buffer: 549
+Upload Buffer: 548
+Upload Buffer: 547
+Upload Buffer: 546
+Upload Buffer: 545
+Upload Buffer: 544
+Upload Buffer: 543
+Upload Buffer: 542
+Upload Buffer: 541
+Upload Buffer: 540
+Upload Buffer: 539
+Upload Buffer: 538
+Upload Buffer: 537
+Upload Buffer: 536
+Upload Buffer: 535
+Upload Buffer: 534
+Upload Buffer: 533
+Upload Buffer: 532
+Upload Buffer: 531
+Upload Buffer: 530
+Upload Buffer: 529
+Upload Buffer: 528
+Upload Buffer: 527
+Upload Buffer: 526
+Upload Buffer: 525
+Upload Buffer: 524
+Upload Buffer: 523
+Upload Buffer: 522
+Upload Buffer: 521
+Upload Buffer: 520
+Upload Buffer: 519
+Upload Buffer: 518
+Upload Buffer: 517
+Upload Buffer: 516
+Upload Buffer: 515
+Upload Buffer: 514
+Upload Buffer: 513
+Upload Buffer: 512
+Upload Buffer: 511
+Upload Buffer: 510
+Upload Buffer: 509
+Upload Buffer: 508
+Upload Buffer: 507
+Upload Buffer: 506
+Upload Buffer: 505
+Upload Buffer: 504
+Upload Buffer: 503
+Upload Buffer: 502
+Upload Buffer: 501
+Upload Buffer: 500
+Upload Buffer: 499
+Upload Buffer: 498
+Upload Buffer: 497
+Upload Buffer: 496
+Upload Buffer: 495
+Upload Buffer: 494
+Upload Buffer: 493
+Upload Buffer: 492
+Upload Buffer: 491
+Upload Buffer: 490
+Upload Buffer: 489
+Upload Buffer: 488
+Upload Buffer: 487
+Upload Buffer: 486
+Upload Buffer: 485
+Upload Buffer: 484
+Upload Buffer: 483
+Upload Buffer: 482
+Upload Buffer: 481
+Upload Buffer: 480
+Upload Buffer: 479
+Upload Buffer: 478
+Upload Buffer: 477
+Upload Buffer: 476
+Upload Buffer: 475
+Upload Buffer: 474
+Upload Buffer: 473
+Upload Buffer: 472
+Upload Buffer: 471
+Upload Buffer: 470
+Upload Buffer: 469
+Upload Buffer: 468
+Upload Buffer: 467
+Upload Buffer: 466
+Upload Buffer: 465
+Upload Buffer: 464
+Upload Buffer: 463
+Upload Buffer: 462
+Upload Buffer: 461
+Upload Buffer: 460
+Upload Buffer: 459
+Upload Buffer: 458
+Upload Buffer: 457
+Upload Buffer: 456
+Upload Buffer: 455
+Upload Buffer: 454
+Upload Buffer: 453
+Upload Buffer: 452
+Upload Buffer: 451
+Upload Buffer: 450
+Upload Buffer: 449
+Upload Buffer: 448
+Upload Buffer: 447
+Upload Buffer: 446
+Upload Buffer: 445
+Upload Buffer: 444
+Upload Buffer: 443
+Upload Buffer: 442
+Upload Buffer: 441
+Upload Buffer: 440
+Upload Buffer: 439
+Upload Buffer: 438
+Upload Buffer: 437
+Upload Buffer: 436
+Upload Buffer: 435
+Upload Buffer: 434
+Upload Buffer: 433
+Upload Buffer: 432
+Upload Buffer: 431
+Upload Buffer: 430
+Upload Buffer: 429
+Upload Buffer: 428
+Upload Buffer: 427
+Upload Buffer: 426
+Upload Buffer: 425
+Upload Buffer: 424
+Upload Buffer: 423
+Upload Buffer: 422
+Upload Buffer: 421
+Upload Buffer: 420
+Upload Buffer: 419
+Upload Buffer: 418
+Upload Buffer: 417
+Upload Buffer: 416
+Upload Buffer: 415
+Upload Buffer: 414
+Upload Buffer: 413
+Upload Buffer: 412
+Upload Buffer: 411
+Upload Buffer: 410
+Upload Buffer: 409
+Upload Buffer: 408
+Upload Buffer: 407
+Upload Buffer: 406
+Upload Buffer: 405
+Upload Buffer: 404
+Upload Buffer: 403
+Upload Buffer: 402
+Upload Buffer: 401
+Upload Buffer: 400
+Upload Buffer: 399
+Upload Buffer: 398
+Upload Buffer: 397
+Upload Buffer: 396
+Upload Buffer: 395
+Upload Buffer: 394
+Upload Buffer: 393
+Upload Buffer: 392
+Upload Buffer: 391
+Upload Buffer: 390
+Upload Buffer: 389
+Upload Buffer: 388
+Upload Buffer: 387
+Upload Buffer: 386
+Upload Buffer: 385
+Upload Buffer: 384
+Upload Buffer: 383
+Upload Buffer: 382
+Upload Buffer: 381
+Upload Buffer: 380
+Upload Buffer: 379
+Upload Buffer: 378
+Upload Buffer: 377
+Upload Buffer: 376
+Upload Buffer: 375
+Upload Buffer: 374
+Upload Buffer: 373
+Upload Buffer: 372
+Upload Buffer: 371
+Upload Buffer: 370
+Upload Buffer: 369
+Upload Buffer: 368
+Upload Buffer: 367
+Upload Buffer: 366
+Upload Buffer: 365
+Upload Buffer: 364
+Upload Buffer: 363
+Upload Buffer: 362
+Upload Buffer: 361
+Upload Buffer: 360
+Upload Buffer: 359
+Upload Buffer: 358
+Upload Buffer: 357
+Upload Buffer: 356
+Upload Buffer: 355
+Upload Buffer: 354
+Upload Buffer: 353
+Upload Buffer: 352
+Upload Buffer: 351
+Upload Buffer: 350
+Upload Buffer: 349
+Upload Buffer: 348
+Upload Buffer: 347
+Upload Buffer: 346
+Upload Buffer: 345
+Upload Buffer: 344
+Upload Buffer: 343
+Upload Buffer: 342
+Upload Buffer: 341
+Upload Buffer: 340
+Upload Buffer: 339
+Upload Buffer: 338
+Upload Buffer: 337
+Upload Buffer: 336
+Upload Buffer: 335
+Upload Buffer: 334
+Upload Buffer: 333
+Upload Buffer: 332
+Upload Buffer: 331
+Upload Buffer: 330
+Upload Buffer: 329
+Upload Buffer: 328
+Upload Buffer: 327
+Upload Buffer: 326
+Upload Buffer: 325
+Upload Buffer: 324
+Upload Buffer: 323
+Upload Buffer: 322
+Upload Buffer: 321
+Upload Buffer: 320
+Upload Buffer: 319
+Upload Buffer: 318
+Upload Buffer: 317
+Upload Buffer: 316
+Upload Buffer: 315
+Upload Buffer: 314
+Upload Buffer: 313
+Upload Buffer: 312
+Upload Buffer: 311
+Upload Buffer: 310
+Upload Buffer: 309
+Upload Buffer: 308
+Upload Buffer: 307
+Upload Buffer: 306
+Upload Buffer: 305
+Upload Buffer: 304
+Upload Buffer: 303
+Upload Buffer: 302
+Upload Buffer: 301
+Upload Buffer: 300
+Upload Buffer: 299
+Upload Buffer: 298
+Upload Buffer: 297
+Upload Buffer: 296
+Upload Buffer: 295
+Upload Buffer: 294
+Upload Buffer: 293
+Upload Buffer: 292
+Upload Buffer: 291
+Upload Buffer: 290
+Upload Buffer: 289
+Upload Buffer: 288
+Upload Buffer: 287
+Upload Buffer: 286
+Upload Buffer: 285
+Upload Buffer: 284
+Upload Buffer: 283
+Upload Buffer: 282
+Upload Buffer: 281
+Upload Buffer: 280
+Upload Buffer: 279
+Upload Buffer: 278
+Upload Buffer: 277
+Upload Buffer: 276
+Upload Buffer: 275
+Upload Buffer: 274
+Upload Buffer: 273
+Upload Buffer: 272
+Upload Buffer: 271
+Upload Buffer: 270
+Upload Buffer: 269
+Upload Buffer: 268
+Upload Buffer: 267
+Upload Buffer: 266
+Upload Buffer: 265
+Upload Buffer: 264
+Upload Buffer: 263
+Upload Buffer: 262
+Upload Buffer: 261
+Upload Buffer: 260
+Upload Buffer: 259
+Upload Buffer: 258
+Upload Buffer: 257
+Upload Buffer: 256
+Upload Buffer: 255
+Upload Buffer: 254
+Upload Buffer: 253
+Upload Buffer: 252
+Upload Buffer: 251
+Upload Buffer: 250
+Upload Buffer: 249
+Upload Buffer: 248
+Upload Buffer: 247
+Upload Buffer: 246
+Upload Buffer: 245
+Upload Buffer: 244
+Upload Buffer: 243
+Upload Buffer: 242
+Upload Buffer: 241
+Upload Buffer: 240
+Upload Buffer: 239
+Upload Buffer: 238
+Upload Buffer: 237
+Upload Buffer: 236
+Upload Buffer: 235
+Upload Buffer: 234
+Upload Buffer: 233
+Upload Buffer: 232
+Upload Buffer: 231
+Upload Buffer: 230
+Upload Buffer: 229
+Upload Buffer: 228
+Upload Buffer: 227
+Upload Buffer: 226
+Upload Buffer: 225
+Upload Buffer: 224
+Upload Buffer: 223
+Upload Buffer: 222
+Upload Buffer: 221
+Upload Buffer: 220
+Upload Buffer: 219
+Upload Buffer: 218
+Upload Buffer: 217
+Upload Buffer: 216
+Upload Buffer: 215
+Upload Buffer: 214
+Upload Buffer: 213
+Upload Buffer: 212
+Upload Buffer: 211
+Upload Buffer: 210
+Upload Buffer: 209
+Upload Buffer: 208
+Upload Buffer: 207
+Upload Buffer: 206
+Upload Buffer: 205
+Upload Buffer: 204
+Upload Buffer: 203
+Upload Buffer: 202
+Upload Buffer: 201
+Upload Buffer: 200
+Upload Buffer: 199
+Upload Buffer: 198
+Upload Buffer: 197
+Upload Buffer: 196
+Upload Buffer: 195
+Upload Buffer: 194
+Upload Buffer: 193
+Upload Buffer: 192
+Upload Buffer: 191
+Upload Buffer: 190
+Upload Buffer: 189
+Upload Buffer: 188
+Upload Buffer: 187
+Upload Buffer: 186
+Upload Buffer: 185
+Upload Buffer: 184
+Upload Buffer: 183
+Upload Buffer: 182
+Upload Buffer: 181
+Upload Buffer: 180
+Upload Buffer: 179
+Upload Buffer: 178
+Upload Buffer: 177
+Upload Buffer: 176
+Upload Buffer: 175
+Upload Buffer: 174
+Upload Buffer: 173
+Upload Buffer: 172
+Upload Buffer: 171
+Upload Buffer: 170
+Upload Buffer: 169
+Upload Buffer: 168
+Upload Buffer: 167
+Upload Buffer: 166
+Upload Buffer: 165
+Upload Buffer: 164
+Upload Buffer: 163
+Upload Buffer: 162
+Upload Buffer: 161
+Upload Buffer: 160
+Upload Buffer: 159
+Upload Buffer: 158
+Upload Buffer: 157
+Upload Buffer: 156
+Upload Buffer: 155
+Upload Buffer: 154
+Upload Buffer: 153
+Upload Buffer: 152
+Upload Buffer: 151
+Upload Buffer: 150
+Upload Buffer: 149
+Upload Buffer: 148
+Upload Buffer: 147
+Upload Buffer: 146
+Upload Buffer: 145
+Upload Buffer: 144
+Upload Buffer: 143
+Upload Buffer: 142
+Upload Buffer: 141
+Upload Buffer: 140
+Upload Buffer: 139
+Upload Buffer: 138
+Upload Buffer: 137
+Upload Buffer: 136
+Upload Buffer: 135
+Upload Buffer: 134
+Upload Buffer: 133
+Upload Buffer: 132
+Upload Buffer: 131
+Upload Buffer: 130
+Upload Buffer: 129
+Upload Buffer: 128
+Upload Buffer: 127
+Upload Buffer: 126
+Upload Buffer: 125
+Upload Buffer: 124
+Upload Buffer: 123
+Upload Buffer: 122
+Upload Buffer: 121
+Upload Buffer: 120
+Upload Buffer: 119
+Upload Buffer: 118
+Upload Buffer: 117
+Upload Buffer: 116
+Upload Buffer: 115
+Upload Buffer: 114
+Upload Buffer: 113
+Upload Buffer: 112
+Upload Buffer: 111
+Upload Buffer: 110
+Upload Buffer: 109
+Upload Buffer: 108
+Upload Buffer: 107
+Upload Buffer: 106
+Upload Buffer: 105
+Upload Buffer: 104
+Upload Buffer: 103
+Upload Buffer: 102
+Upload Buffer: 101
+Upload Buffer: 100
+Upload Buffer: 99
+Upload Buffer: 98
+Upload Buffer: 97
+Upload Buffer: 96
+Upload Buffer: 95
+Upload Buffer: 94
+Upload Buffer: 93
+Upload Buffer: 92
+Upload Buffer: 91
+Upload Buffer: 90
+Upload Buffer: 89
+Upload Buffer: 88
+Upload Buffer: 87
+Upload Buffer: 86
+Upload Buffer: 85
+Upload Buffer: 84
+Upload Buffer: 83
+Upload Buffer: 82
+Upload Buffer: 81
+Upload Buffer: 80
+Upload Buffer: 79
+Upload Buffer: 78
+Upload Buffer: 77
+Upload Buffer: 76
+Upload Buffer: 75
+Upload Buffer: 74
+Upload Buffer: 73
+Upload Buffer: 72
+Upload Buffer: 71
+Upload Buffer: 70
+Upload Buffer: 69
+Upload Buffer: 68
+Upload Buffer: 67
+Upload Buffer: 66
+Upload Buffer: 65
+Upload Buffer: 64
+Upload Buffer: 63
+Upload Buffer: 62
+Upload Buffer: 61
+Upload Buffer: 60
+Upload Buffer: 59
+Upload Buffer: 58
+Upload Buffer: 57
+Upload Buffer: 56
+Upload Buffer: 55
+Upload Buffer: 54
+Upload Buffer: 53
+Upload Buffer: 52
+Upload Buffer: 51
+Upload Buffer: 50
+Upload Buffer: 49
+Upload Buffer: 48
+Upload Buffer: 47
+Upload Buffer: 46
+Upload Buffer: 45
+Upload Buffer: 44
+Upload Buffer: 43
+Upload Buffer: 42
+Upload Buffer: 41
+Upload Buffer: 40
+Upload Buffer: 39
+Upload Buffer: 38
+Upload Buffer: 37
+Upload Buffer: 36
+Upload Buffer: 35
+Upload Buffer: 34
+Upload Buffer: 33
+Upload Buffer: 32
+Upload Buffer: 31
+Upload Buffer: 30
+Upload Buffer: 29
+Upload Buffer: 28
+Upload Buffer: 27
+Upload Buffer: 26
+Upload Buffer: 25
+Upload Buffer: 24
+Upload Buffer: 23
+Upload Buffer: 22
+Upload Buffer: 21
+Upload Buffer: 20
+Upload Buffer: 19
+Upload Buffer: 18
+Upload Buffer: 17
+Upload Buffer: 16
+Upload Buffer: 15
+Upload Buffer: 14
+Upload Buffer: 13
+Upload Buffer: 12
+Upload Buffer: 11
+Upload Buffer: 10
+Upload Buffer: 9
+Upload Buffer: 8
+Upload Buffer: 7
+Upload Buffer: 6
+Upload Buffer: 5
+Upload Buffer: 4
+Upload Buffer: 3
+Upload Buffer: 2
+Upload Buffer: 1
+Successfully put record Ok("9b9180937a87efb849320fcd9fe385a3055cd0fb") at Duration { secs: 31, nanos: 701656624 }
+Successfully put record Ok("85c5d73a81ba4762839f317e8481b937356fa515") at Duration { secs: 32, nanos: 246072898 }
+Successfully put record Ok("63e3ee7651658dd72a6b6a067c43b438ae6b2ff5") at Duration { secs: 32, nanos: 806358321 }
+Successfully put record Ok("db2aac0334bd30b519e3a6d7c245c73b6864034f") at Duration { secs: 32, nanos: 809291233 }
+Successfully put record Ok("861f4563bf075a3e441d420aa5c8f31330fcb865") at Duration { secs: 32, nanos: 853407012 }
+Successfully put record Ok("b2ce2ac24292ef1fdf98cad7a71f2df4fe0196c4") at Duration { secs: 32, nanos: 853870245 }
+Successfully put record Ok("4ee51bc2438d890c03fedfd742681893c10a78a6") at Duration { secs: 33, nanos: 226418464 }
+Successfully put record Ok("70ea441aaaada61a88797db6b67d3438fc83763c") at Duration { secs: 33, nanos: 324178510 }
+Successfully put record Ok("8032f884c6a8b6806853d3a5a67d8b147d127156") at Duration { secs: 33, nanos: 324717895 }
+Successfully put record Ok("f2f8704e07e90ec4fbed4be7c4e786254faaa735") at Duration { secs: 33, nanos: 325651073 }
+Successfully put record Ok("23acad79a8515c300929d0a1e00a5730a7530dfe") at Duration { secs: 33, nanos: 326707781 }
+Successfully put record Ok("ea647ecdabba4352a762badbe23883ba393afa83") at Duration { secs: 33, nanos: 328032889 }
+Successfully put record Ok("d8df5deaf5978ae7c91003a0f98967b6be10dea8") at Duration { secs: 35, nanos: 783462998 }
+Successfully put record Ok("1a56c51a76ccb57124e69bcbdc6bc49931964040") at Duration { secs: 35, nanos: 784924120 }
+Successfully put record Ok("126a6d7a057035d9ef6882f2756f40a5ed1db583") at Duration { secs: 35, nanos: 785281075 }
+Successfully put record Ok("5511259f85f756475104a41d020a10684eabda2c") at Duration { secs: 35, nanos: 785538725 }
+Successfully put record Ok("2b18632383ca978517cda9e0a1f571e10013328e") at Duration { secs: 36, nanos: 11244738 }
+Successfully put record Ok("ee7841972fc66acf39883054edba7619a26e0312") at Duration { secs: 36, nanos: 12465623 }
+Successfully put record Ok("7106dc3bdaec5a0f4ac2a60866f6a3b42e4460e3") at Duration { secs: 36, nanos: 27160874 }
+Successfully put record Ok("3e99c0f7a7ef993eef8e195dddcab487d6e98966") at Duration { secs: 36, nanos: 28574116 }
+Successfully put record Ok("7da28d9d782ad99988c8974b41c30403b180df4e") at Duration { secs: 36, nanos: 31881847 }
+Successfully put record Ok("affdf5cd3ab145b22075b13dfe8bdcc2e40b65f1") at Duration { secs: 36, nanos: 35616993 }
+Successfully put record Ok("4b777b88e269adc4c35ddaafc891b8aaeb38f522") at Duration { secs: 36, nanos: 38039856 }
+Successfully put record Ok("29c9511d9d2491fe4a411663c956de38d2be85a4") at Duration { secs: 36, nanos: 48565461 }
+Successfully put record Ok("89b6809e97b7a7f60981166ffda5bc85e1ca8626") at Duration { secs: 36, nanos: 56509668 }
+Successfully put record Ok("008f7673323ccce53ca73da2559f1a356574a42d") at Duration { secs: 36, nanos: 63361099 }
+Successfully put record Ok("33d115e0dcaca8c6eaf398295587dafe701b5a4f") at Duration { secs: 36, nanos: 69241351 }
+Successfully put record Ok("68aef4ca760beb9e0540f4feb25772543ce9bcde") at Duration { secs: 36, nanos: 567021594 }
+Successfully put record Ok("bbfce03b4b7058404722397736549f96575c7547") at Duration { secs: 36, nanos: 982909055 }
+Successfully put record Ok("c7aebd4e6b99c80c0eaa04a118d11773f0a3d1fc") at Duration { secs: 37, nanos: 15993637 }
+Successfully put record Ok("b75f5fea08e03052cb95081767229520c8b485b5") at Duration { secs: 37, nanos: 22025723 }
+Successfully put record Ok("cd3a683e4ce13173dfbede0b595f9461d093d25d") at Duration { secs: 37, nanos: 91368418 }
+Successfully put record Ok("a08daae5b4c53a092f08e644f38b49b4a9bd7e2e") at Duration { secs: 37, nanos: 142586506 }
+Successfully put record Ok("3b9242633d0c875b4504e2799044f6684efedafe") at Duration { secs: 37, nanos: 145959639 }
+Successfully put record Ok("22ae04de4f6ede216712779c90bdf6f6d8b22959") at Duration { secs: 37, nanos: 169991440 }
+Successfully put record Ok("fcdafee5c30c34af16fd9a571cc922a4a89fb606") at Duration { secs: 37, nanos: 683504086 }
+Successfully put record Ok("81b6e5c12d6668eaedabe9bcd1602dc303eebdda") at Duration { secs: 37, nanos: 736559175 }
+Successfully put record Ok("0593091f2ceaa4230a2b1756b616dc7d4c317525") at Duration { secs: 37, nanos: 828605678 }
+Successfully put record Ok("1f619e193ed40c705f2f4b2063b7c2181926bb66") at Duration { secs: 37, nanos: 871667595 }
+Successfully put record Ok("2e2b400ed8e91aab62a773ab8ae9c4646a1b106d") at Duration { secs: 37, nanos: 904347453 }
+Successfully put record Ok("532d0ac098c4e6a02bead6b6f277b3d5f0531052") at Duration { secs: 37, nanos: 904571771 }
+Successfully put record Ok("1d6fef81994cf9f9879f34875cea8c947bd54660") at Duration { secs: 37, nanos: 905542018 }
+Successfully put record Ok("1192c21ab0be3cc51361d676f3dfaf06a7740668") at Duration { secs: 37, nanos: 918452925 }
+Successfully put record Ok("d717cf2616c8b43247dad614bac9c55fdf6dfaef") at Duration { secs: 38, nanos: 195038507 }
+Successfully put record Ok("b4fd1b80e9a85137fcfd82079a955a7e25c86b48") at Duration { secs: 38, nanos: 210060536 }
+Successfully put record Ok("e08ed914d1ed5d24f2c6329b9738f4ff4ba8656a") at Duration { secs: 38, nanos: 440877841 }
+Successfully put record Ok("57dae620552b17069d83eaf95e6e7d591d69b250") at Duration { secs: 38, nanos: 480348818 }
+Successfully put record Ok("34e6b93c9c7abdde9ddea1d58bc29ce9df05c7aa") at Duration { secs: 38, nanos: 576058074 }
+Successfully put record Ok("1951c9e9bbf0d7fbd0401078508af8d41107b199") at Duration { secs: 39, nanos: 64643752 }
+Successfully put record Ok("26d8ca79d81af3f49b289afea39aa70e591a06a9") at Duration { secs: 39, nanos: 67730351 }
+Successfully put record Ok("a591c84741e2ac76e29b47c8ee7fac37df9d24e8") at Duration { secs: 39, nanos: 89058556 }
+Successfully put record Ok("09ae98bd676644422175d14562e6e235c2614f62") at Duration { secs: 39, nanos: 89392508 }
+Successfully put record Ok("7b5563735841f691e0ed6bb7d81fc6fbbef12d5d") at Duration { secs: 39, nanos: 91695107 }
+Successfully put record Ok("caff3ad267fe52f7abc18b2496831b02c778863a") at Duration { secs: 39, nanos: 93657632 }
+Successfully put record Ok("95de77bc8cc2c31bd3980768ebf454a6260ad338") at Duration { secs: 39, nanos: 96110511 }
+Successfully put record Ok("336bbf79fbbbe5117fdf2c0eff25610363633b46") at Duration { secs: 39, nanos: 96154543 }
+Successfully put record Ok("3791e4f4da928e21256aa2ecd2115c4aec265dba") at Duration { secs: 39, nanos: 96202923 }
+Successfully put record Ok("8defcb7532c5c8b50a18174fadbad46e097075c1") at Duration { secs: 39, nanos: 96276290 }
+Successfully put record Ok("f7fd59ecc0efaaa7de09495991e6f2540e05dd72") at Duration { secs: 39, nanos: 97161910 }
+Successfully put record Ok("34bef0e90e6ae184c80c0d16a2b019cbbe9ca189") at Duration { secs: 39, nanos: 98366964 }
+Successfully put record Ok("72372fc94adcb427e0709dad9612f49f59485b0b") at Duration { secs: 39, nanos: 98740340 }
+Successfully put record Ok("c70c9a264342e2172790a9f5c5668da35cc21520") at Duration { secs: 39, nanos: 99379390 }
+Successfully put record Ok("8af1b7f2dced78f9a3b7731e56ba02445143c934") at Duration { secs: 39, nanos: 99997271 }
+Successfully put record Ok("7bc19c8eb2cdd110b5ade4bb337da56c491c1f42") at Duration { secs: 39, nanos: 100393539 }
+Successfully put record Ok("a6717165fb3ec7eb7ad1d9b8454272f1b76d153a") at Duration { secs: 39, nanos: 101000649 }
+Successfully put record Ok("ecaf5c2233dd707da621284393b95237046c0fbc") at Duration { secs: 39, nanos: 101790070 }
+Successfully put record Ok("e1b1bb5c1df8828913777cbfb6fff14100aef4f9") at Duration { secs: 39, nanos: 103790115 }
+Successfully put record Ok("cba18dbaef8cb17c129e8b5de2a479168418a9d0") at Duration { secs: 39, nanos: 103839737 }
+Successfully put record Ok("d81977295a97ad1d823d2e97980a4a0aa3e405d5") at Duration { secs: 39, nanos: 103885903 }
+Successfully put record Ok("cf8ec8a4cfd3793a402a24c7d3a6ea9656a2a0e3") at Duration { secs: 39, nanos: 103932530 }
+Successfully put record Ok("71992f9a5ad1e5b7bddf66d9985d5210c81abefe") at Duration { secs: 39, nanos: 103984637 }
+Successfully put record Ok("015bd937dfd2449a63397e6dfa3889ca05fdb290") at Duration { secs: 39, nanos: 104034450 }
+Successfully put record Ok("7bb303815585ab13fafb2e97c73ee1c778d51e6f") at Duration { secs: 39, nanos: 105006070 }
+Successfully put record Ok("cddd8210fd159e2cd398d6b9aed84fb14d692928") at Duration { secs: 39, nanos: 105094164 }
+Successfully put record Ok("c1971c7c484f09cd82106c03b506b9b33b38e94b") at Duration { secs: 39, nanos: 105232381 }
+Successfully put record Ok("edd8dbf8819b67c4c4efa6b3d3e3593b8a0baa35") at Duration { secs: 39, nanos: 105331977 }
+Successfully put record Ok("6b8749dbc5b1defae8012636b6afd922d82138e9") at Duration { secs: 39, nanos: 105710682 }
+Successfully put record Ok("a5c6c6333bff5983329081ee89cf1b64db17ad0a") at Duration { secs: 39, nanos: 106073438 }
+Successfully put record Ok("c574d94daaef49be715abaafea3ca16e753df512") at Duration { secs: 39, nanos: 106175448 }
+Successfully put record Ok("1db1d30caec621ecd40622ed72c56c537f3d5fef") at Duration { secs: 39, nanos: 106568870 }
+Successfully put record Ok("eb800cf65b1953afd8f4dd69029579cba6e898b3") at Duration { secs: 39, nanos: 106968745 }
+Successfully put record Ok("487124cb68e0fd651b5875fe0840c1fc4b08ad5f") at Duration { secs: 39, nanos: 107123143 }
+Successfully put record Ok("951333a207b998f63d407d1f2676b2b09497516c") at Duration { secs: 39, nanos: 107489014 }
+Successfully put record Ok("a234041b2216a370f9af81b3708b03e7bb2bf8f5") at Duration { secs: 39, nanos: 107843374 }
+Successfully put record Ok("b08e4d45477fd3881777eba0f6c4ece42525b6b8") at Duration { secs: 39, nanos: 107958018 }
+Successfully put record Ok("780f601295f47760e325030eb6db5553e7c5a955") at Duration { secs: 39, nanos: 108321204 }
+Successfully put record Ok("88d0f12570e49681dbe3c7ecf918a72472e5f75e") at Duration { secs: 39, nanos: 108655868 }
+Successfully put record Ok("086cb88a50bc20e1cbd0298cb62a269b19c064ee") at Duration { secs: 39, nanos: 110231302 }
+Successfully put record Ok("6ca0a301dc15532012e721545a8663e9a253749a") at Duration { secs: 39, nanos: 110639693 }
+Successfully put record Ok("ac613d6eaff8118c2b66f190a81beec2dc595d69") at Duration { secs: 39, nanos: 111015844 }
+Successfully put record Ok("6e268899e0122214623301eb4a63ebd7fe775e56") at Duration { secs: 39, nanos: 111409577 }
+Successfully put record Ok("9f0d4bc7542fba98d92ed06ff9bc1f445fac0451") at Duration { secs: 39, nanos: 111930768 }
+Successfully put record Ok("672e37b3b266c8936beed57bf372df4141c5ea0c") at Duration { secs: 39, nanos: 112368413 }
+Successfully put record Ok("cb748e0366d2c5fbd78001e4d70b62c080e3abed") at Duration { secs: 39, nanos: 115215686 }
+Successfully put record Ok("3598cbc029a87608d6571d22dc61a5783c7614fd") at Duration { secs: 39, nanos: 115329448 }
+Successfully put record Ok("3bf2426096f91a45a67fba49e582648055e1941c") at Duration { secs: 39, nanos: 115681473 }
+Successfully put record Ok("7ea6bea453fadd6e8d609492fddceee7513b8811") at Duration { secs: 39, nanos: 116072131 }
+Successfully put record Ok("3230d91d137577dc5e556014bcb7ad5e3949f8cd") at Duration { secs: 39, nanos: 116501210 }
+Successfully put record Ok("40303a7e6529f375279feeb16a8d8dee131a5614") at Duration { secs: 39, nanos: 116871239 }
+Successfully put record Ok("79a46fe666708841cd3ecfe3c24389b1c693b425") at Duration { secs: 39, nanos: 117312812 }
+Successfully put record Ok("eb23c9a8a39e069392d5e9e96c2ad38b63058eba") at Duration { secs: 39, nanos: 117676028 }
+Successfully put record Ok("c1e8497faeb6bba61b468fbca81107978ad4f3a2") at Duration { secs: 39, nanos: 118084359 }
+Successfully put record Ok("9916533e795deaed2f29a9f03fbe06211775ecf6") at Duration { secs: 39, nanos: 118487510 }
+Successfully put record Ok("aca395844721f568bf9ce0274b6c444781a55beb") at Duration { secs: 39, nanos: 118656414 }
+Successfully put record Ok("ac8c8eff57427efb7492d91ef1592e0e9b65e74f") at Duration { secs: 39, nanos: 119014992 }
+Successfully put record Ok("fb4972fe240058484949c385aabc494afeca5a80") at Duration { secs: 39, nanos: 119204034 }
+Successfully put record Ok("5b8e4e57372c5e293bcccad73f5bbde8efb23434") at Duration { secs: 39, nanos: 119610531 }
+Successfully put record Ok("602dbc016a6a1a61534d832e9584bb2b232db1c7") at Duration { secs: 39, nanos: 119974509 }
+Successfully put record Ok("038cd68b5688683a3961afc789e03a699f12c9b5") at Duration { secs: 39, nanos: 120124589 }
+Successfully put record Ok("13986acebde5dda9fb3adcabe845e49dfb3f0709") at Duration { secs: 39, nanos: 120545122 }
+Successfully put record Ok("87c0bef25cc5645a2ed3205852fdc2ffbe0f1f4d") at Duration { secs: 39, nanos: 120950357 }
+Successfully put record Ok("6449551d88bb32e414136a4d568c9fd4f8d327a1") at Duration { secs: 39, nanos: 137295131 }
+Successfully put record Ok("b9b68f020e366c69365c707d4f56a24bbd85d915") at Duration { secs: 39, nanos: 137605228 }
+Successfully put record Ok("02d0145ed403492e1f28b7ebf18d850082fb6692") at Duration { secs: 39, nanos: 137876554 }
+Successfully put record Ok("73541e8c1bfa3f40dd5942c043f4bebed2755c6e") at Duration { secs: 39, nanos: 138166233 }
+Successfully put record Ok("ad451f8828a2211ec3c2f14bc03fa4a607f050c7") at Duration { secs: 39, nanos: 155988238 }
+Successfully put record Ok("5ac98a96511e2a1cb7eec9945c23785fdabe6b78") at Duration { secs: 39, nanos: 156214729 }
+Successfully put record Ok("fac7852ce27540083629e3ae529050bdd7fe1e06") at Duration { secs: 39, nanos: 156592543 }
+Successfully put record Ok("1165995b6a53409aa8dfd2589779a1cb2dc79342") at Duration { secs: 39, nanos: 156938067 }
+Successfully put record Ok("79ba70a00f5ad8ffec3d0c6293252c57b15a87e1") at Duration { secs: 39, nanos: 157228317 }
+Successfully put record Ok("623d3a9e427f93965f4468cc1d221315fc2bd170") at Duration { secs: 39, nanos: 157518868 }
+Successfully put record Ok("d2043c2ffa8bc65cf3131cfd037cddfd956ce3d3") at Duration { secs: 39, nanos: 157850346 }
+Successfully put record Ok("368ec6ce55c34b93a126ea6cd3ac993d31707b18") at Duration { secs: 39, nanos: 158158760 }
+Successfully put record Ok("bb2d0b56d7e148fbb0d67e3efdd06fb78df125aa") at Duration { secs: 39, nanos: 158719785 }
+Successfully put record Ok("68dd76a139c57a453a3c71f07fa457e1e18f68e8") at Duration { secs: 39, nanos: 159078083 }
+Successfully put record Ok("43b76fe1f832b7e95d3e9afe43017e44f34ed178") at Duration { secs: 39, nanos: 159457760 }
+Successfully put record Ok("7d5972afafb8284e61f9a6200fb3fad2905c58bd") at Duration { secs: 39, nanos: 159784188 }
+Successfully put record Ok("f0ee73bda1ce985aa0a3a41589c48e1391fd81af") at Duration { secs: 39, nanos: 160163845 }
+Successfully put record Ok("b32b142a7c7294059f01d2f790c3e5cab4e8ca6b") at Duration { secs: 39, nanos: 160532272 }
+Successfully put record Ok("ecab1d97d9e0feaf7c1f4a6b39e53f94a0e20bda") at Duration { secs: 39, nanos: 160901269 }
+Successfully put record Ok("fc2575087dcf782e328ab97ad08312a8c6386085") at Duration { secs: 39, nanos: 161255889 }
+Successfully put record Ok("4a435375b60c0dcdede712db2c78440acf9421ad") at Duration { secs: 39, nanos: 161604849 }
+Successfully put record Ok("df4093237adbba1d1b720263722e6fd792fab031") at Duration { secs: 39, nanos: 161971743 }
+Successfully put record Ok("388a159bead85df7d684cd60ce66f874c4e7b70d") at Duration { secs: 39, nanos: 364826154 }
+Successfully put record Ok("efa437de1d57aa5f060cf28f7fc206d7d0a0296a") at Duration { secs: 39, nanos: 365379986 }
+Successfully put record Ok("108608d35e804356576fcc76c79f92966e75d0d1") at Duration { secs: 39, nanos: 365656000 }
+Successfully put record Ok("4ef4760348c900c9c69a214ba9b62796bdbe1a4a") at Duration { secs: 39, nanos: 365982087 }
+Successfully put record Ok("d5cfe5114edb2e477494182db5efb04c44f5a0a9") at Duration { secs: 39, nanos: 371938862 }
+Successfully put record Ok("3d522125ec5fda3d532748d73e78918f1374e4f3") at Duration { secs: 39, nanos: 372467677 }
+Successfully put record Ok("2de82c18dbdbd23529f88fc3710ce5783d6ac845") at Duration { secs: 39, nanos: 382256179 }
+Successfully put record Ok("0ae3e0f24ee6a2ffbb2cea78639c1eb3d6663540") at Duration { secs: 39, nanos: 389781515 }
+Successfully put record Ok("87a05f84fdcbab9ba32d217348307b1052cba5bf") at Duration { secs: 39, nanos: 401042760 }
+Successfully put record Ok("8cc6cf56507209deed77266387cb92ecb4b43027") at Duration { secs: 39, nanos: 401402250 }
+Successfully put record Ok("0f4c16c6b112a875d4a7404075f5d62d5d5e8d8a") at Duration { secs: 39, nanos: 401792357 }
+Successfully put record Ok("7a321a70a56bc6a2bf785d65d5263315a316f44c") at Duration { secs: 39, nanos: 407688318 }
+Successfully put record Ok("50e5922d96f52bd649f300bfd67a8898df7da88e") at Duration { secs: 39, nanos: 408076882 }
+Successfully put record Ok("18a68a766627ab2b8824ae3e62e66e48b4d02204") at Duration { secs: 39, nanos: 408367503 }
+Successfully put record Ok("60ca8db003e3f200c76c98051fd8341c09e96c7e") at Duration { secs: 39, nanos: 421267080 }
+Successfully put record Ok("00ff3f84637c97e5fba83cbc58dcb2bcbf7e8f8c") at Duration { secs: 39, nanos: 421957937 }
+Successfully put record Ok("d7322d6672d3317a1ab9c92d434c0ee0ef9ca9d1") at Duration { secs: 39, nanos: 422414167 }
+Successfully put record Ok("db72a8084105a836b2a8062de917bf9b4d2f2ff2") at Duration { secs: 39, nanos: 422781621 }
+Successfully put record Ok("6f78aa8cfa70e2e0809b02630a2acfdf16b9b95c") at Duration { secs: 39, nanos: 423182558 }
+Successfully put record Ok("fd962d11d3e34613dd4af8ffd9283095e1636e4d") at Duration { secs: 39, nanos: 423596359 }
+Successfully put record Ok("be6f59dd5fb5dc4d22c42d512575a10a0e5b3c62") at Duration { secs: 39, nanos: 424040776 }
+Successfully put record Ok("e118c460bff33d5c19e7b3de957c3bca727853c0") at Duration { secs: 39, nanos: 424448145 }
+Successfully put record Ok("49687c136316453617b7930917e3dd7e8b0324ca") at Duration { secs: 39, nanos: 424936214 }
+Successfully put record Ok("4a13508aa08bd075ca350ce412714a800d505865") at Duration { secs: 39, nanos: 429414695 }
+Successfully put record Ok("851afceebe7842086cb3973e9a9c1d9aba46205f") at Duration { secs: 39, nanos: 429852861 }
+Successfully put record Ok("2ca22d116a6f76da1f0ecdb307217cfa18206b4a") at Duration { secs: 39, nanos: 430189208 }
+Successfully put record Ok("f279fb288005156df86f72961c9544a2211ef90e") at Duration { secs: 39, nanos: 430556983 }
+Successfully put record Ok("b34c29b47cbfad6c59461fc56ca31f052506786a") at Duration { secs: 39, nanos: 430866289 }
+Successfully put record Ok("08eef570b880350c7130fbc409aee3f5f9f92354") at Duration { secs: 39, nanos: 431084776 }
+Successfully put record Ok("1266591cb13a6c36b03749886fa97e7f7e22552c") at Duration { secs: 39, nanos: 534250680 }
+Successfully put record Ok("8745601b3ef1f295e59757320ae795254ebdbb20") at Duration { secs: 39, nanos: 534730113 }
+Successfully put record Ok("fd3e4092023301d0115d7383f21fa0ac567818dd") at Duration { secs: 39, nanos: 535167517 }
+Successfully put record Ok("db3a7976b90a1e9dad78db47a01f8baeb9fcc020") at Duration { secs: 39, nanos: 547356230 }
+Successfully put record Ok("3b82129327d669248d11d9ecf31d1e6c860b7502") at Duration { secs: 39, nanos: 548010128 }
+Successfully put record Ok("0047625e4c7ef7b774d8a8943a2476228dd55b54") at Duration { secs: 39, nanos: 548418769 }
+Successfully put record Ok("4045180ca1e38680265efb624841c4c25e388d51") at Duration { secs: 39, nanos: 548730800 }
+Successfully put record Ok("615e693452fab05fcdb7e50b9229e7f077bde661") at Duration { secs: 39, nanos: 549108303 }
+Successfully put record Ok("d13761db7c277e5d32b889166348c40543cdf060") at Duration { secs: 39, nanos: 555818782 }
+Successfully put record Ok("7edaf3203faf21e708c6eb4c6a3a62fc159bfa63") at Duration { secs: 39, nanos: 555989219 }
+Successfully put record Ok("0e4f57150f96145f6137756f2e7648fb5b18ef57") at Duration { secs: 39, nanos: 556181888 }
+Successfully put record Ok("20160365a5fb30428264a5f5f0f2b513a7da4830") at Duration { secs: 39, nanos: 584231973 }
+Successfully put record Ok("a81044266d889f56a27ac0103976bbc46b9f8d85") at Duration { secs: 39, nanos: 584602524 }
+Successfully put record Ok("a2ec83f3dd6f57487c45e82d65272234ac7d3fb9") at Duration { secs: 39, nanos: 584910728 }
+Successfully put record Ok("0d031352e9f982e80ad41ea4a0734bf207d40ab1") at Duration { secs: 39, nanos: 585178246 }
+Successfully put record Ok("43e8fdb952dca3a67182574bc18f834d0d7857e5") at Duration { secs: 39, nanos: 585534600 }
+Successfully put record Ok("5b91e78d44ea3fd6ad03207c48240bff5d04c7ac") at Duration { secs: 39, nanos: 657777678 }
+Successfully put record Ok("5c7ed90f7e24c173f065b1123f96bf9e9022dafe") at Duration { secs: 39, nanos: 667416451 }
+Successfully put record Ok("96cc0cfaa2e889b13573db1a04c925ce0e1d4d8f") at Duration { secs: 39, nanos: 729726678 }
+Successfully put record Ok("350785d1097abffb326545f6df20453f4cbf9a80") at Duration { secs: 39, nanos: 729903067 }
+Successfully put record Ok("6cf48c37328213daab47774c761daa40fd209d25") at Duration { secs: 39, nanos: 730027809 }
+Successfully put record Ok("db9904f287ac29b9f541ac84070772b9d47f6dd3") at Duration { secs: 39, nanos: 731758112 }
+Successfully put record Ok("4fe585646bda31ce02ddf20b7585bacb240c9a9e") at Duration { secs: 39, nanos: 731895578 }
+Successfully put record Ok("8d1b6e791a945b33c822e95d3e400f379c2d65fc") at Duration { secs: 39, nanos: 732019168 }
+^Cexit
+
+_manjaro@manjaro-pc:~/GIT/bc_p2p/evaluation\[01;32m[manjaro@manjaro-pc[01;37m evaluation[01;32m]$[00m exit
+exit
+
+Script done on 2020-10-26 19:36:04+01:00 [COMMAND_EXIT_CODE="130"]
