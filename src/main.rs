@@ -11,7 +11,7 @@
 //! Close with Ctrl-c.
 
 mod sem_scholar_utils;
-use crate::sem_scholar_utils::api::{get_all_references_by_id, get_all_citations_by_reference_id};
+use crate::sem_scholar_utils::api::{get_all_references_by_id, get_all_citations_by_reference_id, get_paper_id_by_arXiv_id};
 use crate::sem_scholar_utils::doc::Reference;
 use crate::sem_scholar_utils::sbc::create_k2_sets;
 
@@ -42,13 +42,14 @@ use std::{error::Error, task::{Context, Poll}, fs, env};
 use std::collections::{HashMap, HashSet};
 use sha1::Sha1;
 use sha1::Digest;
-use std::io::Read;
+use std::io::{Read, BufReader};
 use std::iter::FromIterator;
 use chrono::{Local};
 use chrono::DateTime;
 use std::path::Path;
 use lazy_static::lazy_static;
 use mut_static::MutStatic;
+use std::fs::File;
 
 pub struct Timer {
     startTime : DateTime<Local>
@@ -65,6 +66,14 @@ impl Timer {
 lazy_static! {
     static ref MY_TIMER: MutStatic<Timer> = MutStatic::new();
 }
+
+#[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Arxiv_Refs {
+    pub url: Vec<String>,
+    pub pdf: Vec<String>,
+}
+
 
 // We create a custom network behaviour that combines Kademlia and mDNS.
 #[derive(NetworkBehaviour)]
@@ -132,6 +141,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // FILTERING
     // --------------------
     let k2_hashes;
+    //let paper_ids;
     if args.len() > 1 {
         match args[1].as_str() {
             "filter" => {
@@ -142,7 +152,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
             "json" => {
                 println!("check public database with DOIs from JSON file");
 
-               // paper_ids = get_paper_ids_from_json(arXid_json: &str)
+                // Load Json file
+                let mut file = File::open( args[2].to_owned())?;
+                let reader = BufReader::new(file);
+                let mut arx_id_json:Arxiv_Refs = serde_json::from_reader(reader)?;
+                print!("{:#?}", arx_id_json.url);
+
+
+
+                // paper_ids = get_paper_id_by_arXiv_id(arXid_json: &str)
                 // TODO: add document ID input dialog
             },
             _ => println!("Standard Mode"), 
