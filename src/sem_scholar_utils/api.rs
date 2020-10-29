@@ -19,6 +19,13 @@ pub async fn get_all_references_by_id(id: &str) -> Result<Vec<Reference>, anyhow
     Ok(doc.references.unwrap())
 }
 
+// pub async fn get_paper_id_by_arXiv_id(arXid: &str) -> Result<paper_id, anyhow::Error> {
+//     let doc_url = format!("{}{}", API_URL+"arxiv:", arXid);
+//     let body = reqwest::get(&doc_url).await?.text().await?;
+//     let doc: Root = serde_json::from_str(body.as_ref())?;
+//     Ok(doc.paper_id.unwrap())
+// }
+
 pub async fn get_all_citations_by_reference_id(
     id: &str,
 ) -> Result<Vec<Citation>, anyhow::Error> {

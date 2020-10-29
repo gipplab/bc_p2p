@@ -2,7 +2,15 @@
 A peer to peer implementation of confidential bibliographic coupling detection.
 
 ---
+#### Document input
+
+SUBMIT: ./bc_p2p [DOI]
+FILTER Test: ./bc_p2p filter
+
+
+
 #### Run multiple instances from your terminal, then:
+
 PUT: Type `PUT my-key my-value`
 
 GET: Type `GET my-key`

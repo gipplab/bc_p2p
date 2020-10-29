@@ -139,9 +139,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 k2_hashes = referenceFiltering().await;
                 // TODO: add document ID input dialog
             },
-            _ => println!("Standard Mode"),
+            "json" => {
+                println!("check public database with DOIs from JSON file");
+
+               // paper_ids = get_paper_ids_from_json(arXid_json: &str)
+                // TODO: add document ID input dialog
+            },
+            _ => println!("Standard Mode"), 
         }
     }
+
+    // I need a list of dois
 
     // TODO: Check and upload k2_hashes to DHT
     // TODO:  originality ratio can be calculatedh as a numeric value
