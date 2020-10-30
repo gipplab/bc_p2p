@@ -11,7 +11,7 @@
 //! Close with Ctrl-c.
 
 mod sem_scholar_utils;
-use crate::sem_scholar_utils::api::{get_all_references_by_id, get_all_citations_by_reference_id, get_paper_id_by_arXiv_id};
+use crate::sem_scholar_utils::api::{get_all_references_by_id, get_all_citations_by_reference_id};
 use crate::sem_scholar_utils::doc::Reference;
 use crate::sem_scholar_utils::sbc::create_k2_sets;
 
@@ -132,6 +132,7 @@ impl NetworkBehaviourEventProcess<KademliaEvent> for MyBehaviour {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
+    let mut upload_buffer: Vec<Key> = Vec::new();
     env_logger::init();
 
     // Shared timer init
@@ -150,13 +151,47 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 // TODO: add document ID input dialog
             },
             "json" => {
-                println!("check public database with DOIs from JSON file");
+                println!("check public database with IDs from JSON file");
 
                 // Load Json file
                 let mut file = File::open( args[2].to_owned())?;
                 let reader = BufReader::new(file);
                 let mut arx_id_json:Arxiv_Refs = serde_json::from_reader(reader)?;
-                print!("{:#?}", arx_id_json.url);
+                //print!("{:#?}", arx_id_json.url);
+
+
+
+                // create reference objects
+                let mut my_refs: Vec<Reference> = Vec::new();
+                for id in arx_id_json.url {
+                    let my_ref = Reference {
+                        arxiv_id: None,
+                        authors: None,
+                        doi: None,
+                        intent: None,
+                        is_influential: None,
+                        paper_id: format!("arxiv:{}", id), //expects arxiv_ids only, will break DOIs
+                        title: None,
+                        url: None,
+                        venue: None,
+                        year: None
+                    };
+                    my_refs.push(my_ref);
+                }
+
+                // print!("{:#?}", my_refs);
+
+                k2_hashes =filter_pub_refs(my_refs).await;
+                print!("{:#?}", k2_hashes);
+
+                // add to upload buffer
+                for hash in k2_hashes {
+                    upload_buffer.push(Key::new(&hash));
+                }
+
+
+                // print originality ratio
+
 
 
 
@@ -167,7 +202,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    // I need a list of dois
+
 
     // TODO: Check and upload k2_hashes to DHT
     // TODO:  originality ratio can be calculatedh as a numeric value
@@ -207,7 +242,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 
     // SAVE CLI INPUT
-    helper_safe_cli(&mut swarm, local_peer_id)
+    helper_safe_cli(&mut swarm, local_peer_id, &mut upload_buffer)
 }
 
 async fn referenceFiltering() -> Vec<String> {
@@ -215,7 +250,7 @@ async fn referenceFiltering() -> Vec<String> {
     // REFERENCE FILTERING
     // --------------------
 
-    // Get and print combinations from non-unique document
+    // Get and print combinations from document
     let my_refs = get_all_references_by_id("97efafdb4a3942ab3efba53ded7413199f79c054").await.unwrap();
 
 
@@ -231,11 +266,11 @@ async fn referenceFiltering() -> Vec<String> {
     return filter_pub_refs(my_refs).await;
 }
 
-fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId) -> Result<(), Box<dyn Error>> {
+fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId, mut upload_buffer: &mut Vec<Key>) -> Result<(), Box<dyn Error>> {
 // Read full lines from stdin
     let mut stdin = io::BufReader::new(io::stdin()).lines();
 
-    let mut upload_buffer: Vec<Key> = Vec::new();
+    //let mut upload_buffer: Vec<Key> = Vec::new();
     let mut listening = false;
 
     task::block_on(future::poll_fn(move |cx: &mut Context| {
