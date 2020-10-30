@@ -50,6 +50,7 @@ use std::path::Path;
 use lazy_static::lazy_static;
 use mut_static::MutStatic;
 use std::fs::File;
+use std::borrow::Borrow;
 
 pub struct Timer {
     startTime : DateTime<Local>
@@ -185,24 +186,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 for hash in k2_hashes {
                     upload_buffer.push(Key::new(&hash));
                 }
-
-
-                // print originality ratio
-
-
-
-
-                // paper_ids = get_paper_id_by_arXiv_id(arXid_json: &str)
-                // TODO: add document ID input dialog
             },
             _ => println!("Standard Mode"), 
         }
     }
-
-
-
-    // TODO: Check and upload k2_hashes to DHT
-    // TODO:  originality ratio can be calculatedh as a numeric value
 
     // --------------------
     // P2P Upload
@@ -267,7 +254,6 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
 // Read full lines from stdin
     let mut stdin = io::BufReader::new(io::stdin()).lines();
 
-    //let mut upload_buffer: Vec<Key> = Vec::new();
     let mut listening = false;
 
     task::block_on(future::poll_fn(move |cx: &mut Context| {
@@ -297,13 +283,16 @@ fn helper_safe_cli(swarm: &mut Swarm<MyBehaviour, PeerId>, local_peer_id: PeerId
         if upload_buffer.len() > 0 {
             println!("Upload Buffer: {}", upload_buffer.len());
             let value = Vec::from(local_peer_id.to_base58());
-            let key = upload_buffer.pop().unwrap().to_owned();
+            let key = upload_buffer.pop().unwrap().clone();
+            let get_key = key.clone();
             let record = Record {
                 key,
                 value,
                 publisher: Some(local_peer_id.to_owned()), // USEFUL FOR TRACEABILITY AND SPAM-PROTECTION
                 expires: None, //stays in memory for ever + periodic replication and republication - Date as std::time::Instant
             };
+            swarm.kademlia.get_record(&get_key, Quorum::One); // TODO: cancel put if KEY is already on DHT
+
             swarm.kademlia.put_record(record, Quorum::One); // Quorum = min replication factor specifies the minimum number of distinct nodes that must be successfully contacted in order for a query to succeed.
         }
         Poll::Pending
