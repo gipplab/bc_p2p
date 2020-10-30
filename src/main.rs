@@ -157,9 +157,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 let mut file = File::open( args[2].to_owned())?;
                 let reader = BufReader::new(file);
                 let mut arx_id_json:Arxiv_Refs = serde_json::from_reader(reader)?;
-                //print!("{:#?}", arx_id_json.url);
-
-
 
                 // create reference objects
                 let mut my_refs: Vec<Reference> = Vec::new();
@@ -179,10 +176,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
                     my_refs.push(my_ref);
                 }
 
-                // print!("{:#?}", my_refs);
-
                 k2_hashes =filter_pub_refs(my_refs).await;
                 print!("{:#?}", k2_hashes);
+
+                // check_buffer
 
                 // add to upload buffer
                 for hash in k2_hashes {
@@ -341,6 +338,8 @@ async fn filter_pub_refs(my_refs: Vec<Reference>) -> Vec<String> {
     let k2_sets = create_k2_sets(my_refs.clone());
 
     let mut k2_hashes: Vec<String> = vec![];
+    let k2_len = k2_sets.len();
+    println!("Num of k2_sets: {}", k2_len);
 
     // check entries for each k2 pair -> is it cited by the same doc_id
     for r in k2_sets {
@@ -366,6 +365,7 @@ async fn filter_pub_refs(my_refs: Vec<Reference>) -> Vec<String> {
         }
     }
 
+    println!("Originality Ratio Public Check: {}/{}={}", k2_len,k2_hashes.len(), k2_len/k2_hashes.len());
     return k2_hashes;
 }
 
