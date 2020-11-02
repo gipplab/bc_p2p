@@ -51,6 +51,7 @@ use lazy_static::lazy_static;
 use mut_static::MutStatic;
 use std::fs::File;
 use std::borrow::Borrow;
+use regex::Regex;
 
 pub struct Timer {
     startTime : DateTime<Local>
@@ -72,7 +73,8 @@ lazy_static! {
 #[serde(rename_all = "camelCase")]
 pub struct Arxiv_Refs {
     pub url: Vec<String>,
-    pub pdf: Vec<String>,
+    pub arxiv: Vec<String>,
+    pub pdf: Option<Vec<String>>,
 }
 
 
@@ -161,20 +163,37 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
                 // create reference objects
                 let mut my_refs: Vec<Reference> = Vec::new();
-                for id in arx_id_json.url {
-                    let my_ref = Reference {
-                        arxiv_id: None,
-                        authors: None,
-                        doi: None,
-                        intent: None,
-                        is_influential: None,
-                        paper_id: format!("arxiv:{}", id), //expects arxiv_ids only, will break DOIs
-                        title: None,
-                        url: None,
-                        venue: None,
-                        year: None
-                    };
-                    my_refs.push(my_ref);
+                for mut id in arx_id_json.url {
+                    let mut prefix = "url";
+                    let re_doi = Regex::new(r"10[.]1\d{3}/[^\s]+").unwrap();
+                    let re_axv = Regex::new(r"\d{4}[.]\d{4,}[^\s]").unwrap();
+
+                    if re_doi.is_match(&*id) {
+                        //check for doi
+                        id = re_doi.find(&*id).unwrap().as_str().parse().unwrap();
+                        prefix = "";
+                    } else if re_axv.is_match(&*id){
+                        // check for arxiv
+                        id = re_axv.find(&*id).unwrap().as_str().parse().unwrap();
+                        prefix = "arxiv:";
+                    }
+
+                    if prefix != "url" {
+                        let my_ref = Reference {
+                            arxiv_id: None,
+                            authors: None,
+                            doi: None,
+                            intent: None,
+                            is_influential: None,
+                            paper_id: format!("{}{}",prefix, id), //expects arxiv_ids only, will break DOIs
+                            title: None,
+                            url: None,
+                            venue: None,
+                            year: None
+                        };
+
+                        my_refs.push(my_ref);
+                    }
                 }
 
                 k2_hashes =filter_pub_refs(my_refs).await;
