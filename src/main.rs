@@ -73,7 +73,7 @@ lazy_static! {
 #[serde(rename_all = "camelCase")]
 pub struct Arxiv_Refs {
     pub url: Vec<String>,
-    pub arxiv: Vec<String>,
+    pub arxiv: Option<Vec<String>>,
     pub pdf: Option<Vec<String>>,
 }
 
@@ -373,7 +373,9 @@ async fn filter_pub_refs(my_refs: Vec<Reference>) -> Vec<String> {
         }
     }
 
-    println!("Originality Ratio Public Check: {}/{}={}", k2_len,k2_hashes.len(), k2_len/k2_hashes.len());
+    let original_hashes: f32 = k2_len as f32;
+    let all_hashes: f32 = k2_hashes.len() as f32;
+    println!("Originality Ratio Public Check: {}/{}={:.3}", k2_len,k2_hashes.len(), all_hashes/original_hashes);
     return k2_hashes;
 }
 
