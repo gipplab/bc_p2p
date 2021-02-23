@@ -19,39 +19,43 @@ provider "google" {
 resource "google_compute_network" "vpc_network" {
   name = "bcp2p-terraform-network"
 }
-resource "google_compute_instance" "vm_instance" {
-  name         = "bcp2p-terraform-instance-${count.index}"
-  machine_type = "f1-micro"
-  count        = var.instances
 
-  boot_disk {
-    initialize_params {
-      image = "cos-cloud/cos-stable"
+resource "google_cloud_run_service" "default" {
+  name     = "cloudrun-srv"
+  location = "us-central1"
+
+  template {
+    spec {
+      containers {
+        image = "gcr.io/p2p-evaluation/ihlec_bc_p2p"
+      }
     }
   }
 
-  network_interface {
-    network = google_compute_network.vpc_network.name
-      access_config {
-        
-    }
-  }
-
-  provisioner "file" {
-    source      = "/target/release/bc_p2p"
-    destination = "bc_p2p"
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "./bc_p2p",
-    ]
-    connection {
-      type        = "ssh"
-      host        = google_compute_instance.vm_instance[count.index].network_interface.0.nat_ip
-      user        = var.username
-      # private_key = file(var.private_key_path)
-    }
+  traffic {
+    percent         = 100
+    latest_revision = true
   }
 }
+
+
+
+# resource "google_compute_instance" "vm_instance" {
+#   name         = "bcp2p-terraform-instance-${count.index}"
+#   machine_type = "f1-micro"
+#   count        = var.instances
+
+#   boot_disk {
+#     initialize_params {
+#       image = "cos-cloud/cos-stable"
+#     }
+#   }
+
+#   network_interface {
+#     network = google_compute_network.vpc_network.name
+#       access_config {
+
+#     }
+#   }
+# }
 

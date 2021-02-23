@@ -1,7 +1,5 @@
 FROM rust AS builder
 
-RUN apt-get install 
-
 COPY src/ src/
 COPY Cargo.toml .
 COPY Cargo.lock .
@@ -11,7 +9,8 @@ RUN cargo build --release
 # CMD ["/target/release/bc_p2p"]
 
 FROM debian:buster-slim
-COPY --from=builder /target/release/bc_p2p ./usr/local/bin/bc_p2p
+RUN apt-get update && apt-get install -y libssl-dev
+COPY --from=builder /target/release/bc_p2p /bin/bc_p2p
 
 CMD ["bc_p2p"]
 
