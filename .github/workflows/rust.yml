@@ -1,27 +1,71 @@
-name: Build and Deploy
-
-on:
-  push:
-    tags:
-      - '*'
-
+name: Build Binaries
+on: 
+  release:
+    types: # This configuration does not affect the page_build event above
+      - created
 jobs:
-  build:
-    name: Publish binaries
-    runs-on: ubuntu-latest
-
+  build_for_mac:
+    name: MacOS
+    runs-on: macos-10.15
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build --release
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: target/release/bc_p2p
-        asset_name: bc_p2p
-        tag: ${{ github.ref }}
-        overwrite: true
-        body: "Release"
-
+      - uses: actions/checkout@master
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Rename binary
+        run: mv target/release/bc_p2p bc_p2p-macos64
+      - name: Upload to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl \
+            -f \
+            -sSL \
+            -XPOST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Content-Length: $(stat -f%z bc_p2p-macos64)" \
+            -H "Content-Type: application/octet-stream" \
+            --upload-file "bc_p2p-macos64" \
+            "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)/assets?name=bc_p2p-macos64"
+  build_for_pi:
+    name: Raspberry Pi
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: armv7-unknown-linux-gnueabihf
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target armv7-unknown-linux-gnueabihf
+      - name: Rename binary
+        run: mv target/armv7-unknown-linux-gnueabihf/release/bc_p2p bc_p2p-armv7-pi
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@d648f1babf776de9cad881320bd9e9818fc3b262
+        with:
+          args: bc_p2p-armv7-pi application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build_for_linux:
+    name: Linux
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+      - name: Rename binary
+        run: mv target/release/bc_p2p bc_p2p-linux-amd64
+      - name: Upload to release
+        uses: JasonEtco/upload-to-release@d648f1babf776de9cad881320bd9e9818fc3b262
+        with:
+          args: bc_p2p-linux-amd64 application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
