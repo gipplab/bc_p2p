@@ -28,4 +28,4 @@ jobs:
           title: "Build"
           files: |
             LICENSE
-            bc_p2p
+            /target/release/bc_p2p
