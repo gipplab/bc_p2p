@@ -8,11 +8,13 @@ RUN cargo build --release
 
 # CMD ["/target/release/bc_p2p"]
 
-FROM debian:buster-slim
-RUN apt-get update && apt-get install -y libssl-dev
+FROM debian:buster
+RUN apt-get update && apt-get install -y libssl-dev bash
 COPY --from=builder /target/release/bc_p2p /bin/bc_p2p
 
 CMD ["bc_p2p"]
+
+EXPOSE 4001
 
 # run detached with: 
 # docker run -it 7811 /bin/bash
