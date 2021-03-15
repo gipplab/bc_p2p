@@ -23,11 +23,17 @@ resource "google_compute_network" "vpc_network" {
 resource "google_cloud_run_service" "default" {
   name     = "cloudrun-srv"
   location = "us-central1"
-
+        
   template {
     spec {
       containers {
-        image = "gcr.io/p2p-evaluation/ihlec_bc_p2p"
+        image = "us.gcr.io/p2p-evaluation/ihlec_bc_p2p"
+
+        command = ["bc_p2p"]
+        args = ["</dev/zero"]
+
+        # args = ["< /dev/fd/1 3>&1 > /dev/null | :"]
+        # args = ["< /dev/null > /dev/null 2>&1 &"]
       }
     }
   }
@@ -45,6 +51,7 @@ resource "google_cloud_run_service" "default" {
 #   machine_type = "f1-micro"
 #   count        = var.instances
 
+
 #   boot_disk {
 #     initialize_params {
 #       image = "cos-cloud/cos-stable"
@@ -57,5 +64,5 @@ resource "google_cloud_run_service" "default" {
 
 #     }
 #   }
-# }
+# |}
 

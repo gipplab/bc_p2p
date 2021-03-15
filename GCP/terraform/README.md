@@ -14,3 +14,7 @@ Bring down the infrastructure:
 ```
 terraform destroy 
 ```
+# Docker
+docker tag <image> us.gcr.io/p2p-evaluation/ihlec_bc_p2p
+
+docker push us.gcr.io/p2p-evaluation/ihlec_bc_p2p

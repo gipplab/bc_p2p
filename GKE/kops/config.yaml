@@ -1,0 +1,43 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  name: simple.k8s.local
+spec:
+  api:
+    loadBalancer:
+      type: Public
+  authorization:
+    alwaysAllow: {}
+  channel: stable
+  cloudProvider: gce
+  configBase: gs://kubernetes-clusters/simple.k8s.local
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-us-central1-a
+      name: a
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-us-central1-a
+      name: a
+    name: events
+  iam:
+    legacy: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.7.2
+  masterPublicName: api.simple.k8s.local
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  project: my-gce-project
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - name: us-central1
+    region: us-central1
+    type: Public
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
