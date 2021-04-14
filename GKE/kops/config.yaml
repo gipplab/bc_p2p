@@ -29,7 +29,7 @@ spec:
   networking:
     kubenet: {}
   nonMasqueradeCIDR: 100.64.0.0/10
-  project: my-gce-project
+  project: p2p-evaluation 
   sshAccess:
   - 0.0.0.0/0
   subnets:
