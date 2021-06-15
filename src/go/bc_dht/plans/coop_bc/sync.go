@@ -63,7 +63,7 @@ func ExampleSync(runenv *runtime.RunEnv) error {
 		time.Sleep(1 * time.Second)
 		runenv.RecordMessage("set...")
 		time.Sleep(5 * time.Second)
-		runenv.RecordMessage("go, release followers!")
+		runenv.RecordMessage("go, release followers!") // TODO: invert behavior - followers first
 
 		// signal on the 'released' state.
 		client.MustSignalEntry(ctx, releasedState)

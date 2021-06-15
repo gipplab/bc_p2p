@@ -16,8 +16,10 @@ func main() {
 // depending on the name of the test case.
 func runf(runenv *runtime.RunEnv) error {
 	switch c := runenv.TestCase; c {
-	case "output":
-		return ExampleOutput(runenv)
+	case "idle":
+		return DhtIdle(runenv)
+	case "upload":
+		return DhtBatchUpload(runenv)
 	case "failure":
 		return ExampleFailure(runenv)
 	case "panic":
