@@ -17,6 +17,9 @@ import (
 //
 // The leader waits until all the followers have reached the state "ready"
 // then, the followers wait for a signal from the leader to be released.
+
+// TODO: 1. We need the leader to load the sample records
+// TODO: 2. We need the followers to fill their routing tables
 func ExampleSync(runenv *runtime.RunEnv) error {
 	var (
 		enrolledState = sync.State("enrolled")
