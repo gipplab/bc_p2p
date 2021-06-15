@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bcpcp
+  labels:
+    beta.kubernetes.io/arch: amd64
+    beta.kubernetes.io/instance-type: e2-medium
+    beta.kubernetes.io/os: linux
+    cloud.google.com/gke-boot-disk: pd-standard
+    cloud.google.com/gke-nodepool: default-pool
+    cloud.google.com/gke-os-distribution: cos
+    cloud.google.com/machine-family: e2
+    failure-domain.beta.kubernetes.io/region: europe-east3
+    failure-domain.beta.kubernetes.io/zone: europe-east3-b
+    kubernetes.io/arch: amd64
+    kubernetes.io/hostname: gke-deployment-default-pool-2eb071cc-00m0
+    kubernetes.io/os: linux
+    node.kubernetes.io/instance-type: e2-medium
+    topology.gke.io/zone: europe-east3-b
+    topology.kubernetes.io/region: europe-east3
+    topology.kubernetes.io/zone: europe-east3-b
+
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: bcpcp
+  template:
+    metadata:
+      labels:
+        app: bcpcp
+    spec:
+      containers:
+      - name: bcpcp
+        image: us.gcr.io/p2p-evaluation/ihlec_bc_p2p
+        tty: true
+        stdin: true
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4001
+          labels:
+
+

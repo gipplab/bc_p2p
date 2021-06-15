@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bcpcp
+env:
+  GKE_CLUSTER: cluster-123    
+  GKE_ZONE: us-central1-c   
+  DEPLOYMENT_NAME: gke-test
+
+spec:
+  replicas: 20
+  selector:
+    matchLabels:
+      app: bcpcp
+  template:
+    metadata:
+      labels:
+        app: bcpcp
+    spec:
+      containers:
+      - name: bcpcp
+        image: us.gcr.io/p2p-evaluation/ihlec_bc_p2p
+        tty: true
+        stdin: true
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4001
+          labels:
+
+
