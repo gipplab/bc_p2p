@@ -12,12 +12,12 @@ import (
 	mplex "github.com/libp2p/go-libp2p-mplex"
 	yamux "github.com/libp2p/go-libp2p-yamux"
 	tcp "github.com/libp2p/go-tcp-transport"
-	"github.com/testground/sdk-go/runtime"
 )
 
 // main for Standalone and debug run
 func main() {
 	fmt.Println("Idle Mode")
+	DhtIdle()
 }
 
 // Demonstrate test output functions
@@ -29,9 +29,7 @@ func main() {
 // 	return nil
 // }
 
-func DhtIdle(runenv *runtime.RunEnv) error {
-	runenv.RecordMessage("Idle...")
-	runenv.RecordMessage("Additional arguments: %d", len(runenv.TestInstanceParams))
+func DhtIdle() error {
 
 	// init libp2p connector
 	ctx, cancel := context.WithCancel(context.Background())
