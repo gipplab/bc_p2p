@@ -8,13 +8,17 @@ import (
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/peer"
-	"github.com/libp2p/go-libp2p-kad-dht"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 	mplex "github.com/libp2p/go-libp2p-mplex"
 	yamux "github.com/libp2p/go-libp2p-yamux"
 	tcp "github.com/libp2p/go-tcp-transport"
 	"github.com/testground/sdk-go/runtime"
 )
+
+// main for Standalone and debug run
+func main() {
+	fmt.Println("Idle Mode")
+}
 
 // Demonstrate test output functions
 // This method emits two Messages and one Metric
