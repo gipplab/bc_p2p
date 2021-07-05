@@ -9,8 +9,6 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/peer"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
-	mplex "github.com/libp2p/go-libp2p-mplex"
-	yamux "github.com/libp2p/go-libp2p-yamux"
 	tcp "github.com/libp2p/go-tcp-transport"
 )
 
@@ -31,31 +29,29 @@ func main() {
 
 func DhtIdle() error {
 
-	// init libp2p connector
+	// shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	// set ipv4 listener
 	transports := libp2p.ChainOptions(
 		libp2p.Transport(tcp.NewTCPTransport),
 	)
-
-	// allow parallel connections on the same transport
-	muxers := libp2p.ChainOptions(
-		libp2p.Muxer("/yamux/1.0.0", yamux.DefaultTransport),
-		libp2p.Muxer("/mplex/6.7.0", mplex.DefaultTransport),
-	)
-
-	// set transport to listen on ipv4
 	listenAddrs := libp2p.ListenAddrStrings(
 		"/ip4/0.0.0.0/tcp/0",
 		"/ip4/0.0.0.0/tcp/0/ws",
 	)
+	// muxers := libp2p.ChainOptions(
+	// 	libp2p.Muxer("/yamux/1.0.0", yamux.DefaultTransport),
+	// 	libp2p.Muxer("/mplex/6.7.0", mplex.DefaultTransport),
+	// ) // is default
 
+	// create peer (libp2p node)
 	host, err := libp2p.New(
 		ctx,
 		transports,
 		listenAddrs,
-		muxers,
+		//muxers,
 	)
 	if err != nil {
 		panic(err)
