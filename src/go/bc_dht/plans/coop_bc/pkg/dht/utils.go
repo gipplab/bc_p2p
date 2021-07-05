@@ -9,13 +9,19 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/peer"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
+	record "github.com/libp2p/go-libp2p-record"
 	tcp "github.com/libp2p/go-tcp-transport"
 	"github.com/multiformats/go-multiaddr"
 )
 
+type blankValidator struct{}
+
+func (blankValidator) Validate(_ string, _ []byte) error        { return nil }
+func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil }
+
 // JoinDht start the node and tries to connect to the provided bootstrapPeers.
 // If no bootstrapPeers are probided, the default IPFS bootstrapPeers are used.
-func JoinDht(bootstrapPeers []multiaddr.Multiaddr) error {
+func JoinDht(bootstrapPeers []multiaddr.Multiaddr) (*dht.IpfsDHT, error) {
 	// JOIN DHT
 	// shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
@@ -56,6 +62,9 @@ func JoinDht(bootstrapPeers []multiaddr.Multiaddr) error {
 		panic(err)
 	}
 
+	//kademliaDHT.Validator.(record.NamespacedValidator)["dfh"] = blankValidator{} // Dokument Feature Hash (dfh)
+	kademliaDHT.Validator.(record.NamespacedValidator)["v"] = blankValidator{} // Value (v)
+
 	// Look for other peers
 	var wg sync.WaitGroup // create goroutines group
 	if len(bootstrapPeers) == 0 {
@@ -81,5 +90,5 @@ func JoinDht(bootstrapPeers []multiaddr.Multiaddr) error {
 	}
 	wg.Wait()
 
-	return nil
+	return kademliaDHT, nil
 }
