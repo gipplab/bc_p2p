@@ -4,13 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/testground/sdk-go/run"
 	"github.com/testground/sdk-go/runtime"
 )
 
-func main() {
-	run.Invoke(runf)
-}
+// func main() {
+// 	run.Invoke(runf)
+// }
 
 // Pick a different example function to run
 // depending on the name of the test case.

@@ -13,11 +13,12 @@ import (
 )
 
 // main for Standalone and debug run
-func main() {
-	fmt.Println("Idle Mode")
-	DhtIdle()
-}
+// func main() {
+// 	fmt.Println("Idle Mode")
+// 	DhtIdle()
+// }
 
+//// TestPlan Specific Logging
 // Demonstrate test output functions
 // This method emits two Messages and one Metric
 // func ExampleOutput(runenv *runtime.RunEnv) error {
@@ -28,7 +29,7 @@ func main() {
 // }
 
 func DhtIdle() error {
-
+	// JOIN DHT
 	// shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -57,28 +58,34 @@ func DhtIdle() error {
 		panic(err)
 	}
 
+	// Show Local IPv4
 	for _, addr := range host.Addrs() {
 		fmt.Println("Listening on", addr)
 	}
 
-	//DHT
+	// Init the DHT
 	kademliaDHT, err := dht.New(ctx, host)
 	if err != nil {
 		panic(err)
 	}
 
-	// searching peers
+	// Clean routing table
 	if err = kademliaDHT.Bootstrap(ctx); err != nil {
 		panic(err)
 	}
 
-	// manually look for bootstrap peers
-	var wg sync.WaitGroup
+	// Look for other peers
+	var wg sync.WaitGroup // create goroutines group
 	for _, peerAddr := range dht.DefaultBootstrapPeers {
+		// go through IPFS default peers
+		// TODO: compare public IPFS with Private DHT
 		peerinfo, _ := peer.AddrInfoFromP2pAddr(peerAddr)
+
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+
+			// Ping
 			if err := host.Connect(ctx, *peerinfo); err != nil {
 				log.Println(err)
 			} else {
