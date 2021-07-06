@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/ipfs/testround/plans/example/pkg/dht"
@@ -15,15 +16,24 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	id, addr, err := dht.BootstrapDht(ctx) // empty peers for default bootstrapping
+	dht, err := dht.BootstrapDht(ctx) // empty peers for default bootstrapping
 	// dht, err := dht.JoinDht(ctx, append(myPeers, ma))
 	if err != nil {
 		println("Could not start Bootstraper")
 		panic(err)
 	}
 
-	println(id)
-	println(addr.String())
+	println(dht.PeerID().String())
+	println(dht.Host().Addrs()[0].String())
+
+	// write PeerID to file
+	f, err := os.Create("bootstrap_ID.tmp")
+	_, err = f.WriteString(dht.Host().Addrs()[0].String() + "/p2p/" + dht.PeerID().String()) //"/ip4/192.168.2.70/tcp/45009/p2p/QmasJcoadBm2LQ1WTtxJbnaywnHhRYiboTWSKDZCBGytTm"
+	f.Close()
+	if err != nil {
+		println("Could not write File")
+		panic(err)
+	}
 
 	// save it to temp file to share it with others
 	for {

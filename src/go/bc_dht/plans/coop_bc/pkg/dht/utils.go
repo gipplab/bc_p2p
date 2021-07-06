@@ -48,17 +48,17 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 	}
 
 	// Init the DHT
-	kademliaDHT, err := kaddht.New(ctx, host)
+	kademliaDHT, err := kaddht.New(ctx, host, kaddht.Mode(kaddht.ModeServer))
+	// !!! ModeServer will cause troubles when running outside a private network behind NAT
 	if err != nil {
 		panic(err)
 	}
 
-	// Clean routing table
+	// // Clean routing table
 	if err = kademliaDHT.Bootstrap(ctx); err != nil {
 		panic(err)
 	}
 
-	//kademliaDHT.Validator.(record.NamespacedValidator)["dfh"] = blankValidator{} // Dokument Feature Hash (dfh)
 	kademliaDHT.Validator.(record.NamespacedValidator)["v"] = blankValidator{} // Value (v)
 
 	// Look for other peers
@@ -68,8 +68,6 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 	}
 
 	for _, peerAddr := range bootstrapPeers {
-		// go through IPFS default peers
-		// TODO: compare public IPFS with Private DHT
 		peerinfo, _ := peer.AddrInfoFromP2pAddr(peerAddr)
 
 		wg.Add(1)
@@ -89,7 +87,7 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 	return kademliaDHT, nil
 }
 
-func BootstrapDht(ctx context.Context) (string, multiaddr.Multiaddr, error) {
+func BootstrapDht(ctx context.Context) (*kaddht.IpfsDHT, error) {
 	// set ipv4 listener
 	transports := libp2p.ChainOptions(
 		libp2p.Transport(tcp.NewTCPTransport),
@@ -116,45 +114,11 @@ func BootstrapDht(ctx context.Context) (string, multiaddr.Multiaddr, error) {
 
 	fmt.Println("Bootstrap PeerID: " + host.ID().String())
 
-	return host.ID().String(), host.Addrs()[0], nil
+	// Init the DHT
+	kademliaDHT, err := kaddht.New(ctx, host, kaddht.Mode(kaddht.ModeServer))
+	if err != nil {
+		panic(err)
+	}
 
-	// // Init the DHT
-	// kademliaDHT, err := kaddht.New(ctx, host)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// // Clean routing table
-	// if err = kademliaDHT.Bootstrap(ctx); err != nil {
-	// 	panic(err)
-	// }
-
-	// //kademliaDHT.Validator.(record.NamespacedValidator)["dfh"] = blankValidator{} // Dokument Feature Hash (dfh)
-	// kademliaDHT.Validator.(record.NamespacedValidator)["v"] = blankValidator{} // Value (v)
-
-	// // Look for other peers
-	// var wg sync.WaitGroup // create goroutines group
-	// if len(bootstrapPeers) == 0 {
-	// 	bootstrapPeers = kaddht.DefaultBootstrapPeers
-	// }
-
-	// for _, peerAddr := range bootstrapPeers {
-	// 	// go through IPFS default peers
-	// 	// TODO: compare public IPFS with Private DHT
-	// 	peerinfo, _ := peer.AddrInfoFromP2pAddr(peerAddr)
-
-	// 	wg.Add(1)
-	// 	go func() {
-	// 		defer wg.Done()
-
-	// 		// Ping
-	// 		if err := host.Connect(ctx, *peerinfo); err != nil {
-	// 			log.Println(err)
-	// 		} else {
-	// 			log.Println("Connection established with bootstrap node:", *peerinfo)
-	// 		}
-	// 	}()
-	// }
-	// wg.Wait()
-
+	return kademliaDHT, nil
 }

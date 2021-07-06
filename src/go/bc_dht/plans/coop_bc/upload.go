@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/ipfs/testround/plans/example/pkg/dht"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
@@ -20,16 +22,23 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	b, err := ioutil.ReadFile("bootstrap_ID.tmp") // just pass the file name
+	if err != nil {
+		fmt.Print(err)
+	}
+	bootstrap_addr := string(b)
+
 	// Define bootstrap nodes
-	ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ")
+	// ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ") //ipfs
+	ma, err := multiaddr.NewMultiaddr(bootstrap_addr)
 	if err != nil {
 		_ = ma
 		panic(err)
 	}
 
 	var myPeers []multiaddr.Multiaddr
-	dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
-	// dht, err := dht.JoinDht(ctx, append(myPeers, ma))
+	// dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
+	dht, err := dht.JoinDht(ctx, append(myPeers, ma))
 	if err != nil {
 		println("Could not join DHT")
 		panic(err)
@@ -37,12 +46,14 @@ func main() {
 
 	// Single PUT GET to check network
 	// dht.Provide() // TODO: might be more efficient
+tryput:
 	txValue := "valueDiesDAs"
 	println("PUT:", txValue)
 	err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
 	if err != nil {
 		println("Put Failed")
-		panic(err)
+		time.Sleep(time.Second)
+		goto tryput
 	}
 	myBytes, err := dht.GetValue(ctx, "/v/hello")
 	rxValue := string(myBytes[:])
