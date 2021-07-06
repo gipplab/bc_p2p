@@ -8,7 +8,7 @@ import (
 
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/peer"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
+	kaddht "github.com/libp2p/go-libp2p-kad-dht"
 	record "github.com/libp2p/go-libp2p-record"
 	tcp "github.com/libp2p/go-tcp-transport"
 	"github.com/multiformats/go-multiaddr"
@@ -21,11 +21,7 @@ func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil 
 
 // JoinDht start the node and tries to connect to the provided bootstrapPeers.
 // If no bootstrapPeers are probided, the default IPFS bootstrapPeers are used.
-func JoinDht(bootstrapPeers []multiaddr.Multiaddr) (*dht.IpfsDHT, error) {
-	// JOIN DHT
-	// shared cancelable context
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht.IpfsDHT, error) {
 
 	// set ipv4 listener
 	transports := libp2p.ChainOptions(
@@ -52,7 +48,7 @@ func JoinDht(bootstrapPeers []multiaddr.Multiaddr) (*dht.IpfsDHT, error) {
 	}
 
 	// Init the DHT
-	kademliaDHT, err := dht.New(ctx, host)
+	kademliaDHT, err := kaddht.New(ctx, host)
 	if err != nil {
 		panic(err)
 	}
@@ -68,7 +64,7 @@ func JoinDht(bootstrapPeers []multiaddr.Multiaddr) (*dht.IpfsDHT, error) {
 	// Look for other peers
 	var wg sync.WaitGroup // create goroutines group
 	if len(bootstrapPeers) == 0 {
-		bootstrapPeers = dht.DefaultBootstrapPeers
+		bootstrapPeers = kaddht.DefaultBootstrapPeers
 	}
 
 	for _, peerAddr := range bootstrapPeers {
