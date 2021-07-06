@@ -16,9 +16,9 @@ import (
 func runf(runenv *runtime.RunEnv) error {
 	switch c := runenv.TestCase; c {
 	case "idle":
-		return DhtIdle(runenv)
-	case "upload":
-		return DhtBatchUpload(runenv)
+		return DhtIdle()
+	// case "upload":
+	// 	return DhtBatchUpload(runenv)
 	case "failure":
 		return ExampleFailure(runenv)
 	case "panic":

@@ -23,12 +23,17 @@ func main() {
 	// Define bootstrap nodes
 	ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ")
 	if err != nil {
-		panic(err)
 		_ = ma
+		panic(err)
 	}
+
 	var myPeers []multiaddr.Multiaddr
 	dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
 	// dht, err := dht.JoinDht(ctx, append(myPeers, ma))
+	if err != nil {
+		println("Could not join DHT")
+		panic(err)
+	}
 
 	// Single PUT GET to check network
 	// dht.Provide() // TODO: might be more efficient
@@ -39,7 +44,6 @@ func main() {
 		println("Put Failed")
 		panic(err)
 	}
-
 	myBytes, err := dht.GetValue(ctx, "/v/hello")
 	rxValue := string(myBytes[:])
 	println("GET:", rxValue)
@@ -50,16 +54,21 @@ func main() {
 		println(rxValue)
 	}
 
-	// Batch upload in goroutine
+	// Batch UPLOAD in goroutine
 	var uploadgroup sync.WaitGroup
-
-	// Upload
 	for _, element := range sampleData() {
 		uploadgroup.Add(1)
 		go uploader(ctx, dht, element, &uploadgroup)
 	}
-
 	uploadgroup.Wait()
+
+	// Batch CHECK in goroutine
+	var checkgroup sync.WaitGroup
+	for _, element := range sampleData() {
+		checkgroup.Add(1)
+		go checker(ctx, dht, element, &checkgroup)
+	}
+	checkgroup.Wait()
 
 }
 
@@ -83,9 +92,22 @@ func uploader(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sy
 	defer wg.Done()
 
 	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
-	err := dht.PutValue(ctx, "/v/"+element[0], []byte(element[1]))
+	err := dht.PutValue(ctx, "/v/"+element[1], []byte(element[0]))
 	if err != nil {
 		println("Put Failed")
 		panic(err)
+	}
+}
+
+func checker(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	fmt.Printf("GET :: HDF: %s\n", element[1])
+	myBytes, err := dht.GetValue(ctx, "/v/"+element[1])
+	if err != nil {
+		println("GET Failed")
+		panic(err)
+	} else {
+		println("Found HDF: " + element[1] + " in DocumentID: " + string(myBytes[:]))
 	}
 }
