@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
+	"log"
+	"os"
 	"sync"
-	"time"
 
 	"github.com/ipfs/testround/plans/example/pkg/dht"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
@@ -14,21 +16,21 @@ import (
 // main for Standalone and debug run
 func main() {
 	fmt.Println("Join DHT")
-	// shared cancelable context
+	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	// define bootstrap nodes
+	// Define bootstrap nodes
 	ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ")
 	if err != nil {
 		panic(err)
 		_ = ma
 	}
 	var myPeers []multiaddr.Multiaddr
-	//dht, err := dht.JoinDht(myPeers) // empty peers for default bootstrapping
-	dht, err := dht.JoinDht(ctx, append(myPeers, ma))
+	dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
+	// dht, err := dht.JoinDht(ctx, append(myPeers, ma))
 
-	// upload
+	// Single PUT GET to check network
 	// dht.Provide() // TODO: might be more efficient
 	txValue := "valueDiesDAs"
 	println("PUT:", txValue)
@@ -48,31 +50,42 @@ func main() {
 		println(rxValue)
 	}
 
-	// Batch upload
+	// Batch upload in goroutine
 	var uploadgroup sync.WaitGroup
 
-	for i := 1; i <= 5; i++ {
+	// Upload
+	for _, element := range sampleData() {
 		uploadgroup.Add(1)
-		go uploader(ctx, dht, i, &uploadgroup)
+		go uploader(ctx, dht, element, &uploadgroup)
 	}
 
 	uploadgroup.Wait()
 
 }
 
-func uploader(ctx context.Context, dht *kaddht.IpfsDHT, id int, wg *sync.WaitGroup) {
+func sampleData() [][]string {
+	// From CSV
+	csvfile, err := os.Open("test10_doc.csv")
+	if err != nil {
+		log.Fatalln("Couldn't open the csv file", err)
+	}
+	r := csv.NewReader(csvfile)
+	// Read each record from csv
+	record, err := r.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return record
+}
+
+func uploader(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
 	defer wg.Done()
-	fmt.Printf("Upload %d starting\n", id)
-	// upload
-	txValue := "valueDiesDAs"
-	txKey := fmt.Sprint("/v/hello", id)
-	println("PUT:", txValue)
-	err := dht.PutValue(ctx, txKey, []byte(txValue))
+
+	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
+	err := dht.PutValue(ctx, "/v/"+element[0], []byte(element[1]))
 	if err != nil {
 		println("Put Failed")
 		panic(err)
 	}
-
-	time.Sleep(time.Second)
-	fmt.Printf("Upload %d done\n", id)
 }
