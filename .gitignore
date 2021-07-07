@@ -1,4 +1,5 @@
 /target
+/.vscode
 
 secret.json
 .idea/dbnavigator.xml
