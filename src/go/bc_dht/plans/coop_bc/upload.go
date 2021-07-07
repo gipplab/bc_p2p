@@ -69,7 +69,7 @@ tryput:
 	var uploadgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		uploadgroup.Add(1)
-		go uploader(ctx, dht, element, &uploadgroup)
+		go upload(ctx, dht, element, &uploadgroup)
 	}
 	uploadgroup.Wait()
 
@@ -77,7 +77,7 @@ tryput:
 	var checkgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		checkgroup.Add(1)
-		go checker(ctx, dht, element, &checkgroup)
+		go check(ctx, dht, element, &checkgroup)
 	}
 	checkgroup.Wait()
 
@@ -99,7 +99,7 @@ func sampleData() [][]string {
 	return record
 }
 
-func uploader(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+func upload(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
@@ -110,7 +110,7 @@ func uploader(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sy
 	}
 }
 
-func checker(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+func check(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	fmt.Printf("GET :: HDF: %s\n", element[1])

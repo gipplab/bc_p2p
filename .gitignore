@@ -5,3 +5,4 @@ secret.json
 .idea/dbnavigator.xml
 GKE/terraform/terraform.tfstate
 GKE/terraform/terraform.tfstate.backup
+src/go/bc_dht/plans/coop_bc/bootstrap_ID.tmp

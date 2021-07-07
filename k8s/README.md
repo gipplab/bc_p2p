@@ -12,11 +12,12 @@ kubectl delete -f deployment.yml
 
 
 # Notes
-Multi-cluster networking can be a minefield.
+Multi-regional networking can be a minefield.
 
-Pod-to-Pod communication across clusters should work out of the box on GKE and EKS
+for Pod-to-Pod communication across clusters:
 - on AKS the "advanced networking mode must be set
 - on Cilium a "cluster mesh" is needed
+- on GKE enable "intranode visibility"
 - others are not tested
 
 ## If pods are not able to communicate:
@@ -32,4 +33,11 @@ If Pods cannot find each other directly
 (this causes a big overhead and extra costs)
 
 
+### GKE Problem
+- Please be aware that free trial accounts for Google Cloud Platform have limited quota during their trial period. In order to increase your quota, please upgrade to a paid account by clicking "Upgrade my account" from the top of any page once logged in to Google Cloud Console.
+No more than 8 IPs per region.
+
+## Multi-Regional Cluster
+- Set up Kubernetes clusters in multiple regions with different CIDR blocks
+- Set up cross-region communication
 
