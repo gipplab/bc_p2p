@@ -16,7 +16,7 @@ import (
 )
 
 // main for Standalone and debug run
-func main() {
+func uploadPeer() {
 	fmt.Println("Join DHT")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
@@ -46,14 +46,14 @@ func main() {
 
 	// Single PUT GET to check network
 	// dht.Provide() // TODO: might be more efficient
-tryput:
+	// tryput:
 	txValue := "valueDiesDAs"
 	println("PUT:", txValue)
 	err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
 	if err != nil {
 		println("Put Failed")
 		time.Sleep(time.Second)
-		goto tryput
+		// goto tryput
 	}
 	myBytes, err := dht.GetValue(ctx, "/v/hello")
 	rxValue := string(myBytes[:])

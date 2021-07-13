@@ -10,8 +10,8 @@ import (
 	"github.com/multiformats/go-multiaddr"
 )
 
-// main for Standalone and debug run
-func main() {
+// Start and join a peer in idle mode
+func IdlePeer() {
 	fmt.Println("Join DHT")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())

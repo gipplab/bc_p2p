@@ -1,1 +1,1 @@
-testground run single --plan=bc_test --testcase=quickstart --runner=local:docker --builder=docker:go --instances=1
+testground run single --plan=coop_bc --testcase=upload --runner=local:docker --builder=docker:go --instances=1

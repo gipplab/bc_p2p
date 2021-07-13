@@ -10,7 +10,7 @@ import (
 )
 
 // main for Standalone and debug run
-func main() {
+func bootstrapPeer() {
 	fmt.Println("Start Bootstrap Host")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
