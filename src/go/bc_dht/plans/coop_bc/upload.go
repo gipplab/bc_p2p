@@ -16,7 +16,7 @@ import (
 )
 
 // main for Standalone and debug run
-func uploadPeer() {
+func UploadPeer() {
 	fmt.Println("Join DHT")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
