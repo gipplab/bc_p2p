@@ -27,6 +27,8 @@ func runf(runenv *runtime.RunEnv) error {
 		readyState    = sync.State("ready")
 		releasedState = sync.State("released")
 
+		addressesTopic = sync.NewTopic("bootstrapAddr", "")
+
 		ctx = context.Background()
 	)
 
@@ -52,8 +54,17 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("i'm the bootstrapper.")
 		numFollowers := runenv.TestInstanceCount - 1
 
-		BootstrapPeer()
 		// TODO: find alternative to bootstrap_ID.tmp
+
+		///////////////////////////
+		// topic 'addresses', of type string (we infer the type from the 2nd arg)
+		peerAddr, comProtocol, peerID := BootstrapPeer()
+
+		// instances publish their endpoint addresses on the 'addresses' topic
+		seq := client.MustPublish(ctx, addressesTopic, peerAddr+comProtocol+peerID)
+
+		runenv.RecordMessage("I am instance number %d publishing to the 'addresses' topic\n", seq)
+		////////////////////////////
 
 		// let's wait for the followers to signal.
 		runenv.RecordMessage("waiting for %d instances to become ready", numFollowers)
@@ -65,7 +76,7 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("the followers are all ready")
 		runenv.RecordMessage("Lets upload...")
 
-		UploadPeer()
+		UploadPeer(peerAddr + comProtocol + peerID)
 
 		time.Sleep(1 * time.Second)
 		runenv.RecordMessage("set...")
@@ -77,7 +88,16 @@ func runf(runenv *runtime.RunEnv) error {
 		return nil
 	}
 
-	IdlePeer()
+	// consume all addresses from all peers
+	ch := make(chan string)
+	_ = client.MustSubscribe(ctx, addressesTopic, ch)
+
+	addr := ""
+	for i := 0; i < runenv.TestInstanceCount; i++ {
+		addr = <-ch
+		runenv.RecordMessage("received addr:", addr)
+	}
+	IdlePeer(addr)
 
 	rand.Seed(time.Now().UnixNano())
 	sleep := rand.Intn(5)

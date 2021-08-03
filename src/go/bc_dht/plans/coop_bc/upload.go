@@ -4,29 +4,28 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"sync"
 	"time"
 
-	"github.com/ipfs/testround/plans/example/pkg/dht"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/multiformats/go-multiaddr"
 )
 
 // main for Standalone and debug run
-func UploadPeer() {
+func UploadPeer(bootstrap_addr string) {
 	fmt.Println("Join DHT")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	b, err := ioutil.ReadFile("bootstrap_ID.tmp") // just pass the file name
-	if err != nil {
-		fmt.Print(err)
-	}
-	bootstrap_addr := string(b)
+	// b, err := ioutil.ReadFile("bootstrap_ID.tmp") // just pass the file name
+	// if err != nil {
+	// 	fmt.Print(err)
+	// }
+	// bootstrap_addr := string(b)
 
 	// Define bootstrap nodes
 	// ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ") //ipfs

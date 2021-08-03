@@ -6,11 +6,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/ipfs/testround/plans/example/pkg/dht"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 )
 
 // main for Standalone and debug run
-func BootstrapPeer() {
+// returns host.addr, protocol, peerID
+func BootstrapPeer() (string, string, string) {
 	fmt.Println("Start Bootstrap Host")
 	// Shared cancelable context
 	ctx, cancel := context.WithCancel(context.Background())
@@ -39,4 +40,6 @@ func BootstrapPeer() {
 	for {
 		time.Sleep(time.Second)
 	}
+
+	return dht.Host().Addrs()[0].String(), "/p2p/", dht.PeerID().String()
 }
