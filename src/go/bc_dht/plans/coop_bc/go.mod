@@ -3,7 +3,6 @@ module github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc
 go 1.16
 
 require (
-    github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/huin/goupnp v1.0.2 // indirect
@@ -26,6 +25,7 @@ require (
 	github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e // indirect
 	github.com/prometheus/common v0.30.0 // indirect
 	github.com/prometheus/procfs v0.7.1 // indirect
+	github.com/testground/sdk-go v0.2.7 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
