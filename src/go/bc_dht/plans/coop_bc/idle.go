@@ -3,18 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 	"github.com/multiformats/go-multiaddr"
 )
 
 // Start and join a peer in idle mode
-func IdlePeer(bootstrap_addr string) {
+func IdlePeer(ctx context.Context, bootstrap_addr string) {
 	fmt.Println("Join DHT")
 	// Shared cancelable context
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	// ctx, cancel := context.WithCancel(context.Background())
+	// defer cancel()
 
 	// b, err := ioutil.ReadFile("bootstrap_ID.tmp") // just pass the file name
 	// if err != nil {
@@ -39,7 +38,7 @@ func IdlePeer(bootstrap_addr string) {
 	}
 
 	println("Own PeerID: " + dht.PeerID().String())
-	for {
-		time.Sleep(time.Second)
-	}
+	// for {
+	// 	time.Sleep(time.Second)
+	// }
 }

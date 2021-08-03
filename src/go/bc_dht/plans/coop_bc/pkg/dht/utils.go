@@ -120,5 +120,7 @@ func BootstrapDht(ctx context.Context) (*kaddht.IpfsDHT, error) {
 		panic(err)
 	}
 
+	kademliaDHT.Validator.(record.NamespacedValidator)["v"] = blankValidator{} // might not be needed
+
 	return kademliaDHT, nil
 }

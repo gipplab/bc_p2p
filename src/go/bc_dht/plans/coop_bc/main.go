@@ -15,6 +15,11 @@ import (
 	"github.com/testground/sdk-go/sync"
 )
 
+//todo: followers all ready but bootstrapper is not reachable via DHT
+//todo: ip4 address should not be localhost
+//todo: check how to enforce a second LAN dht: https://github.com/libp2p/go-libp2p-kad-dht/blob/master/dual/dual_test.go
+//todo: or use mdns to find default peers
+
 func main() {
 	run.Invoke(runf)
 }
@@ -42,7 +47,6 @@ func runf(runenv *runtime.RunEnv) error {
 
 	// wait for the network to initialize; this should be pretty fast.
 	netclient.MustWaitNetworkInitialized(ctx)
-	runenv.RecordMessage("network initilization complete")
 
 	// signal entry in the 'enrolled' state, and obtain a sequence number.
 	seq := client.MustSignalEntry(ctx, enrolledState)
@@ -54,19 +58,16 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("i'm the bootstrapper.")
 		numFollowers := runenv.TestInstanceCount - 1
 
-		// TODO: find alternative to bootstrap_ID.tmp
+		peerAddr, comProtocol, peerID := BootstrapPeer(ctx)
 
-		///////////////////////////
-		// topic 'addresses', of type string (we infer the type from the 2nd arg)
-		peerAddr, comProtocol, peerID := BootstrapPeer()
-
-		// instances publish their endpoint addresses on the 'addresses' topic
+		// bootstrapper publishes its endpoint address on the 'addresses' topic
 		seq := client.MustPublish(ctx, addressesTopic, peerAddr+comProtocol+peerID)
 
 		runenv.RecordMessage("I am instance number %d publishing to the 'addresses' topic\n", seq)
-		////////////////////////////
 
+		// ---------------------------------------
 		// let's wait for the followers to signal.
+		// ---------------------------------------
 		runenv.RecordMessage("waiting for %d instances to become ready", numFollowers)
 		err := <-client.MustBarrier(ctx, readyState, numFollowers).C
 		if err != nil {
@@ -88,6 +89,11 @@ func runf(runenv *runtime.RunEnv) error {
 		return nil
 	}
 
+	rand.Seed(time.Now().UnixNano())
+	sleep := rand.Intn(5) + 5
+	runenv.RecordMessage("i'm a follower; signalling ready after %d seconds", sleep)
+	time.Sleep(time.Duration(sleep) * time.Second)
+
 	// consume all addresses from all peers
 	ch := make(chan string)
 	_ = client.MustSubscribe(ctx, addressesTopic, ch)
@@ -96,13 +102,13 @@ func runf(runenv *runtime.RunEnv) error {
 	for i := 0; i < runenv.TestInstanceCount; i++ {
 		addr = <-ch
 		runenv.RecordMessage("received addr:", addr)
-	}
-	IdlePeer(addr)
+		if addr != "" {
+			break
+		}
 
-	rand.Seed(time.Now().UnixNano())
-	sleep := rand.Intn(5)
-	runenv.RecordMessage("i'm a follower; signalling ready after %d seconds", sleep)
-	time.Sleep(time.Duration(sleep) * time.Second)
+	}
+	IdlePeer(ctx, addr)
+
 	runenv.RecordMessage("follower signalling now")
 
 	// signal entry in the 'ready' state.

@@ -17,7 +17,7 @@ import (
 // main for Standalone and debug run
 func UploadPeer(bootstrap_addr string) {
 	fmt.Println("Join DHT")
-	// Shared cancelable context
+	// New context for upload
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
