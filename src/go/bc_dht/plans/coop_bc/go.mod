@@ -1,4 +1,4 @@
-module github.com/ipfs/testround/plans/example
+module github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc
 
 go 1.16
 
