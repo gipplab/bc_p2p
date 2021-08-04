@@ -2,8 +2,6 @@ package dht
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"sync"
 
 	"github.com/libp2p/go-libp2p"
@@ -12,6 +10,7 @@ import (
 	record "github.com/libp2p/go-libp2p-record"
 	tcp "github.com/libp2p/go-tcp-transport"
 	"github.com/multiformats/go-multiaddr"
+	"github.com/testground/sdk-go/runtime"
 )
 
 type blankValidator struct{}
@@ -21,7 +20,7 @@ func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil 
 
 // JoinDht start the node and tries to connect to the provided bootstrapPeers.
 // If no bootstrapPeers are probided, the default IPFS bootstrapPeers are used.
-func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht.IpfsDHT, error) {
+func JoinDht(ctx context.Context, runenv *runtime.RunEnv, bootstrapPeers []multiaddr.Multiaddr) (*kaddht.IpfsDHT, error) {
 
 	// set ipv4 listener
 	transports := libp2p.ChainOptions(
@@ -44,7 +43,7 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 
 	// Show Local IPv4
 	for _, addr := range host.Addrs() {
-		fmt.Println("Listening on", addr)
+		runenv.RecordMessage("Listening on", addr)
 	}
 
 	// Init the DHT
@@ -76,9 +75,9 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 
 			// Ping
 			if err := host.Connect(ctx, *peerinfo); err != nil {
-				log.Println(err)
+				panic(err)
 			} else {
-				log.Println("Connection established with bootstrap node:", *peerinfo)
+				runenv.RecordMessage("Connection established with bootstrap node:", *peerinfo)
 			}
 		}()
 	}
@@ -87,7 +86,7 @@ func JoinDht(ctx context.Context, bootstrapPeers []multiaddr.Multiaddr) (*kaddht
 	return kademliaDHT, nil
 }
 
-func BootstrapDht(ctx context.Context) (*kaddht.IpfsDHT, error) {
+func BootstrapDht(ctx context.Context, runenv *runtime.RunEnv) (*kaddht.IpfsDHT, error) {
 	// set ipv4 listener
 	transports := libp2p.ChainOptions(
 		libp2p.Transport(tcp.NewTCPTransport),
@@ -109,10 +108,10 @@ func BootstrapDht(ctx context.Context) (*kaddht.IpfsDHT, error) {
 
 	// Show Local IPv4
 	for _, addr := range host.Addrs() {
-		fmt.Println("Listening on", addr)
+		runenv.RecordMessage("Listening on", addr)
 	}
 
-	fmt.Println("Bootstrap PeerID: " + host.ID().String())
+	runenv.RecordMessage("Bootstrap PeerID: " + host.ID().String())
 
 	// Init the DHT
 	kademliaDHT, err := kaddht.New(ctx, host, kaddht.Mode(kaddht.ModeServer))

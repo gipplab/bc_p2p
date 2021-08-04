@@ -12,11 +12,12 @@ import (
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/multiformats/go-multiaddr"
+	"github.com/testground/sdk-go/runtime"
 )
 
 // main for Standalone and debug run
-func UploadPeer(bootstrap_addr string) {
-	fmt.Println("Join DHT")
+func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
+	runenv.RecordMessage("Join DHT")
 	// New context for upload
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -37,9 +38,9 @@ func UploadPeer(bootstrap_addr string) {
 
 	var myPeers []multiaddr.Multiaddr
 	// dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
-	dht, err := dht.JoinDht(ctx, append(myPeers, ma))
+	dht, err := dht.JoinDht(ctx, runenv, append(myPeers, ma))
 	if err != nil {
-		println("Could not join DHT")
+		runenv.RecordMessage("Could not join DHT")
 		panic(err)
 	}
 
@@ -47,28 +48,28 @@ func UploadPeer(bootstrap_addr string) {
 	// dht.Provide() // TODO: might be more efficient
 	// tryput:
 	txValue := "valueDiesDAs"
-	println("PUT:", txValue)
+	runenv.RecordMessage("PUT:", txValue)
 	err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
 	if err != nil {
-		println("Put Failed")
+		runenv.RecordMessage("Put Failed")
 		time.Sleep(time.Second)
 		// goto tryput
 	}
 	myBytes, err := dht.GetValue(ctx, "/v/hello")
 	rxValue := string(myBytes[:])
-	println("GET:", rxValue)
+	runenv.RecordMessage("GET:", rxValue)
 	if err != nil {
-		println("Get Failed")
+		runenv.RecordMessage("Get Failed")
 		panic(err)
 	} else {
-		println(rxValue)
+		runenv.RecordMessage(rxValue)
 	}
 
 	// Batch UPLOAD in goroutine
 	var uploadgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		uploadgroup.Add(1)
-		go upload(ctx, dht, element, &uploadgroup)
+		go upload(ctx, runenv, dht, element, &uploadgroup)
 	}
 	uploadgroup.Wait()
 
@@ -76,7 +77,7 @@ func UploadPeer(bootstrap_addr string) {
 	var checkgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		checkgroup.Add(1)
-		go check(ctx, dht, element, &checkgroup)
+		go check(ctx, runenv, dht, element, &checkgroup)
 	}
 	checkgroup.Wait()
 
@@ -98,26 +99,26 @@ func sampleData() [][]string {
 	return record
 }
 
-func upload(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
 	err := dht.PutValue(ctx, "/v/"+element[1], []byte(element[0]))
 	if err != nil {
-		println("Put Failed")
+		runenv.RecordMessage("Put Failed")
 		panic(err)
 	}
 }
 
-func check(ctx context.Context, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	fmt.Printf("GET :: HDF: %s\n", element[1])
 	myBytes, err := dht.GetValue(ctx, "/v/"+element[1])
 	if err != nil {
-		println("GET Failed")
+		runenv.RecordMessage("GET Failed")
 		panic(err)
 	} else {
-		println("Found HDF: " + element[1] + " in DocumentID: " + string(myBytes[:]))
+		runenv.RecordMessage("Found HDF: " + element[1] + " in DocumentID: " + string(myBytes[:]))
 	}
 }

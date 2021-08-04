@@ -2,15 +2,15 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 	"github.com/multiformats/go-multiaddr"
+	"github.com/testground/sdk-go/runtime"
 )
 
 // Start and join a peer in idle mode
-func IdlePeer(ctx context.Context, bootstrap_addr string) {
-	fmt.Println("Join DHT")
+func IdlePeer(ctx context.Context, runenv *runtime.RunEnv, bootstrap_addr string) {
+	runenv.RecordMessage("Join DHT")
 	// Shared cancelable context
 	// ctx, cancel := context.WithCancel(context.Background())
 	// defer cancel()
@@ -31,13 +31,13 @@ func IdlePeer(ctx context.Context, bootstrap_addr string) {
 
 	var myPeers []multiaddr.Multiaddr
 	//dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
-	dht, err := dht.JoinDht(ctx, append(myPeers, ma))
+	dht, err := dht.JoinDht(ctx, runenv, append(myPeers, ma))
 	if err != nil {
-		println("Could not join DHT")
+		runenv.RecordMessage("Could not join DHT")
 		panic(err)
 	}
 
-	println("Own PeerID: " + dht.PeerID().String())
+	runenv.RecordMessage("Own PeerID: " + dht.PeerID().String())
 	// for {
 	// 	time.Sleep(time.Second)
 	// }

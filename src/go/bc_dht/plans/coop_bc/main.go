@@ -58,7 +58,7 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("i'm the bootstrapper.")
 		numFollowers := runenv.TestInstanceCount - 1
 
-		peerAddr, comProtocol, peerID := BootstrapPeer(ctx)
+		peerAddr, comProtocol, peerID := BootstrapPeer(ctx, runenv)
 
 		// bootstrapper publishes its endpoint address on the 'addresses' topic
 		seq := client.MustPublish(ctx, addressesTopic, peerAddr+comProtocol+peerID)
@@ -77,7 +77,7 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("the followers are all ready")
 		runenv.RecordMessage("Lets upload...")
 
-		UploadPeer(peerAddr + comProtocol + peerID)
+		UploadPeer(runenv, peerAddr+comProtocol+peerID)
 
 		time.Sleep(1 * time.Second)
 		runenv.RecordMessage("set...")
@@ -107,7 +107,7 @@ func runf(runenv *runtime.RunEnv) error {
 		}
 
 	}
-	IdlePeer(ctx, addr)
+	IdlePeer(ctx, runenv, addr)
 
 	runenv.RecordMessage("follower signalling now")
 
