@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"sync"
-	"time"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
@@ -18,12 +17,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// New context for upload
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
-	// b, err := ioutil.ReadFile("bootstrap_ID.tmp") // just pass the file name
-	// if err != nil {
-	// 	fmt.Print(err)
-	// }
-	// bootstrap_addr := string(b)
 
 	// Define bootstrap nodes
 	// ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ") //ipfs
@@ -42,27 +35,27 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 
 	// Single PUT GET to check network
-	// dht.Provide() // TODO: might be more efficient
 	// tryput:
-	txValue := "valueDiesDAs"
-	runenv.RecordMessage("PUT:", txValue)
-	err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
-	if err != nil {
-		runenv.RecordMessage("Put Failed")
-		time.Sleep(time.Second)
-		// goto tryput
-	}
-	myBytes, err := dht.GetValue(ctx, "/v/hello")
-	rxValue := string(myBytes[:])
-	runenv.RecordMessage("GET:", rxValue)
-	if err != nil {
-		runenv.RecordMessage("Get Failed")
-		panic(err)
-	} else {
-		runenv.RecordMessage(rxValue)
-	}
+	// txValue := "valueDiesDAs"
+	// runenv.RecordMessage("PUT:", txValue)
+	// err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
+	// if err != nil {
+	// 	runenv.RecordMessage("Put Failed")
+	// 	time.Sleep(time.Second)
+	// 	// goto tryput
+	// }
+	// myBytes, err := dht.GetValue(ctx, "/v/hello")
+	// rxValue := string(myBytes[:])
+	// runenv.RecordMessage("GET:", rxValue)
+	// if err != nil {
+	// 	runenv.RecordMessage("Get Failed")
+	// 	panic(err)
+	// } else {
+	// 	runenv.RecordMessage(rxValue)
+	// }
 
 	// Batch UPLOAD in goroutine
+	// dht.Provide() // TODO: might be more efficient
 	var uploadgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		uploadgroup.Add(1)
