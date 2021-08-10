@@ -43,7 +43,7 @@ func JoinDht(ctx context.Context, runenv *runtime.RunEnv, bootstrapPeers []multi
 
 	// Show Local IPv4
 	for _, addr := range host.Addrs() {
-		runenv.RecordMessage("Listening on", addr)
+		runenv.RecordMessage("Listening on %s", addr.String())
 	}
 
 	// Init the DHT
@@ -108,10 +108,10 @@ func BootstrapDht(ctx context.Context, runenv *runtime.RunEnv) (*kaddht.IpfsDHT,
 
 	// Show Local IPv4
 	for _, addr := range host.Addrs() {
-		runenv.RecordMessage("Listening on", addr)
+		runenv.RecordMessage("Listening on %s", addr.String())
 	}
 
-	runenv.RecordMessage("Bootstrap PeerID: " + host.ID().String())
+	runenv.RecordMessage("Bootstrap PeerID: %s" + host.ID().String())
 
 	// Init the DHT
 	kademliaDHT, err := kaddht.New(ctx, host, kaddht.Mode(kaddht.ModeServer))

@@ -101,7 +101,7 @@ func runf(runenv *runtime.RunEnv) error {
 	addr := ""
 	for i := 0; i < runenv.TestInstanceCount; i++ {
 		addr = <-ch
-		runenv.RecordMessage("received addr:", addr)
+		runenv.RecordMessage("received addr: %s", addr)
 		if addr != "" {
 			break
 		}
