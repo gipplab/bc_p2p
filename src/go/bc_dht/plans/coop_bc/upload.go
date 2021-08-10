@@ -70,7 +70,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		go check(ctx, runenv, dht, element, &checkgroup)
 	}
 	checkgroup.Wait()
-
 }
 
 func sampleData() [][]string {

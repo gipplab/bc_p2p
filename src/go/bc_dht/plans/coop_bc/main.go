@@ -82,10 +82,15 @@ func runf(runenv *runtime.RunEnv) error {
 		time.Sleep(1 * time.Second)
 		runenv.RecordMessage("set...")
 		time.Sleep(5 * time.Second)
-		runenv.RecordMessage("go, release followers!") // TODO: invert behavior - followers first
+		runenv.RecordMessage("go, release followers!")
 
 		// signal on the 'released' state.
 		client.MustSignalEntry(ctx, releasedState)
+
+		time.Sleep(5 * time.Second)
+		runenv.RecordMessage("Bootstrapper OUT...")
+
+		client.Close()
 		return nil
 	}
 
@@ -121,5 +126,6 @@ func runf(runenv *runtime.RunEnv) error {
 	}
 
 	runenv.RecordMessage("i have been released")
+	client.Close()
 	return nil
 }

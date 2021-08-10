@@ -77,7 +77,7 @@ func JoinDht(ctx context.Context, runenv *runtime.RunEnv, bootstrapPeers []multi
 			if err := host.Connect(ctx, *peerinfo); err != nil {
 				panic(err)
 			} else {
-				runenv.RecordMessage("Connection established with bootstrap node: ", *peerinfo)
+				runenv.RecordMessage("Connection established with bootstrap node: " + peerinfo.String())
 			}
 		}()
 	}
