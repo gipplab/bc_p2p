@@ -6,7 +6,6 @@ package main
 
 import (
 	"context"
-	"math/rand"
 	"time"
 
 	"github.com/testground/sdk-go/network"
@@ -53,21 +52,41 @@ func runf(runenv *runtime.RunEnv) error {
 
 	runenv.RecordMessage("my sequence ID: %d", seq)
 
-	// if we're the first instance to signal, we'll become the LEADER.
+	// if we're the first instance to signal, we'll become the BOOTSTRAPPER.
 	if seq == 1 {
-		runenv.RecordMessage("i'm the bootstrapper.")
-		numFollowers := runenv.TestInstanceCount - 1
+		runenv.RecordMessage("i'm the bootstrapper")
 
 		peerAddr, comProtocol, peerID := BootstrapPeer(ctx, runenv)
 
-		// bootstrapper publishes its endpoint address on the 'addresses' topic
+		// publishes its endpoint address on the 'addresses' topic
 		seq := client.MustPublish(ctx, addressesTopic, peerAddr+comProtocol+peerID)
 
-		runenv.RecordMessage("I am instance number %d publishing to the 'addresses' topic\n", seq)
+		runenv.RecordMessage("I am instance number %d", seq)
 
-		// ---------------------------------------
-		// let's wait for the followers to signal.
-		// ---------------------------------------
+		// signal entry in the 'ready' state for uploader
+		client.MustSignalEntry(ctx, readyState)
+
+		// wait until the uploader releases us.
+		err := <-client.MustBarrier(ctx, releasedState, 1).C
+		if err != nil {
+			return err
+		}
+
+		runenv.RecordMessage("bootstrapper has been released")
+		client.Close()
+
+		return nil
+	} else if seq == 2 {
+		runenv.RecordMessage("i'm the uploader")
+
+		// give bootstrapper some time
+		time.Sleep(time.Duration(5) * time.Second)
+
+		numFollowers := runenv.TestInstanceCount - 1
+
+		runenv.RecordMessage("I am instance number %d \n", seq)
+
+		// waiting for all other peers
 		runenv.RecordMessage("waiting for %d instances to become ready", numFollowers)
 		err := <-client.MustBarrier(ctx, readyState, numFollowers).C
 		if err != nil {
@@ -75,29 +94,36 @@ func runf(runenv *runtime.RunEnv) error {
 		}
 
 		runenv.RecordMessage("the followers are all ready")
+
+		// consume all addresses from all peers
+		ch := make(chan string)
+		_ = client.MustSubscribe(ctx, addressesTopic, ch)
+
+		addr := ""
+		for i := 0; i < runenv.TestInstanceCount; i++ {
+			addr = <-ch
+			runenv.RecordMessage("received addr: %s", addr)
+			if addr != "" {
+				break
+			}
+
+		}
+
 		runenv.RecordMessage("Lets upload...")
-
-		UploadPeer(runenv, peerAddr+comProtocol+peerID)
-
-		time.Sleep(1 * time.Second)
-		runenv.RecordMessage("set...")
-		time.Sleep(5 * time.Second)
-		runenv.RecordMessage("go, release followers!")
+		UploadPeer(runenv, addr)
 
 		// signal on the 'released' state.
+		runenv.RecordMessage("releasing peers!")
 		client.MustSignalEntry(ctx, releasedState)
 
-		time.Sleep(5 * time.Second)
-		runenv.RecordMessage("Bootstrapper OUT...")
+		runenv.RecordMessage("uploader has been closed")
 
 		client.Close()
 		return nil
 	}
 
-	rand.Seed(time.Now().UnixNano())
-	sleep := rand.Intn(5) + 5
-	runenv.RecordMessage("i'm a follower; signalling ready after %d seconds", sleep)
-	time.Sleep(time.Duration(sleep) * time.Second)
+	runenv.RecordMessage("i'm a normal peer")
+	time.Sleep(time.Duration(3) * time.Second)
 
 	// consume all addresses from all peers
 	ch := make(chan string)
@@ -112,6 +138,7 @@ func runf(runenv *runtime.RunEnv) error {
 		}
 
 	}
+
 	IdlePeer(ctx, runenv, addr)
 
 	runenv.RecordMessage("follower signalling now")
@@ -119,7 +146,7 @@ func runf(runenv *runtime.RunEnv) error {
 	// signal entry in the 'ready' state.
 	client.MustSignalEntry(ctx, readyState)
 
-	// wait until the leader releases us.
+	// wait until the uploader releases us.
 	err := <-client.MustBarrier(ctx, releasedState, 1).C
 	if err != nil {
 		return err
