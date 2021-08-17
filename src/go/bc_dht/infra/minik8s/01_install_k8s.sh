@@ -15,30 +15,31 @@ START_TIME=`date +%s`
 echo "Creating cluster for Testground..."
 echo
 
-# 
+# Expects cluster.yaml
 CLUSTER_SPEC_TEMPLATE=$1
 
 my_dir="$(dirname "$0")"
 source "$my_dir/install-playbook/validation.sh"
 
-echo "Required arguments"
+echo "Required arguments for MiniKube"
 echo "------------------"
 echo "Deployment name (DEPLOYMENT_NAME): $DEPLOYMENT_NAME"
 echo "Cluster name (CLUSTER_NAME): $CLUSTER_NAME"
 echo "Kops state store (KOPS_STATE_STORE): $KOPS_STATE_STORE"
-echo "AWS availability zone A (ZONE_A): $ZONE_A"
-echo "AWS availability zone B (ZONE_B): $ZONE_B"
-echo "AWS region (AWS_REGION): $AWS_REGION"
-echo "AWS worker node type (WORKER_NODE_TYPE): $WORKER_NODE_TYPE"
-echo "AWS master node type (MASTER_NODE_TYPE): $MASTER_NODE_TYPE"
+# echo "AWS availability zone A (ZONE_A): $ZONE_A"
+# echo "AWS availability zone B (ZONE_B): $ZONE_B"
+# echo "AWS region (AWS_REGION): $AWS_REGION"
+# echo "AWS worker node type (WORKER_NODE_TYPE): $WORKER_NODE_TYPE"
+# echo "AWS master node type (MASTER_NODE_TYPE): $MASTER_NODE_TYPE"
 echo "Worker nodes (WORKER_NODES): $WORKER_NODES"
 echo "Public key (PUBKEY): $PUBKEY"
 echo
 
-CLUSTER_SPEC=$(mktemp)
-envsubst <$CLUSTER_SPEC_TEMPLATE >$CLUSTER_SPEC
+# Temporary File from cluster.yaml
+CLUSTER_SPEC=$(mktemp) 
+envsubst <$CLUSTER_SPEC_TEMPLATE >$CLUSTER_SPEC # to file && var
 
-# Verify with the user before continuing.
+# DIALOG: Verify with the user before continuing.
 echo
 echo "The cluster will be built based on the params above."
 echo -n "Do they look right to you? [y/n]: "
