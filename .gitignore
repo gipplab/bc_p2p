@@ -7,3 +7,4 @@ GKE/terraform/terraform.tfstate
 GKE/terraform/terraform.tfstate.backup
 src/go/bc_dht/plans/coop_bc/bootstrap_ID.tmp
 src/go/bc_dht/data/*
+src/go/bc_dht/tasks.db

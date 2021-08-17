@@ -6,6 +6,7 @@ package main
 
 import (
 	"context"
+	"math/rand"
 	"time"
 
 	"github.com/testground/sdk-go/network"
@@ -80,7 +81,7 @@ func runf(runenv *runtime.RunEnv) error {
 		runenv.RecordMessage("i'm the uploader")
 
 		// give bootstrapper some time
-		time.Sleep(time.Duration(5) * time.Second)
+		time.Sleep(time.Duration(2) * time.Second)
 
 		numFollowers := runenv.TestInstanceCount - 1
 
@@ -123,7 +124,9 @@ func runf(runenv *runtime.RunEnv) error {
 	}
 
 	runenv.RecordMessage("i'm a normal peer")
-	time.Sleep(time.Duration(3) * time.Second)
+	rand.Seed(time.Now().UnixNano())
+	n := rand.Intn(10)
+	time.Sleep(time.Duration(n+5) * time.Second)
 
 	// consume all addresses from all peers
 	ch := make(chan string)
