@@ -1,0 +1,12 @@
+export CLUSTER_NAME=bcp2p.k8s.local
+export DEPLOYMENT_NAME=alpha.bcp2p
+export KOPS_STATE_STORE=s3://172.17.0.2:9000/minibucket
+export WORKER_NODES=5
+export PUBKEY=$HOME/.ssh/testground_rsa.pub
+# export AWS_REGION=eu-central-1
+# export ZONE_A=eu-central-1a
+# export ZONE_B=eu-central-1b
+# export MASTER_NODE_TYPE=c5.2xlarge
+# export WORKER_NODE_TYPE=c5.2xlarge
+# export TEAM=Similariteam
+# export PROJECT=SimilarityDetection
