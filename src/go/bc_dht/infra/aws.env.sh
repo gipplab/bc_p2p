@@ -1,0 +1,12 @@
+export CLUSTER_NAME=bcp2p.k8s.local
+export DEPLOYMENT_NAME=alpha.bcp2p
+export KOPS_STATE_STORE=s3://kops-backend-bucket-bcp2p
+export AWS_REGION=eu-central-1
+export ZONE_A=eu-central-1a
+export ZONE_B=eu-central-1b
+export WORKER_NODES=5
+export MASTER_NODE_TYPE=c5.2xlarge
+export WORKER_NODE_TYPE=c5.2xlarge
+export PUBKEY=$HOME/.ssh/testground_rsa.pub
+export TEAM=Similariteam
+export PROJECT=SimilarityDetection

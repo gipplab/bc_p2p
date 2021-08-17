@@ -1,0 +1,1 @@
+http://kops-backend-bucket-bcp2p.s3.eu-central-1.amazonaws.com
