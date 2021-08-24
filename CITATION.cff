@@ -1,0 +1,13 @@
+# YAML 1.2
+---
+authors: 
+  -
+    family-names: Ihle
+    given-names: Cornelius
+cff-version: "1.1.0"
+license: "Apache-2.0"
+message: "If you use this software, please cite it using these metadata."
+repository-code: "https://github.com/ag-gipp/bc_p2p"
+title: "Peer-to-peer Similarity Detection"
+version: "0.1"
+...
