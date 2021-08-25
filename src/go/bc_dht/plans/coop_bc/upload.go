@@ -34,26 +34,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		panic(err)
 	}
 
-	// Single PUT GET to check network
-	// tryput:
-	// txValue := "valueDiesDAs"
-	// runenv.RecordMessage("PUT:", txValue)
-	// err = dht.PutValue(ctx, "/v/hello", []byte(txValue))
-	// if err != nil {
-	// 	runenv.RecordMessage("Put Failed")
-	// 	time.Sleep(time.Second)
-	// 	// goto tryput
-	// }
-	// myBytes, err := dht.GetValue(ctx, "/v/hello")
-	// rxValue := string(myBytes[:])
-	// runenv.RecordMessage("GET:", rxValue)
-	// if err != nil {
-	// 	runenv.RecordMessage("Get Failed")
-	// 	panic(err)
-	// } else {
-	// 	runenv.RecordMessage(rxValue)
-	// }
-
 	// Batch UPLOAD in goroutine
 	// dht.Provide() // TODO: might be more efficient
 	var uploadgroup sync.WaitGroup
@@ -73,6 +53,8 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 }
 
 func sampleData() [][]string {
+	// Todo: add fakeFile1000
+
 	// Fake File
 	fakeFile := [][]string{
 		{"49001", "44b71eecde659689d848176615a2696aaeb2fb27"},
