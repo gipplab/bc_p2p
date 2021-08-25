@@ -19,7 +19,7 @@ func (blankValidator) Validate(_ string, _ []byte) error        { return nil }
 func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil }
 
 // JoinDht start the node and tries to connect to the provided bootstrapPeers.
-// If no bootstrapPeers are probided, the default IPFS bootstrapPeers are used.
+// If no bootstrapPeers are provided, the default IPFS bootstrapPeers are used.
 func JoinDht(ctx context.Context, runenv *runtime.RunEnv, bootstrapPeers []multiaddr.Multiaddr) (*kaddht.IpfsDHT, error) {
 
 	// set ipv4 listener

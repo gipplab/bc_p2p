@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"sync"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
@@ -11,15 +13,38 @@ import (
 	"github.com/testground/sdk-go/runtime"
 )
 
-// main for Standalone and debug run
 func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
+	// 1. Semantic Scholar Check
+
+	apiURL := "https://api.semanticscholar.org/v1/paper/"
+
+	// Get documentID by DOI
+
+	sampleDocumentID := "863f7197639325641f787caaf3a77a3f567fb24f"
+	// cppd = 863f7197639325641f787caaf3a77a3f567fb24f
+	// rbac = d7a3e44f86cb69dbc351b7d212312136ab6f0b8e
+
+	// Get all references by ID
+	resp, err := http.Get(apiURL + sampleDocumentID)
+	if err != nil {
+		panic(err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	runenv.RecordMessage(string(body))
+
+	// Filter public references
+
 	runenv.RecordMessage("Join DHT")
 	// New context for upload
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	// Define bootstrap nodes
-	// ma, err := multiaddr.NewMultiaddr("/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ") //ipfs
 	ma, err := multiaddr.NewMultiaddr(bootstrap_addr)
 	if err != nil {
 		_ = ma
@@ -27,15 +52,13 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 
 	var myPeers []multiaddr.Multiaddr
-	// dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
 	dht, err := dht.JoinDht(ctx, runenv, append(myPeers, ma))
 	if err != nil {
 		runenv.RecordMessage("Could not join DHT")
 		panic(err)
 	}
 
-	// Batch UPLOAD in goroutine
-	// dht.Provide() // TODO: might be more efficient
+	// 2. Batch UPLOAD in goroutine
 	var uploadgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		uploadgroup.Add(1)
@@ -43,7 +66,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 	uploadgroup.Wait()
 
-	// Batch CHECK in goroutine
+	// 3. Batch CHECK in goroutine
 	var checkgroup sync.WaitGroup
 	for _, element := range sampleData() {
 		checkgroup.Add(1)
