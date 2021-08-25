@@ -15,10 +15,7 @@ import (
 	"github.com/testground/sdk-go/sync"
 )
 
-//todo: followers all ready but bootstrapper is not reachable via DHT
-//todo: ip4 address should not be localhost
-//todo: check how to enforce a second LAN dht: https://github.com/libp2p/go-libp2p-kad-dht/blob/master/dual/dual_test.go
-//todo: or use mdns to find default peers
+//todo: try all addresses of multiaddress for connection
 
 func main() {
 	run.Invoke(runf)
