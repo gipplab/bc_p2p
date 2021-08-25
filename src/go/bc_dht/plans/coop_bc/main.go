@@ -134,12 +134,11 @@ func runf(runenv *runtime.RunEnv) error {
 		addr = <-ch
 		runenv.RecordMessage("received addr: %s", addr)
 		if addr != "" {
+			IdlePeer(ctx, runenv, addr)
 			break
 		}
 
 	}
-
-	IdlePeer(ctx, runenv, addr)
 
 	runenv.RecordMessage("follower signalling now")
 
