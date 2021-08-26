@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -24,7 +25,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// cppd = 863f7197639325641f787caaf3a77a3f567fb24f
 	// rbac = d7a3e44f86cb69dbc351b7d212312136ab6f0b8e
 
-	// Get all references by ID
+	// Get all references by ID \\\\\\\\\\\\\\\\\\\\\\\\
 	resp, err := http.Get(apiURL + sampleDocumentID)
 	if err != nil {
 		panic(err)
@@ -35,7 +36,77 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		panic(err)
 	}
 
-	runenv.RecordMessage(string(body))
+	type DocumentResponseStruct struct {
+		Abstract string `json:"abstract"`
+		ArxivID  string `json:"arxivId"`
+		Authors  []struct {
+			AuthorID string `json:"authorId"`
+			Name     string `json:"name"`
+			URL      string `json:"url"`
+		} `json:"authors"`
+		CitationVelocity int `json:"citationVelocity"`
+		Citations        []struct {
+			ArxivID interface{} `json:"arxivId"`
+			Authors []struct {
+				AuthorID string `json:"authorId"`
+				Name     string `json:"name"`
+			} `json:"authors"`
+			Doi           interface{}   `json:"doi"`
+			Intent        []interface{} `json:"intent"`
+			IsInfluential bool          `json:"isInfluential"`
+			PaperID       string        `json:"paperId"`
+			Title         string        `json:"title"`
+			URL           string        `json:"url"`
+			Venue         string        `json:"venue"`
+			Year          int           `json:"year"`
+		} `json:"citations"`
+		CorpusID                 int      `json:"corpusId"`
+		Doi                      string   `json:"doi"`
+		FieldsOfStudy            []string `json:"fieldsOfStudy"`
+		InfluentialCitationCount int      `json:"influentialCitationCount"`
+		IsOpenAccess             bool     `json:"isOpenAccess"`
+		IsPublisherLicensed      bool     `json:"isPublisherLicensed"`
+		NumCitedBy               int      `json:"numCitedBy"`
+		NumCiting                int      `json:"numCiting"`
+		PaperID                  string   `json:"paperId"`
+		References               []struct {
+			ArxivID interface{} `json:"arxivId"`
+			Authors []struct {
+				AuthorID string `json:"authorId"`
+				Name     string `json:"name"`
+			} `json:"authors"`
+			Doi           string   `json:"doi"`
+			Intent        []string `json:"intent"`
+			IsInfluential bool     `json:"isInfluential"`
+			PaperID       string   `json:"paperId"`
+			Title         string   `json:"title"`
+			URL           string   `json:"url"`
+			Venue         string   `json:"venue"`
+			Year          int      `json:"year"`
+		} `json:"references"`
+		Title  string `json:"title"`
+		Topics []struct {
+			Topic   string `json:"topic"`
+			TopicID string `json:"topicId"`
+			URL     string `json:"url"`
+		} `json:"topics"`
+		URL   string `json:"url"`
+		Venue string `json:"venue"`
+		Year  int    `json:"year"`
+	}
+	var m DocumentResponseStruct
+
+	err = json.Unmarshal(body, &m)
+	if err != nil {
+		panic(err)
+	}
+
+	_ = m.References //Document References
+
+	// Get citations by reference ID
+
+	fmt.Printf("%+v\n", m.References)
+	//runenv.RecordMessage(m)
 
 	// Filter public references
 
