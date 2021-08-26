@@ -142,6 +142,16 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		runenv.RecordMessage("Co-Cit-Map-Entry: ")
 		fmt.Printf("%+v\n", coCitationMap[refOfSubmission.PaperID])
 	}
+	runenv.RecordMessage("Entire Co-Cit-Map:")
+	fmt.Printf("%+v\n", coCitationMap)
+
+	// TODO: Verify that keys and values are unique
+
+	// Create all k-combinations of the submission's references
+
+	// Take each k-combination and create a intersection for the citing-documentIDs
+
+	// Remove intersection result from the total amount of k-combinations
 
 	// HashSet for Co-Citations
 
