@@ -25,7 +25,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// cppd = 863f7197639325641f787caaf3a77a3f567fb24f
 	// rbac = d7a3e44f86cb69dbc351b7d212312136ab6f0b8e
 
-	// Get all references by ID \\\\\\\\\\\\\\\\\\\\\\\\
+	// Get all references by ID || What is the original work referencing?
 	resp, err := http.Get(apiURL + sampleDocumentID)
 	if err != nil {
 		panic(err)
@@ -103,9 +103,49 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 
 	_ = m.References //Document References
 
-	// Get citations by reference ID
+	//inverted map || key:<referenceID> value:<[]paperIDsWhereItAppears>
+	coCitationMap := make(map[string][]string, 1000) // Preallocate space for 1000 entries
 
-	fmt.Printf("%+v\n", m.References)
+	// Get citations by reference ID || Who else cited the references of the "original work"
+	for _, refOfSubmission := range m.References {
+		// Prepare the coCitationMap by setting submission's refernceIDs as key
+		coCitationMap[refOfSubmission.PaperID] = nil
+
+		// Get co-citations
+		runenv.RecordMessage("Getting citations from submission-reference:")
+		fmt.Printf("%+v\n", refOfSubmission)
+
+		resp, err := http.Get(apiURL + refOfSubmission.PaperID)
+		if err != nil {
+			panic(err)
+		}
+
+		poteniallyCoCitedDocBody, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			panic(err)
+		}
+
+		var cc DocumentResponseStruct
+		err = json.Unmarshal(poteniallyCoCitedDocBody, &cc)
+		if err != nil {
+			panic(err)
+		}
+
+		// Fill co-cite map
+		// Saves all potenially-co-citing papersIDs to the inverted map with the cited reference's paperID as key
+		coCitationMap[refOfSubmission.PaperID] = nil
+		// Add all citing paperIDs
+		for _, ccpID := range cc.References {
+			coCitationMap[refOfSubmission.PaperID] = append(coCitationMap[refOfSubmission.PaperID], ccpID.PaperID)
+		}
+
+		runenv.RecordMessage("Co-Cit-Map-Entry: ")
+		fmt.Printf("%+v\n", coCitationMap[refOfSubmission.PaperID])
+	}
+
+	// HashSet for Co-Citations
+
+	//fmt.Printf("%+v\n", m.References)
 	//runenv.RecordMessage(m)
 
 	// Filter public references
