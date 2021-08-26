@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
+	github.com/gitchander/permutation v0.0.0-20210517125447-a5d73722e1b1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/huin/goupnp v1.0.2 // indirect
 	github.com/ipfs/go-datastore v0.4.6 // indirect

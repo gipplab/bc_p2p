@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sort"
 	"sync"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
@@ -148,6 +149,26 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// TODO: Verify that keys and values are unique
 
 	// Create all k-combinations of the submission's references
+	referencesDocIDs := make([]string, 0, len(coCitationMap))
+	for key := range coCitationMap {
+		referencesDocIDs = append(referencesDocIDs, key)
+	}
+	// We sort the strings to void redundant combinations || NO h(r1,r2) h(r2,r1) ONLY h(r1,r2)
+	sort.Strings(referencesDocIDs)
+	// TODO: this should not be hard-coded for k2 || allow for higher k in the future
+
+	// Find elements for each ID combination
+	combinations := [][]string{}
+	for _, refIdA := range referencesDocIDs {
+		for _, ref1dB := range referencesDocIDs {
+			// Identical IDs would break combinational hash security
+			if refIdA == ref1dB {
+				continue
+			}
+			combinations = append(combinations, []string{refIdA, ref1dB})
+		}
+	}
+	fmt.Printf("%+v\n", combinations)
 
 	// Take each k-combination and create a intersection for the citing-documentIDs
 
