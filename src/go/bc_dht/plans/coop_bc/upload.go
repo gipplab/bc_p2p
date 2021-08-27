@@ -170,9 +170,34 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 	fmt.Printf("%+v\n", combinations)
 
-	// Take each k-combination and create a intersection for the citing-documentIDs
+	// Take each k-combination-element and create an intersection for the citing-documentIDs from the coCitationMap
+	originalCombinations := combinations
+	for _, combination := range combinations {
+		intersection := make([]string, 0)
+		hash := make(map[interface{}]bool)
 
-	// Remove intersection result from the total amount of k-combinations
+		for i := 0; i < len(coCitationMap[combination[0]]); i++ {
+			el := coCitationMap[combination[0]][i]
+			hash[el] = true
+		}
+
+		for i := 0; i < len(coCitationMap[combination[1]]); i++ {
+			el := coCitationMap[combination[1]][i]
+			if _, found := hash[el]; found {
+				intersection = append(intersection, el)
+			}
+		}
+
+		// Keep only unique and new combinations
+		if len(intersection) <= 1 {
+			originalCombinations = append(originalCombinations, combination)
+		}
+	}
+
+	fmt.Printf("%+v\n", originalCombinations)
+
+	fmt.Printf("%+v\n", len(originalCombinations))
+	fmt.Printf("%+v\n", len(combinations))
 
 	// HashSet for Co-Citations
 
