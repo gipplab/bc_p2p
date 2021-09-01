@@ -2,11 +2,14 @@ package main
 
 import (
 	"context"
+	"crypto/sha1"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"sort"
+	"strings"
 	"sync"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
@@ -22,9 +25,10 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 
 	// Get documentID by DOI
 
-	sampleDocumentID := "863f7197639325641f787caaf3a77a3f567fb24f"
+	sampleDocumentID := "77f59aac5011ae660181b6454a94c627d7339206"
 	// cppd = 863f7197639325641f787caaf3a77a3f567fb24f
 	// rbac = d7a3e44f86cb69dbc351b7d212312136ab6f0b8e
+	// refs5 = 77f59aac5011ae660181b6454a94c627d7339206
 
 	// Get all references by ID || What is the original work referencing?
 	resp, err := http.Get(apiURL + sampleDocumentID)
@@ -171,7 +175,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	fmt.Printf("%+v\n", combinations)
 
 	// Take each k-combination-element and create an intersection for the citing-documentIDs from the coCitationMap
-	originalCombinations := combinations
+	originalCombinations := [][]string{}
 	for _, combination := range combinations {
 		intersection := make([]string, 0)
 		hash := make(map[interface{}]bool)
@@ -196,15 +200,12 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 
 	fmt.Printf("%+v\n", originalCombinations)
 
-	fmt.Printf("%+v\n", len(originalCombinations))
+	// Filter public references
 	fmt.Printf("%+v\n", len(combinations))
-
-	// HashSet for Co-Citations
+	fmt.Printf("%+v\n", len(originalCombinations))
 
 	//fmt.Printf("%+v\n", m.References)
 	//runenv.RecordMessage(m)
-
-	// Filter public references
 
 	runenv.RecordMessage("Join DHT")
 	// New context for upload
@@ -225,21 +226,72 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		panic(err)
 	}
 
-	// 2. Batch UPLOAD in goroutine
-	var uploadgroup sync.WaitGroup
-	for _, element := range sampleData() {
-		uploadgroup.Add(1)
-		go upload(ctx, runenv, dht, element, &uploadgroup)
-	}
-	uploadgroup.Wait()
+	// Check the DHT for our hashed combinations
+	inputDocHash := sha1.New()
+	inputDocHash.Write([]byte(sampleDocumentID))
 
-	// 3. Batch CHECK in goroutine
-	var checkgroup sync.WaitGroup
-	for _, element := range sampleData() {
-		checkgroup.Add(1)
-		go check(ctx, runenv, dht, element, &checkgroup)
+	var checkgroupInitial sync.WaitGroup
+	channelForUnseenHashes := make(chan []byte, sha1.New().Size())
+	for _, combination := range originalCombinations {
+		h := sha1.New()
+		h.Write([]byte(strings.Join(combination, "")))
+
+		checkgroupInitial.Add(1)
+		go func() {
+			if !check(ctx, runenv, dht, []string{string(inputDocHash.Sum(nil)), string(h.Sum(nil))}, &checkgroupInitial) {
+				println("Unseen Hash: " + hex.EncodeToString([]byte(string(h.Sum(nil)))))
+
+				channelForUnseenHashes <- h.Sum(nil)
+			}
+		}()
 	}
-	checkgroup.Wait()
+	checkgroupInitial.Wait()
+
+	messages := <-channelForUnseenHashes
+	unseenHashes := make([]string, 0)
+	for i := 0; i < len(messages); i += sha1.New().Size() {
+		unseenHashes = append(unseenHashes, hex.EncodeToString(messages[i:i+sha1.New().Size()]))
+		println("Als ob das nur einer ist!!: ", hex.EncodeToString(messages[i:i+sha1.New().Size()]))
+	}
+
+	// for _, uh := range *unseenHashes {
+	// 	hex.EncodeToString(uh) //TODO: this should be a string, not a f* rune. The channel
+	// }
+	// runenv.RecordMessage(unseenHashes)
+	runenv.RecordMessage(fmt.Sprint(len(unseenHashes)))
+
+	// // 2. Batch UPLOAD in goroutine
+	// var uploadgroup sync.WaitGroup
+	// for _, element := range unseenHashes {
+	// 	uploadgroup.Add(1)
+	// 	go upload(ctx, runenv, dht, element, &uploadgroup)
+	// }
+	// uploadgroup.Wait()
+
+	// // 3. Batch CHECK in goroutine
+	// var checkgroup sync.WaitGroup
+	// for _, element := range sampleData() {
+	// 	checkgroup.Add(1)
+	// 	go check(ctx, runenv, dht, element, &checkgroup)
+	// }
+	// checkgroup.Wait()
+
+	// Sample DATA
+	// // 2. Batch UPLOAD in goroutine
+	// var uploadgroup sync.WaitGroup
+	// for _, element := range sampleData() {
+	// 	uploadgroup.Add(1)
+	// 	go upload(ctx, runenv, dht, element, &uploadgroup)
+	// }
+	// uploadgroup.Wait()
+
+	// // 3. Batch CHECK in goroutine
+	// var checkgroup sync.WaitGroup
+	// for _, element := range sampleData() {
+	// 	checkgroup.Add(1)
+	// 	go check(ctx, runenv, dht, element, &checkgroup)
+	// }
+	// checkgroup.Wait()
 }
 
 func sampleData() [][]string {
@@ -285,15 +337,17 @@ func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, el
 	}
 }
 
-func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
+func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) bool {
 	defer wg.Done()
 
-	fmt.Printf("GET :: HDF: %s\n", element[1])
+	fmt.Printf("GET :: HDF: %q\n", hex.EncodeToString([]byte(element[1])))
 	myBytes, err := dht.GetValue(ctx, "/v/"+element[1])
 	if err != nil {
-		runenv.RecordMessage("GET Failed")
-		panic(err)
+		runenv.RecordMessage("GET Failed for: %q/n", hex.EncodeToString([]byte(element[1])))
+		return false
+
 	} else {
-		runenv.RecordMessage("Found HDF: " + element[1] + " in DocumentID: " + string(myBytes[:]))
+		runenv.RecordMessage("Found HDF: " + hex.EncodeToString([]byte(element[1])) + " in DocumentID: " + string(myBytes[:]))
+		return true
 	}
 }
