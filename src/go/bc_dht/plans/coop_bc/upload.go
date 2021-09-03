@@ -240,8 +240,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		go func() {
 			defer checkgroupInitial.Done()
 			if !check(ctx, runenv, dht, []string{string(inputDocHash.Sum(nil)), string(h.Sum(nil))}) {
-				println("Unseen Hash: " + hex.EncodeToString([]byte(string(h.Sum(nil)))))
-
 				channelForUnseenHashes <- h.Sum(nil)
 			}
 		}()
@@ -264,14 +262,8 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	unseenHashes := []string{}
 	for _, msg := range messages {
 		unseenHashes = append(unseenHashes, hex.EncodeToString(msg))
-		println("Als ob das nur einer ist!!: ", hex.EncodeToString(msg))
+		runenv.RecordMessage("Original New Hash: " + hex.EncodeToString(msg))
 	}
-
-	// for _, uh := range *unseenHashes {
-	// 	hex.EncodeToString(uh) //TODO: this should be a string, not a f* rune. The channel
-	// }
-	// runenv.RecordMessage(unseenHashes)
-	runenv.RecordMessage(fmt.Sprint(len(unseenHashes)))
 
 	// // 2. Batch UPLOAD in goroutine
 	// var uploadgroup sync.WaitGroup
