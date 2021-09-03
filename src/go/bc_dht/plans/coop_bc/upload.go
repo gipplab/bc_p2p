@@ -231,27 +231,40 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	inputDocHash.Write([]byte(sampleDocumentID))
 
 	var checkgroupInitial sync.WaitGroup
-	channelForUnseenHashes := make(chan []byte, sha1.New().Size())
+	channelForUnseenHashes := make(chan []byte, len(originalCombinations))
 	for _, combination := range originalCombinations {
 		h := sha1.New()
 		h.Write([]byte(strings.Join(combination, "")))
 
 		checkgroupInitial.Add(1)
 		go func() {
-			if !check(ctx, runenv, dht, []string{string(inputDocHash.Sum(nil)), string(h.Sum(nil))}, &checkgroupInitial) {
+			defer checkgroupInitial.Done()
+			if !check(ctx, runenv, dht, []string{string(inputDocHash.Sum(nil)), string(h.Sum(nil))}) {
 				println("Unseen Hash: " + hex.EncodeToString([]byte(string(h.Sum(nil)))))
 
 				channelForUnseenHashes <- h.Sum(nil)
 			}
 		}()
 	}
+
 	checkgroupInitial.Wait()
 
-	messages := <-channelForUnseenHashes
-	unseenHashes := make([]string, 0)
-	for i := 0; i < len(messages); i += sha1.New().Size() {
-		unseenHashes = append(unseenHashes, hex.EncodeToString(messages[i:i+sha1.New().Size()]))
-		println("Als ob das nur einer ist!!: ", hex.EncodeToString(messages[i:i+sha1.New().Size()]))
+	messages := [][]byte{}
+	for {
+		select {
+		case msg := <-channelForUnseenHashes:
+			messages = append(messages, msg)
+			continue
+		default:
+		}
+		break
+	}
+	close(channelForUnseenHashes)
+
+	unseenHashes := []string{}
+	for _, msg := range messages {
+		unseenHashes = append(unseenHashes, hex.EncodeToString(msg))
+		println("Als ob das nur einer ist!!: ", hex.EncodeToString(msg))
 	}
 
 	// for _, uh := range *unseenHashes {
@@ -337,8 +350,7 @@ func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, el
 	}
 }
 
-func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) bool {
-	defer wg.Done()
+func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) bool {
 
 	fmt.Printf("GET :: HDF: %q\n", hex.EncodeToString([]byte(element[1])))
 	myBytes, err := dht.GetValue(ctx, "/v/"+element[1])
