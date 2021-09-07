@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dbc"
 	"github.com/testground/sdk-go/runtime"
 )
 
@@ -15,7 +15,7 @@ func BootstrapPeer(ctx context.Context, runenv *runtime.RunEnv) (string, string,
 	// ctx, cancel := context.WithCancel(context.Background())
 	// defer cancel()
 
-	dht, err := dht.BootstrapDht(ctx, runenv) // empty peers for default bootstrapping
+	dht, err := dbc.BootstrapDht(ctx, runenv) // empty peers for default bootstrapping
 	// dht, err := dht.JoinDht(ctx, append(myPeers, ma))
 	if err != nil {
 		runenv.RecordMessage("Could not start Bootstraper")

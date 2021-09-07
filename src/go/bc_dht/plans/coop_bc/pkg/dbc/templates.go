@@ -1,4 +1,4 @@
-package dht
+package dbc
 
 type DocumentResponseStruct struct {
 	Abstract string `json:"abstract"`

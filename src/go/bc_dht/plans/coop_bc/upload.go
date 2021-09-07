@@ -12,7 +12,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dbc"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/runtime"
@@ -41,7 +41,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		panic(err)
 	}
 
-	var m dht.DocumentResponseStruct
+	var m dbc.DocumentResponseStruct
 
 	err = json.Unmarshal(body, &m)
 	if err != nil {
@@ -72,7 +72,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 			panic(err)
 		}
 
-		var cc dht.DocumentResponseStruct
+		var cc dbc.DocumentResponseStruct
 		err = json.Unmarshal(poteniallyCoCitedDocBody, &cc)
 		if err != nil {
 			panic(err)
@@ -160,7 +160,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 
 	var myPeers []multiaddr.Multiaddr
-	dht, err := dht.JoinDht(ctx, runenv, append(myPeers, ma))
+	dht, err := dbc.JoinDht(ctx, runenv, append(myPeers, ma))
 	if err != nil {
 		runenv.RecordMessage("Could not join DHT")
 		panic(err)

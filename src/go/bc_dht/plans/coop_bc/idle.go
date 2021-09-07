@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dht"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dbc"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/runtime"
 )
@@ -30,8 +30,8 @@ func IdlePeer(ctx context.Context, runenv *runtime.RunEnv, bootstrap_addr string
 	}
 
 	var myPeers []multiaddr.Multiaddr
-	//dht, err := dht.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
-	dht, err := dht.JoinDht(ctx, runenv, append(myPeers, ma))
+	//dht, err := dbc.JoinDht(ctx, myPeers) // empty peers for default bootstrapping
+	dht, err := dbc.JoinDht(ctx, runenv, append(myPeers, ma))
 	if err != nil {
 		runenv.RecordMessage("Could not join DHT")
 		panic(err)
