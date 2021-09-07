@@ -288,38 +288,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	checkgroup.Wait()
 }
 
-func sampleData() [][]string {
-	// Todo: add fakeFile1000
-
-	// Fake File
-	fakeFile := [][]string{
-		{"49001", "44b71eecde659689d848176615a2696aaeb2fb27"},
-		{"49001", "5e84bace19194e76e9815b7e20df02d801089c7e"},
-		{"49001", "f43b4c8ab78ab2cfaf6fbce63dac09087e352559"},
-		{"49001", "67cc113d5a4c70e462c6e91db66eb90b996d4ec1"},
-		{"49001", "8ab113d0d52cab6d190eb338dccbd07b39185420"},
-		{"49001", "00e026e7bd70932a11711c80ce4ce235dda99860"},
-		{"49001", "446c551127448c7fb3a4aa3799bada2195534fe6"},
-		{"49001", "89975d4b6232f078fd3ae277da3aa75da20a0080"},
-		{"49001", "cfb1a38a80d599420859793e40b3fc34cf537976"},
-		{"49001", "3035020d7795f0fd041319b3208be61b09b8dcae"},
-	}
-
-	// // From CSV
-	// csvfile, err := os.Open("test10_doc.csv")
-	// if err != nil {
-	// 	log.Fatalln("Couldn't open the csv file", err)
-	// }
-	// r := csv.NewReader(csvfile)
-	// // Read each record from csv
-	// record, err := r.ReadAll()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	return fakeFile
-}
-
 func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) {
 	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
 	err := dht.PutValue(ctx, "/v/"+element[1], []byte(element[0]))
