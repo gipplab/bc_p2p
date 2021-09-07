@@ -286,6 +286,10 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		}(element)
 	}
 	checkgroup.Wait()
+
+	// calc originality ratio RO
+	runenv.RecordMessage("RO: " + fmt.Sprint(float32(len(unseenHashes))/float32(len(combinations))))
+
 }
 
 func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) {
