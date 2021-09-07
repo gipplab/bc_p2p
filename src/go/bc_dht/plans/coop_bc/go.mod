@@ -4,13 +4,11 @@ go 1.16
 
 require (
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
-	github.com/gitchander/permutation v0.0.0-20210517125447-a5d73722e1b1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/huin/goupnp v1.0.2 // indirect
 	github.com/ipfs/go-datastore v0.4.6 // indirect
 	github.com/ipfs/go-log/v2 v2.3.0 // indirect
 	github.com/ipld/go-ipld-prime v0.10.0 // indirect
-	github.com/juliangruber/go-intersect v1.0.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/koron/go-ssdp v0.0.2 // indirect
 	github.com/libp2p/go-libp2p v0.14.5-0.20210802153435-93ad75977006
