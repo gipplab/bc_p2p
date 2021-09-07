@@ -150,8 +150,6 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	runenv.RecordMessage("Entire Co-Cit-Map:")
 	fmt.Printf("%+v\n", coCitationMap)
 
-	// TODO: Verify that keys and values are unique
-
 	// Create all k-combinations of the submission's references
 	referencesDocIDs := make([]string, 0, len(coCitationMap))
 	for key := range coCitationMap {
@@ -192,7 +190,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 			}
 		}
 
-		// Keep only unique and new combinations
+		// Keep only unique and new combinations || check S2 for uniqe HDFs
 		if len(intersection) <= 1 {
 			originalCombinations = append(originalCombinations, combination)
 		}
@@ -231,7 +229,7 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	inputDocHash.Write([]byte(sampleDocumentID))
 
 	var checkgroupInitial sync.WaitGroup
-	channelForUnseenHashes := make(chan []byte, len(originalCombinations))
+	channelForUnseenHashes := make(chan string, len(originalCombinations))
 	for _, combination := range originalCombinations {
 		h := sha1.New()
 		h.Write([]byte(strings.Join(combination, "")))
@@ -239,15 +237,17 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		checkgroupInitial.Add(1)
 		go func() {
 			defer checkgroupInitial.Done()
-			if !check(ctx, runenv, dht, []string{string(inputDocHash.Sum(nil)), string(h.Sum(nil))}) {
-				channelForUnseenHashes <- h.Sum(nil)
+			hashS := hex.EncodeToString(h.Sum(nil))
+			if !check(ctx, runenv, dht, hashS) {
+				channelForUnseenHashes <- hashS
 			}
 		}()
 	}
 
 	checkgroupInitial.Wait()
 
-	messages := [][]byte{}
+	// channel magic to identify last send message and read all
+	messages := []string{}
 	for {
 		select {
 		case msg := <-channelForUnseenHashes:
@@ -261,42 +261,31 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 
 	unseenHashes := []string{}
 	for _, msg := range messages {
-		unseenHashes = append(unseenHashes, hex.EncodeToString(msg))
-		runenv.RecordMessage("Original New Hash: " + hex.EncodeToString(msg))
+		unseenHashes = append(unseenHashes, msg)
+		runenv.RecordMessage("Original New Hash: " + msg)
 	}
 
-	// // 2. Batch UPLOAD in goroutine
-	// var uploadgroup sync.WaitGroup
-	// for _, element := range unseenHashes {
-	// 	uploadgroup.Add(1)
-	// 	go upload(ctx, runenv, dht, element, &uploadgroup)
-	// }
-	// uploadgroup.Wait()
+	// 2. Batch UPLOAD in goroutine
+	var uploadgroup sync.WaitGroup
+	for _, element := range unseenHashes {
+		uploadgroup.Add(1)
+		go func(e string) {
+			defer uploadgroup.Done()
+			upload(ctx, runenv, dht, []string{sampleDocumentID, e})
+		}(element)
+	}
+	uploadgroup.Wait()
 
-	// // 3. Batch CHECK in goroutine
-	// var checkgroup sync.WaitGroup
-	// for _, element := range sampleData() {
-	// 	checkgroup.Add(1)
-	// 	go check(ctx, runenv, dht, element, &checkgroup)
-	// }
-	// checkgroup.Wait()
-
-	// Sample DATA
-	// // 2. Batch UPLOAD in goroutine
-	// var uploadgroup sync.WaitGroup
-	// for _, element := range sampleData() {
-	// 	uploadgroup.Add(1)
-	// 	go upload(ctx, runenv, dht, element, &uploadgroup)
-	// }
-	// uploadgroup.Wait()
-
-	// // 3. Batch CHECK in goroutine
-	// var checkgroup sync.WaitGroup
-	// for _, element := range sampleData() {
-	// 	checkgroup.Add(1)
-	// 	go check(ctx, runenv, dht, element, &checkgroup)
-	// }
-	// checkgroup.Wait()
+	// // 3. Batch CHECK in goroutine || sanity check
+	var checkgroup sync.WaitGroup
+	for _, element := range unseenHashes {
+		checkgroup.Add(1)
+		go func(e string) {
+			defer checkgroup.Done()
+			check(ctx, runenv, dht, e)
+		}(element)
+	}
+	checkgroup.Wait()
 }
 
 func sampleData() [][]string {
@@ -331,9 +320,7 @@ func sampleData() [][]string {
 	return fakeFile
 }
 
-func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) {
 	fmt.Printf("PUT :: Document-Key: %s HDF: %s\n", element[0], element[1])
 	err := dht.PutValue(ctx, "/v/"+element[1], []byte(element[0]))
 	if err != nil {
@@ -342,16 +329,17 @@ func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, el
 	}
 }
 
-func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) bool {
+// check if HDF exists on DHT
+func check(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element string) bool {
 
-	fmt.Printf("GET :: HDF: %q\n", hex.EncodeToString([]byte(element[1])))
-	myBytes, err := dht.GetValue(ctx, "/v/"+element[1])
+	fmt.Printf("GET :: HDF: %q\n", element)
+	myBytes, err := dht.GetValue(ctx, "/v/"+element)
 	if err != nil {
-		runenv.RecordMessage("GET Failed for: %q/n", hex.EncodeToString([]byte(element[1])))
+		runenv.RecordMessage("GET Failed for: %q/n", element)
 		return false
 
 	} else {
-		runenv.RecordMessage("Found HDF: " + hex.EncodeToString([]byte(element[1])) + " in DocumentID: " + string(myBytes[:]))
+		runenv.RecordMessage("Found HDF: " + element + " in DocumentID: " + string(myBytes[:]))
 		return true
 	}
 }
