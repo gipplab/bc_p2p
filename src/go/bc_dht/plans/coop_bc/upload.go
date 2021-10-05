@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dbc"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
@@ -21,7 +22,12 @@ import (
 func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// 1. Check for existing HDFs on public Semantic Scholar and the confidential DHT
 
-	// TODO: log timings
+	// TODO: log uplaod START and FINISH timestamps
+	runenv.RecordMessage("TestStartTime: " + runenv.TestStartTime.String())
+
+	uploadStartTime := time.Now()
+	runenv.RecordMessage("UploadStartTime: " + uploadStartTime.String())
+
 	// TODO: modify network metrics (latency, bandwidth, etc)
 	// TODO: generate graphs (grafana, plotly, pandas)
 
@@ -31,7 +37,11 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// refs5 = 77f59aac5011ae660181b6454a94c627d7339206
 
 	// Filter for public references on Semantic Scholar
+	s2CheckStartTime := time.Now()
+	runenv.RecordMessage("S2CheckStartTime: " + s2CheckStartTime.String())
 	combinations, originalCombinations := s2check(runenv, sampleDocumentID)
+	s2CheckEndTime := time.Now()
+	runenv.RecordMessage("S2CheckEndTime: " + s2CheckEndTime.String())
 	fmt.Printf("%+v\n", len(combinations))
 	fmt.Printf("%+v\n", len(originalCombinations))
 
@@ -53,7 +63,12 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	}
 	uploadgroup.Wait()
 
+	uploadEndTime := time.Now()
+	runenv.RecordMessage("UploadEndTime: " + uploadEndTime.String())
+
 	// // 3. Batch CHECK || sanity check
+	dhtQueryStartTime := time.Now()
+	runenv.RecordMessage("DhtQueryTime: " + dhtQueryStartTime.String())
 	var checkgroup sync.WaitGroup
 	for _, element := range unseenHashes {
 		checkgroup.Add(1)
@@ -63,10 +78,15 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 		}(element)
 	}
 	checkgroup.Wait()
+	dhtQueryEndTime := time.Now()
 
-	// calc originality ratio RO
-	runenv.RecordMessage("RO: " + fmt.Sprint(float32(len(unseenHashes))/float32(len(combinations))))
-
+	runenv.RecordMessage("___UploaderData___")
+	runenv.RecordMessage("S2CheckDuration: " + (s2CheckEndTime.Sub(s2CheckStartTime)).String())
+	runenv.RecordMessage("OriginalityRatio (RO): " + fmt.Sprint(float32(len(unseenHashes))/float32(len(combinations))))
+	runenv.RecordMessage("UploadedOriginalCombinations: " + fmt.Sprint(len(originalCombinations)))
+	runenv.RecordMessage("UploadDuration: " + (uploadEndTime.Sub(uploadStartTime)).String())
+	runenv.RecordMessage("DhtQueryDuration: " + (dhtQueryEndTime.Sub(dhtQueryStartTime)).String())
+	runenv.RecordMessage("__________________")
 }
 
 func upload(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, element []string) {

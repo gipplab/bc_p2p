@@ -22,7 +22,8 @@ func main() {
 }
 
 func runf(runenv *runtime.RunEnv) error {
-	runenv.RecordMessage("Hello, Testground!")
+	runenv.TestStartTime = time.Now()
+	runenv.RecordMessage("Testground Run Started at: " + runenv.TestStartTime.String())
 
 	var (
 		enrolledState = sync.State("enrolled")
