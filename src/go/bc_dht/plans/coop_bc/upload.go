@@ -21,6 +21,10 @@ import (
 func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	// 1. Check for existing HDFs on public Semantic Scholar and the confidential DHT
 
+	// TODO: log timings
+	// TODO: modify network metrics (latency, bandwidth, etc)
+	// TODO: generate graphs (grafana, plotly, pandas)
+
 	sampleDocumentID := "77f59aac5011ae660181b6454a94c627d7339206"
 	// cppd = 863f7197639325641f787caaf3a77a3f567fb24f
 	// rbac = d7a3e44f86cb69dbc351b7d212312136ab6f0b8e
