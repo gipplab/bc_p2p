@@ -46,8 +46,42 @@ func runf(runenv *runtime.RunEnv) error {
 	// wait for the network to initialize; this should be pretty fast.
 	netclient.MustWaitNetworkInitialized(ctx)
 
+	// NETCONFIG
+	config := network.Config{
+		// Control the "default" network. At the moment, this is the only network.
+		Network: "default",
+
+		// Enable this network.
+		Enable: true,
+
+		// Set the traffic shaping characteristics.
+		Default: network.LinkShape{
+			Latency:   100 * time.Millisecond,
+			Bandwidth: 1 << 20, // 1Mib
+		},
+
+		// Set what state the sidecar should signal back to you when it's done.
+		CallbackState: "network-configured",
+	}
+
 	// signal entry in the 'enrolled' state, and obtain a sequence number.
 	seq := client.MustSignalEntry(ctx, enrolledState)
+
+	// copy the test subnet.
+	// config.IPv4 = runenv.TestSubnet
+	// Use the sequence number to fill in the last two octets.
+	//
+	// NOTE: Be careful not to modify the IP from `runenv.TestSubnet`.
+	// That could trigger undefined behavior.
+	// ipC := byte((seq >> 8) + 1)
+	// ipD := byte(seq)
+	// config.IPv4.IP = append(config.IPv4.IP[0:2:2], ipC, ipD)
+
+	err := netclient.ConfigureNetwork(ctx, &config)
+	if err != nil {
+		return err
+	}
+	/// NETCONFIG
 
 	runenv.RecordMessage("my sequence ID: %d", seq)
 
@@ -147,7 +181,7 @@ func runf(runenv *runtime.RunEnv) error {
 	client.MustSignalEntry(ctx, readyState)
 
 	// wait until the uploader releases us.
-	err := <-client.MustBarrier(ctx, releasedState, 1).C
+	err = <-client.MustBarrier(ctx, releasedState, 1).C
 	if err != nil {
 		return err
 	}

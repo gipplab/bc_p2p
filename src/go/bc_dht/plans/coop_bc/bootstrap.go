@@ -23,7 +23,7 @@ func BootstrapPeer(ctx context.Context, runenv *runtime.RunEnv) (string, string,
 	}
 
 	runenv.RecordMessage(dht.PeerID().String())
-	runenv.RecordMessage(dht.Host().Addrs()[0].String()) // 0 Localhost, 1 LAN, 2 WAN
+	runenv.RecordMessage(dht.Host().Addrs()[2].String()) // 0 Localhost, 1 LAN, 2 WAN
 
 	// // write PeerID to file
 	// f, err := os.Create("bootstrap_ID.tmp")
@@ -39,5 +39,5 @@ func BootstrapPeer(ctx context.Context, runenv *runtime.RunEnv) (string, string,
 	// 	time.Sleep(time.Second)
 	// }
 
-	return dht.Host().Addrs()[0].String(), "/p2p/", dht.PeerID().String() // 0 Localhost, 1 LAN, 2 WAN
+	return dht.Host().Addrs()[2].String(), "/p2p/", dht.PeerID().String() // 0 Localhost, 1 LAN, 2 WAN
 }
