@@ -62,6 +62,8 @@ func runf(runenv *runtime.RunEnv) error {
 
 		// Set what state the sidecar should signal back to you when it's done.
 		CallbackState: "network-configured",
+
+		RoutingPolicy: network.AllowAll,
 	}
 
 	// signal entry in the 'enrolled' state, and obtain a sequence number.

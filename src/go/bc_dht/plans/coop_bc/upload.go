@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"crypto/sha1"
+	"crypto/tls"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"sort"
 	"strings"
@@ -180,8 +182,35 @@ func s2check(runenv *runtime.RunEnv, sampleDocumentID string) ([][]string, [][]s
 
 	// Get documentID by DOI
 
+	// DNS HACK
+	var (
+		dnsResolverIP        = "8.8.8.8:53" // Google DNS resolver.
+		dnsResolverProto     = "udp"        // Protocol to use for the DNS resolver
+		dnsResolverTimeoutMs = 5000         // Timeout (ms) for the DNS resolver (optional)
+	)
+
+	dialer := &net.Dialer{
+		Resolver: &net.Resolver{
+			PreferGo: true,
+			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+				d := net.Dialer{
+					Timeout: time.Duration(dnsResolverTimeoutMs) * time.Millisecond,
+				}
+				return d.DialContext(ctx, dnsResolverProto, dnsResolverIP)
+			},
+		},
+	}
+
+	dialContext := func(ctx context.Context, network, addr string) (net.Conn, error) {
+		return dialer.DialContext(ctx, network, addr)
+	}
+
+	http.DefaultTransport.(*http.Transport).DialContext = dialContext
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	httpClient := &http.Client{}
+
 	// Get all references by ID || What is the original work referencing?
-	resp, err := http.Get(apiURL + sampleDocumentID)
+	resp, err := httpClient.Get(apiURL + sampleDocumentID)
 	if err != nil {
 		panic(err)
 	}
@@ -212,7 +241,7 @@ func s2check(runenv *runtime.RunEnv, sampleDocumentID string) ([][]string, [][]s
 		runenv.RecordMessage("Getting citations from submission-reference:")
 		fmt.Printf("%+v\n", refOfSubmission)
 
-		resp, err := http.Get(apiURL + refOfSubmission.PaperID)
+		resp, err := httpClient.Get(apiURL + refOfSubmission.PaperID)
 		if err != nil {
 			panic(err)
 		}
