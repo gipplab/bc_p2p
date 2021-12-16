@@ -8,3 +8,5 @@ GKE/terraform/terraform.tfstate.backup
 src/go/bc_dht/plans/coop_bc/bootstrap_ID.tmp
 src/go/bc_dht/data/*
 src/go/bc_dht/tasks.db
+src/go/bc_dht/.env.toml
+src/go/bc_dht/aws.env.sh
