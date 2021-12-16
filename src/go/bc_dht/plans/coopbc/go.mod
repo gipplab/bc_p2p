@@ -1,4 +1,4 @@
-module github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc
+module github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coopbc
 
 go 1.16
 
@@ -28,7 +28,7 @@ require (
 	github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
-	github.com/testground/sdk-go v0.3.0
+	github.com/testground/sdk-go v0.2.7
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.7.0 // indirect
 	go.uber.org/zap v1.19.1 // indirect

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coop_bc/pkg/dbc"
+	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coopbc/pkg/dbc"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/testground/sdk-go/runtime"
 )
