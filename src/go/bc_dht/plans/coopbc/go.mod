@@ -22,13 +22,14 @@ require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/prometheus/common v0.32.1 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
-	github.com/testground/sdk-go v0.3.0
+	github.com/testground/sdk-go v0.2.7
 	go.uber.org/zap v1.19.1 // indirect
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
-	
+	lukechampine.com/blake3 v1.1.7 // indirect
+
 )
 
 replace lukechampine.com/blake3 => github.com/lukechampine/blake3 v1.1.7 // indirect
