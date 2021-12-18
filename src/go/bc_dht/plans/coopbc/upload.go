@@ -18,10 +18,11 @@ import (
 	"github.com/ihlec/bc_p2p/src/go/bc_dht/plans/coopbc/pkg/dbc"
 	kaddht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/multiformats/go-multiaddr"
+	"github.com/testground/sdk-go/network"
 	"github.com/testground/sdk-go/runtime"
 )
 
-func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
+func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string, netConfig network.Config) {
 	// 1. Check for existing HDFs on public Semantic Scholar and the confidential DHT
 
 	// TODO: log uplaod START and FINISH timestamps
@@ -83,10 +84,16 @@ func UploadPeer(runenv *runtime.RunEnv, bootstrap_addr string) {
 	dhtQueryEndTime := time.Now()
 
 	runenv.RecordMessage("___UploaderData___")
+	runenv.RecordMessage("Instances: " + fmt.Sprint(runenv.TestInstanceCount))
+	runenv.RecordMessage("SimLatency: " + fmt.Sprint(netConfig.Default.Latency))
+	runenv.RecordMessage("SimPeerBandwidth (bytes per second): " + fmt.Sprint(netConfig.Default.Bandwidth))
+	runenv.RecordMessage("SimJitter (ms): " + fmt.Sprint(netConfig.Default.Jitter))
+	runenv.RecordMessage("SimLoss (%): " + fmt.Sprint(netConfig.Default.Loss))
+	runenv.RecordMessage("SimCorrupt (%): " + fmt.Sprint(netConfig.Default.Corrupt))
 	runenv.RecordMessage("S2CheckDuration: " + (s2CheckEndTime.Sub(s2CheckStartTime)).String())
 	runenv.RecordMessage("OriginalityRatio (RO): " + fmt.Sprint(float32(len(unseenHashes))/float32(len(combinations))))
 	runenv.RecordMessage("UploadedOriginalCombinations: " + fmt.Sprint(len(originalCombinations)))
-	runenv.RecordMessage("UploadDuration: " + (uploadEndTime.Sub(uploadStartTime)).String())
+	runenv.RecordMessage("DhtUploadDuration: " + (uploadEndTime.Sub(uploadStartTime)).String())
 	runenv.RecordMessage("DhtQueryDuration: " + (dhtQueryEndTime.Sub(dhtQueryStartTime)).String())
 	runenv.RecordMessage("__________________")
 }
