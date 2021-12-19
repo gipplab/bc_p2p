@@ -18,7 +18,10 @@ fi
 pushd ../outputs/local_docker
 
 # Runs
-for (( i = 10; i <= $1; i = i+$2)) do
+for (( i = 0; i <= $1; i = i+$2)) do
+    if [ $i == 0 ]; then 
+        continue
+    fi
     echo "Run with $i peers. Results at: "
     pwd
     testground run single --plan=coopbc --testcase=bc --runner=local:docker --builder=docker:go --instances=$i --collect
