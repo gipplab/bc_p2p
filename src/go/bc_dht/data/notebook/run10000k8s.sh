@@ -32,9 +32,9 @@ for (( r = 1; r <= $3; r++)) do
         message=$(testground run single --plan=coopbc --testcase=bc --runner=cluster:k8s --builder=docker:go --instances=$i --collect --build-cfg go_proxy_mode=direct)
         runid=$(echo $message | grep -o '....................$')
         echo $runid
-        sleep 180s
+        sleep 120s
         testground collect --runner=cluster:k8s $runid
-        sleep 2s
+        sleep 5s
         tar -xzvf $runid.tgz
         rm $runid.tgz
     done
