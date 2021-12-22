@@ -56,11 +56,11 @@ func runf(runenv *runtime.RunEnv) error {
 
 		// Set the traffic shaping characteristics.
 		Default: network.LinkShape{
-			Latency:   200 * time.Millisecond,
-			Jitter:    30 * time.Millisecond,
-			Bandwidth: (1 << 12), // 1 << 20 1Mib/1048 576 bits
-			Loss:      20,
-			Corrupt:   10,
+			Latency:   0 * time.Millisecond,
+			Jitter:    0 * time.Millisecond,
+			Bandwidth: (1 << 20), // 1 << 20 1Mib/1048 576 bits
+			Loss:      0,
+			Corrupt:   0,
 		},
 
 		// Set what state the sidecar should signal back to you when it's done.
