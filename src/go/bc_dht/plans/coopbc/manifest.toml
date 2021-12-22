@@ -31,7 +31,7 @@ enabled = true
 
 [[testcases]]
 name = "bc"
-instances = { min = 1, max = 200, default = 5 }
+instances = { min = 1, max = 20000, default = 5 }
 
 
 
