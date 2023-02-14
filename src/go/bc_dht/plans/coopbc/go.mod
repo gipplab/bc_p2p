@@ -8,9 +8,8 @@ require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/influxdata/influxdb1-client v0.0.0-20200827194710-b269163b24ab // indirect
-	github.com/ipfs/go-cid v0.1.0 // indirect
 	github.com/ipfs/go-datastore v0.5.1 // indirect
-	github.com/ipld/go-ipld-prime v0.14.3 // indirect
+	github.com/ipld/go-ipld-prime v0.19.0 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/libp2p/go-libp2p v0.17.0
 	github.com/libp2p/go-libp2p-core v0.13.0
@@ -24,7 +23,6 @@ require (
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
 	github.com/testground/sdk-go v0.2.7
 	go.uber.org/zap v1.19.1 // indirect
-	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
 	golang.org/x/net v0.0.0-20211216030914-fe4d6282115f // indirect
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/tools v0.1.8 // indirect
